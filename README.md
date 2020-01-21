@@ -3,6 +3,9 @@
 
 ## Group Members
 Heping Lin - heplin@ucdavis.edu
+
 Marty Macalalad - mmmacalalad@ucdavis.edu
+
 Jed Mandy Nugal - jmnugal@ucdavis.edu
+
 Junyang Shi - jyshi@ucdavis.edu
