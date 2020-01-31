@@ -14,8 +14,8 @@
 	PIXI.utils.sayHello(type)
 	//Create a Pixi Applicircleion
 	let app = new PIXI.Application({
-		width: 256, 
-		height: 256,
+		width: 1000, 
+		height: 1000,
         antialias: true,
         transparent: false,
         resolution: 1
@@ -55,7 +55,7 @@
           left.press = () => {
             //Change the circle's velocity when the key is pressed
             circle.vx = -5;
-            circle.vy = 0;
+            //circle.vy = 0;
           };
 
           //Left arrow key `release` method
@@ -63,7 +63,7 @@
             //If the left arrow has been released, and the right arrow isn't down,
             //and the circle isn't moving vertically:
             //Stop the circle
-            if (!right.isDown && circle.vy === 0) {
+            if (!right.isDown) { // Had && circle.vy === 0
               circle.vx = 0;
             }
           };
@@ -71,10 +71,10 @@
           //Up
           up.press = () => {
             circle.vy = -5;
-            circle.vx = 0;
+            //circle.vx = 0;
           };
           up.release = () => {
-            if (!down.isDown && circle.vx === 0) {
+            if (!down.isDown) {
               circle.vy = 0;
             }
           };
@@ -82,10 +82,10 @@
           //Right
           right.press = () => {
             circle.vx = 5;
-            circle.vy = 0;
+            //circle.vy = 0;
           };
           right.release = () => {
-            if (!left.isDown && circle.vy === 0) {
+            if (!left.isDown) {
               circle.vx = 0;
             }
           };
@@ -93,10 +93,10 @@
           //Down
           down.press = () => {
             circle.vy = 5;
-            circle.vx = 0;
+            //circle.vx = 0;
           };
           down.release = () => {
-            if (!up.isDown && circle.vx === 0) {
+            if (!up.isDown) {
               circle.vy = 0;
             }
           };
