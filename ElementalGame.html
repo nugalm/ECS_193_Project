@@ -42,6 +42,8 @@
         circle.y = 96;
         circle.vx = 0;
         circle.vy = 0;
+        // set the point of rotation to be at the center of the sprite
+        circle.anchor.set(0.5, 0.5);
 		app.stage.addChild(circle);
 		alert("CIRCLE ADDED!");
         
@@ -115,9 +117,20 @@
 	   }
 
 	   function play(){
-            circle.x += circle.vx;
-            circle.y += circle.vy;
+            move();
+           rotate();
 	   }
+      
+      // moves the circle depending on velocity and keyboard input
+      function move(){
+          circle.x += circle.vx;
+          circle.y += circle.vy;
+      }
+      // rotates the circle where the mouse cursor is
+        function rotate(){
+            let mousePosition = findMousePosition();
+            circle.rotation = Math.atan2(mousePosition.x - circle.x, -(mousePosition.y - circle.y));
+        }
       
       function keyboard(value) {
           var key = {};
@@ -136,6 +149,7 @@
             }
           };
 
+          
           //The `upHandler`
           key.upHandler = event => {
             if (event.key === key.value) {
@@ -166,6 +180,13 @@
 
         return key;
 	}
+      
+    function findMousePosition()
+    {
+        var mouseposition = app.renderer.plugins.interaction.mouse.global;
+        return mouseposition;
+        
+    } 
     
       
 	
