@@ -31,6 +31,7 @@
 	//WILL USE TO TEST WHEN WE HAVE SERVER ON
 	PIXI.loader
 	  .add("images/placeholderCircle.png")
+      .add("images/whiteball.png")
 	  .load(setup);
 
     
@@ -38,6 +39,12 @@
 	function setup() {
 		//Create the circle sprite
         circle = new PIXI.Sprite(PIXI.loader.resources["images/placeholderCircle.png"].texture);
+        ball = new PIXI.Sprite(PIXI.loader.resources["images/whiteball.png"].texture);
+        ball.y = 500;
+        ball.x = 500;
+        ball.scale.x = 0.01
+        ball.scale.y = 0.01
+        
 		//Add the circle to the stage
         circle.y = 96;
         circle.vx = 0;
