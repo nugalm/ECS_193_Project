@@ -1,0 +1,172 @@
+﻿<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hello World</title>
+</head>
+  <script src="pixi.min.js"></script>
+<body>
+  <script type="text/javascript">
+    let type = "WebGL"
+    if(!PIXI.utils.isWebGLSupported()){
+      type = "canvas"
+    }
+	PIXI.utils.sayHello(type)
+	//Create a Pixi Applicircleion
+	let app = new PIXI.Application({
+		width: 256, 
+		height: 256,
+        antialias: true,
+        transparent: false,
+        resolution: 1
+		}
+	);
+
+	//Add the canvas that Pixi automatically created for you to the HTML document
+	document.body.appendChild(app.view);
+/*
+	(function keyboard(value) {
+	  let key = {};
+	  key.value = value;
+	  key.isDown = false;
+	  key.isUp = true;
+	  key.press = undefined;
+	  key.release = undefined;
+	  //The `downHandler`
+	  key.downHandler = event => {
+		if (event.key === key.value) {
+		  if (key.isUp && key.press) key.press();
+		  key.isDown = true;
+		  key.isUp = false;
+		  event.preventDefault();
+		}
+	  };
+
+	  //The `upHandler`
+	  key.upHandler = event => {
+		if (event.key === key.value) {
+		  if (key.isDown && key.release) key.release();
+		  key.isDown = false;
+		  key.isUp = true;
+		  event.preventDefault();
+		}
+	  };
+
+	  //Attach event listeners
+	  const downListener = key.downHandler.bind(key);
+	  const upListener = key.upHandler.bind(key);
+  
+	  window.addEventListener(
+		"keydown", downListener, false
+	  );
+	  window.addEventListener(
+		"keyup", upListener, false
+	  );
+  
+	  // Detach event listeners
+	  key.unsubscribe = () => {
+		window.removeEventListener("keydown", downListener);
+		window.removeEventListener("keyup", upListener);
+	  };
+  
+    
+	return key;
+	}*/
+    
+    
+    /*let circle, state;
+      
+	//load an image and run the `setup` function when it's done
+	//WILL USE TO TEST WHEN WE HAVE SERVER ON
+	PIXI.loader
+	  .add("images/placeholderCircle.png")
+	  .load(setup);
+
+    
+	//This `setup` function will run when the image has loaded
+	function setup() {
+		//Create the circle sprite
+        circle = new PIXI.Sprite(PIXI.loader.resources["images/placeholderCircle.png"].texture);
+		//Add the circle to the stage
+		app.stage.addChild(circle);
+		alert("CIRCLE ADDED!");
+        
+            //Capture the keyboard arrow keys
+        let left = keyboard("ArrowLeft"),
+            up = keyboard("ArrowUp"),
+            right = keyboard("ArrowRight"),
+            down = keyboard("ArrowDown");
+
+          //Left arrow key `press` method
+          left.press = () => {
+            //Change the circle's velocity when the key is pressed
+            circle.vx = -5;
+            circle.vy = 0;
+          };
+
+          //Left arrow key `release` method
+          left.release = () => {
+            //If the left arrow has been released, and the right arrow isn't down,
+            //and the circle isn't moving vertically:
+            //Stop the circle
+            if (!right.isDown && circle.vy === 0) {
+              circle.vx = 0;
+            }
+          };
+
+          //Up
+          up.press = () => {
+            circle.vy = -5;
+            circle.vx = 0;
+          };
+          up.release = () => {
+            if (!down.isDown && circle.vx === 0) {
+              circle.vy = 0;
+            }
+          };
+
+          //Right
+          right.press = () => {
+            circle.vx = 5;
+            circle.vy = 0;
+          };
+          right.release = () => {
+            if (!left.isDown && circle.vy === 0) {
+              circle.vx = 0;
+            }
+          };
+
+          //Down
+          down.press = () => {
+            circle.vy = 5;
+            circle.vx = 0;
+          };
+          down.release = () => {
+            if (!up.isDown && circle.vx === 0) {
+              circle.vy = 0;
+            }
+          };
+
+      //Set the game state
+      state = play;
+
+      //Start the game loop 
+      app.ticker.add(delta => gameLoop(delta));
+
+} // end setup
+	
+	function gameLoop(delta){
+		state(delta);
+	}
+
+	function play(){
+		circle.x += circle.vx;
+		circle.y += circle.vy;
+	}
+      */
+	
+
+
+  </script>
+</body>
+</html>
