@@ -30,12 +30,11 @@
     var projectileSpeed = 5;
     
     
-    
-    app.stage.interactive = true;
-
-    app.stage.on("mousedown", function(e){
-        fireProjectile();
+    document.body.addEventListener("click", function(e){
+        fireProjectile();                        
     })
+    
+  
     
     
    // if (app.renderer.plugins.interaction.mousedown){
