@@ -26,25 +26,39 @@
 	document.body.appendChild(app.view);
       
     var circle, state;
-      
+    var projectiles = [];
+    var projectileSpeed = 5;
+    
+    
+    
+    app.stage.interactive = true;
+
+    app.stage.on("mousedown", function(e){
+        fireProjectile();
+    })
+    
+    
+   // if (app.renderer.plugins.interaction.mousedown){
+    //     alert("hi");
+    // }
+    
 	//load an image and run the `setup` function when it's done
-	//WILL USE TO TEST WHEN WE HAVE SERVER ON
+   
 	PIXI.loader
 	  .add("images/placeholderCircle.png")
       .add("images/whiteball.png")
 	  .load(setup);
-
+      
     
 	//This `setup` function will run when the image has loaded
-	function setup() {
+	function setup() { 
+       // projectile = new PIXI.Sprite(PIXI.loader.resources["images/whiteball.png"].texture);
+       // app.stage.addChild(projectile)
+      
+        
+        
 		//Create the circle sprite
         circle = new PIXI.Sprite(PIXI.loader.resources["images/placeholderCircle.png"].texture);
-        ball = new PIXI.Sprite(PIXI.loader.resources["images/whiteball.png"].texture);
-        ball.y = 500;
-        ball.x = 500;
-        ball.scale.x = 0.01
-        ball.scale.y = 0.01
-        
 		//Add the circle to the stage
         circle.y = 96;
         circle.vx = 0;
@@ -125,7 +139,13 @@
 
 	   function play(){
             move();
-           rotate();
+            rotate();
+          if (projectiles.length != 0){
+                for (var projectile = projectiles.length - 1; projectile >= 0; projectile--){
+                projectiles[projectile].x += Math.cos(projectiles[projectile].rotation) * projectileSpeed;
+                projectiles[projectile].y += Math.sin(projectiles[projectile].rotation) * projectileSpeed;
+            }
+           }
 	   }
       
       // moves the circle depending on velocity and keyboard input
@@ -188,12 +208,40 @@
         return key;
 	}
       
+    /*function createProjectile(){
+       // projectile.visible = false;
+        var projectile = new PIXI.Texture.fromImage('images/whiteball.png')
+        projectile.x = circle.x;
+        projectile.y = circle.y;
+              
+    }*/
+      
+    function fireProjectile()
+    {
+        //projectile.visible = true;
+       // var projectile = new PIXI.Texture.fromImage('images/whiteball.png');
+        var projectile = new PIXI.Sprite(PIXI.loader.resources["images/whiteball.png"].texture);
+        projectile.x = circle.x;
+        projectile.y = circle.y;
+        let mousePosition = findMousePosition();
+       // projectile.rotation = Math.atan2(mousePosition.x - projectile.x, -(mousePosition.y - projectile.y));
+        projectile.rotation = circle.rotation - (Math.PI / 2);
+        app.stage.addChild(projectile);
+        projectiles.push(projectile);
+        
+        
+    }
+
     function findMousePosition()
     {
         var mouseposition = app.renderer.plugins.interaction.mouse.global;
         return mouseposition;
         
     } 
+      
+    function hello(){
+        alert("hello you left clicked");
+    }
     
       
 	
