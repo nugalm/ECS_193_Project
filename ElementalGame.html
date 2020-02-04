@@ -11,6 +11,8 @@
     <script src="FireCharacter.js"></script>
     <script src="EarthCharacter.js"></script>
     <script src="WindCharacter.js"></script>
+    <script src="CollisionDetector.js"></script>
+    <script src="CollisionAction.js"></script>
 <body>
   <script type="text/javascript">
     let type = "WebGL"
@@ -31,9 +33,10 @@
 	//Add the canvas that Pixi automatically created for you to the HTML document
 	document.body.appendChild(app.view);
       
-    var circle, state;
+    var circle, state, blueObject;
     var projectiles = [];
     var projectileSpeed = 5;
+    var collision;
     
     // Whenever player left clicks on mouse, call fireProjectile()
     document.body.addEventListener("click", function(e){
@@ -48,19 +51,26 @@
     var earth = new EarthCharacter();
     var wind = new WindCharacter();
     
-    ice.printStat();
-    fire.printStat();
-    earth.printStat();
-    wind.printStat();
+    //ice.printStat();
+    //fire.printStat();
+    //earth.printStat();
+    //wind.printStat();
       
     //load an image and run the `setup` function when it's done
 	PIXI.loader
 	  .add("images/placeholderCircle.png")
       .add("images/whiteball.png")
+      .add("images/blueObject.png")
 	  .load(setup);   
     
 	//This `setup` function will run when the image has loaded
-	function setup() {      
+	function setup() {     
+        blueObject = new PIXI.Sprite(PIXI.loader.resources["images/blueObject.png"].texture);
+        blueObject.y = 500;
+        blueObject.x = 500;
+        app.stage.addChild(blueObject);
+        
+        
 		//Create the circle sprite
         circle = new PIXI.Sprite(PIXI.loader.resources["images/placeholderCircle.png"].texture);
 		//Add the circle to the stage
@@ -139,14 +149,35 @@
 	   }
 
 	   function play(){
+           let hitObject = false;
             move();
             rotate();
-          if (projectiles.length != 0){
-                for (var projectile = projectiles.length - 1; projectile >= 0; projectile--){
-                projectiles[projectile].x += Math.cos(projectiles[projectile].rotation) * projectileSpeed;
-                projectiles[projectile].y += Math.sin(projectiles[projectile].rotation) * projectileSpeed;
-            }
-           }
+           // keep all projectiles moving
+          
+             //   for (var projectile = projectiles.length - 1; projectile >= 0; projectile--){
+            //        projectiles[projectile].x += Math.cos(projectiles[projectile].rotation) * projectileSpeed;
+            //        projectiles[projectile].y += Math.sin(projectiles[projectile].rotation) * projectileSpeed;
+                    // detect if the projectile has hit the blue box
+             //       let h = collisionDetector(projectiles[projectile], blueObject);
+              //      collisionAction(h, blueObject);
+             //       h = false;              
+           // }
+           
+           projectiles.forEach(function(projectile) {
+                projectile.x += Math.cos(projectile.rotation) * projectileSpeed;
+                projectile.y += Math.sin(projectile.rotation) * projectileSpeed;    
+                
+                if (collisionDetector(projectile, blueObject)){
+                    hitObject = true;
+                }
+                                
+            });
+        
+            // makes blueObject semi-transparent if hitObject is true
+            collisionAction(hitObject, blueObject);
+      
+            
+           
 	   }
       
       // moves the circle depending on velocity and keyboard input
