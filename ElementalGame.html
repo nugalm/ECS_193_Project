@@ -13,6 +13,7 @@
     <script src="WindCharacter.js"></script>
     <script src="CollisionDetector.js"></script>
     <script src="CollisionAction.js"></script>
+    <script src="ContainCharacter.js"></script>
 <body>
   <script type="text/javascript">
     let type = "WebGL"
@@ -152,16 +153,7 @@
            let hitObject = false;
             move();
             rotate();
-           // keep all projectiles moving
-          
-             //   for (var projectile = projectiles.length - 1; projectile >= 0; projectile--){
-            //        projectiles[projectile].x += Math.cos(projectiles[projectile].rotation) * projectileSpeed;
-            //        projectiles[projectile].y += Math.sin(projectiles[projectile].rotation) * projectileSpeed;
-                    // detect if the projectile has hit the blue box
-             //       let h = collisionDetector(projectiles[projectile], blueObject);
-              //      collisionAction(h, blueObject);
-             //       h = false;              
-           // }
+           containCharacter(circle, {x: 50, y:50, width:1000, height:1000});
            
            projectiles.forEach(function(projectile) {
                 projectile.x += Math.cos(projectile.rotation) * projectileSpeed;
@@ -266,12 +258,7 @@
         return mouseposition;
         
     } 
-      
-    function hello(){
-        alert("hello you left clicked");
-    }
-    
-      
+        
 	
 
 
