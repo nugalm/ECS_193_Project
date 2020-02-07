@@ -23,13 +23,19 @@
 	PIXI.utils.sayHello(type)
 	//Create a Pixi Applicircleion
 	let app = new PIXI.Application({
-		width: 1000, 
-		height: 1000,
+		width: window.screen.width, 
+		height: window.screen.height,
         antialias: true,
         transparent: false,
         resolution: 1
 		}
 	);
+
+   app.stage.position.x = window.screen.width/2;
+   app.stage.position.y = window.screen.height/2;
+      //scale it
+    //app.stage.scale.x = 2.0;
+ //  app.stage.scale.y = 2.0;
 
 	//Add the canvas that Pixi automatically created for you to the HTML document
 	document.body.appendChild(app.view);
@@ -40,10 +46,11 @@
     var collision;
     
     // Whenever player left clicks on mouse, call fireProjectile()
-    document.body.addEventListener("click", function(e){
+   // document.body.addEventListener("click", function(e){
+    window.addEventListener("click", function(e){
+        
         fireProjectile();                        
     })
-    
 
     // calling constructor with nulls because the respective elements' are initialized
     // by hardcoded values
@@ -52,10 +59,6 @@
     var earth = new EarthCharacter();
     var wind = new WindCharacter();
     
-    //ice.printStat();
-    //fire.printStat();
-    //earth.printStat();
-    //wind.printStat();
       
     //load an image and run the `setup` function when it's done
 	PIXI.loader
@@ -71,7 +74,6 @@
         blueObject.x = 500;
         app.stage.addChild(blueObject);
         
-        
 		//Create the circle sprite
         circle = new PIXI.Sprite(PIXI.loader.resources["images/placeholderCircle.png"].texture);
 		//Add the circle to the stage
@@ -81,7 +83,6 @@
         // set the point of rotation to be at the center of the sprite
         circle.anchor.set(0.5, 0.5);
 		app.stage.addChild(circle);
-		alert("CIRCLE ADDED!");
         
             //Capture the keyboard arrow keys
         let left = keyboard("a"),
@@ -92,7 +93,7 @@
           //Left arrow key `press` method
           left.press = () => {
             //Change the circle's velocity when the key is pressed
-            circle.vx = -5;
+            circle.vx = -10;
             //circle.vy = 0;
           };
 
@@ -108,7 +109,7 @@
 
           //Up
           up.press = () => {
-            circle.vy = -5;
+            circle.vy = -10;
           };
           up.release = () => {
             if (!down.isDown) {
@@ -118,7 +119,7 @@
 
           //Right
           right.press = () => {
-            circle.vx = 5;
+            circle.vx = 10;
           };
           right.release = () => {
             if (!left.isDown) {
@@ -128,7 +129,7 @@
 
           //Down
           down.press = () => {
-            circle.vy = 5;
+            circle.vy = 10;
           };
           down.release = () => {
             if (!up.isDown) {
@@ -152,7 +153,7 @@
 	   function play(){
            let hitObject = false;
             move();
-            rotate();
+           rotate();
            containCharacter(circle, {x: 50, y:50, width:1000, height:1000});
            
            projectiles.forEach(function(projectile) {
@@ -176,11 +177,15 @@
       function move(){
           circle.x += circle.vx;
           circle.y += circle.vy;
+          app.stage.pivot.x = circle.x;
+          app.stage.pivot.y = circle.y;
       }
       // rotates the circle where the mouse cursor is
         function rotate(){
             let mousePosition = findMousePosition();
-            circle.rotation = Math.atan2(mousePosition.x - circle.x, -(mousePosition.y - circle.y));
+            let tempX = circle.worldTransform.tx;
+            let tempY = circle.worldTransform.ty;
+            circle.rotation = Math.atan2(mousePosition.x - tempX, -(mousePosition.y - tempY));
         }
       
       function keyboard(value) {
@@ -242,25 +247,25 @@
       
     function fireProjectile()
     {
-        var projectile = new PIXI.Sprite(PIXI.loader.resources["images/whiteball.png"].texture);
+        let projectile = new PIXI.Sprite(PIXI.loader.resources["images/whiteball.png"].texture);
         projectile.x = circle.x;
         projectile.y = circle.y;
         let mousePosition = findMousePosition();
         projectile.rotation = circle.rotation - (Math.PI / 2);
         app.stage.addChild(projectile);
         projectiles.push(projectile);
+       // printMouse();
+       
                
     }
 
     function findMousePosition()
     {
-        var mouseposition = app.renderer.plugins.interaction.mouse.global;
+        let mouseposition = app.renderer.plugins.interaction.mouse.global;
         return mouseposition;
         
     } 
         
-	
-
 
   </script>
 </body>
