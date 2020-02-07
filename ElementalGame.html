@@ -34,15 +34,15 @@
    app.stage.position.x = window.screen.width/2;
    app.stage.position.y = window.screen.height/2;
       //scale it
-    //app.stage.scale.x = 2.0;
- //  app.stage.scale.y = 2.0;
+    app.stage.scale.x = 2.0;
+   app.stage.scale.y = 2.0;
 
 	//Add the canvas that Pixi automatically created for you to the HTML document
 	document.body.appendChild(app.view);
       
     var circle, state, blueObject;
     var projectiles = [];
-    var projectileSpeed = 5;
+    var projectileSpeed = 15;
     var collision;
     
     // Whenever player left clicks on mouse, call fireProjectile()
@@ -154,7 +154,7 @@
            let hitObject = false;
             move();
            rotate();
-           containCharacter(circle, {x: 50, y:50, width:1000, height:1000});
+           containCharacter(circle, {x: 50, y:50, width:window.screen.width, height:window.screen.height});
            
            projectiles.forEach(function(projectile) {
                 projectile.x += Math.cos(projectile.rotation) * projectileSpeed;
@@ -236,15 +236,7 @@
 
         return key;
 	}
-      
-    /*function createProjectile(){
-       // projectile.visible = false;
-        var projectile = new PIXI.Texture.fromImage('images/whiteball.png')
-        projectile.x = circle.x;
-        projectile.y = circle.y;
-              
-    }*/
-      
+            
     function fireProjectile()
     {
         let projectile = new PIXI.Sprite(PIXI.loader.resources["images/whiteball.png"].texture);
@@ -254,7 +246,6 @@
         projectile.rotation = circle.rotation - (Math.PI / 2);
         app.stage.addChild(projectile);
         projectiles.push(projectile);
-       // printMouse();
        
                
     }
