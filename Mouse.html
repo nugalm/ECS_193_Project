@@ -241,6 +241,11 @@
             return;   
         }
           
+        // Read in keys and play animations
+        // every animation is same for now since sprite changes
+        // the sprite angle/rotation anyway
+          
+        //left  
         if (cursors.left.isDown)
         {
            // player.setVelocityY(0);
@@ -248,14 +253,16 @@
 
             player.anims.play('left', true);
         }
-          
+        
+        //right  
         else if (cursors.right.isDown)
         {
             player.setVelocityX(160);
 
             player.anims.play('left', true);
         }
-           
+        
+        // down  
         if (cursors.down.isDown)
         {
 
@@ -264,8 +271,7 @@
             player.anims.play('left', true);
         }
 
-          // if up key is pressed and player is touching floor
-        //if (cursors.up.isDown && player.body.touching.down)
+        // up  
         else if (cursors.up.isDown)
         {
             player.setVelocityY(-160);
@@ -273,6 +279,7 @@
             player.anims.play('left', true);
         }
           
+        // none  
         if (cursors.up.isUp && cursors.down.isUp && cursors.left.isUp && cursors.right.isUp) 
         {
             player.setVelocityX(0);
