@@ -5,16 +5,16 @@
   <title>Hello World</title>
 
 </head>
-  <script src="phaser.min.js"></script>
-    <script src="phaser.js"></script>
-     <script src="Character.js"></script>
-    <script src="IceCharacter.js"></script>
-    <script src="FireCharacter.js"></script>
-    <script src="EarthCharacter.js"></script>
-    <script src="WindCharacter.js"></script>
-    <script src="CollisionDetector.js"></script>
-    <script src="CollisionAction.js"></script>
-    <script src="ContainCharacter.js"></script>
+  <script src="static/phaser.min.js"></script>
+    <script src="static/phaser.js"></script>
+     <script src="static/Character.js"></script>
+    <script src="static/IceCharacter.js"></script>
+    <script src="static/FireCharacter.js"></script>
+    <script src="static/EarthCharacter.js"></script>
+    <script src="static/WindCharacter.js"></script>
+    <script src="static/CollisionDetector.js"></script>
+    <script src="static/CollisionAction.js"></script>
+    <script src="static/ContainCharacter.js"></script>
 <body>
   <script type="text/javascript">
    
@@ -53,11 +53,11 @@
       {
           // the string sky is link to the loaded asset. used in code when creating
           // Game Objects
-        this.load.image('sky', 'assets/sky.png')
-        this.load.image('ground', 'assets/platform.png');
-        this.load.image('star', 'assets/star.png');
-        this.load.image('bomb', 'assets/bomb.png');
-        this.load.spritesheet('dude', 'assets/dude.png',
+        this.load.image('sky', 'static/assets/sky.png')
+        this.load.image('ground', 'static/assets/platform.png');
+        this.load.image('star', 'static/assets/star.png');
+        this.load.image('bomb', 'static/assets/bomb.png');
+        this.load.spritesheet('dude', 'static/assets/dude.png',
         { frameWidth: 32, frameHeight: 48 }
     );
       }

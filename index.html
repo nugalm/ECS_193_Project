@@ -5,16 +5,17 @@
   <title>Hello World</title>
 
 </head>
-  <script src="phaser.min.js"></script>
-    <script src="phaser.js"></script>
-     <script src="Character.js"></script>
-    <script src="IceCharacter.js"></script>
-    <script src="FireCharacter.js"></script>
-    <script src="EarthCharacter.js"></script>
-    <script src="WindCharacter.js"></script>
-    <script src="CollisionDetector.js"></script>
-    <script src="CollisionAction.js"></script>
-    <script src="ContainCharacter.js"></script>
+  <script src="static/phaser.min.js"></script>
+    <script src="static/phaser.js"></script>
+     <script src="static/Character.js"></script>
+    <script src="static/IceCharacter.js"></script>
+    <script src="static/FireCharacter.js"></script>
+    <script src="static/EarthCharacter.js"></script>
+    <script src="static/WindCharacter.js"></script>
+    <script src="static/CollisionDetector.js"></script>
+    <script src="static/CollisionAction.js"></script>
+    <script src="static/ContainCharacter.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 <body>
   <script type="text/javascript">
    
@@ -53,6 +54,7 @@
       var hitbox;
       var DISPLAY = 150;
       var HITBOX = 110;
+      var clientSprites = {};
       
       var game = new Phaser.Game(config);
       
@@ -60,19 +62,27 @@
       {
           // the string sky is link to the loaded asset. used in code when creating
           // Game Objects
-        this.load.image('sky', 'assets/sky.png')
-        this.load.image('ground', 'assets/platform.png');
-        this.load.image('star', 'assets/star.png');
-        this.load.image('bomb', 'assets/bomb.png');
-        this.load.image('projectile', 'images/whiteball.png');
-        this.load.image('hitbox', 'assets/hitbox_square.png');
-        this.load.spritesheet('mouse', 'images/mouse_walk.png',
+        this.load.image('sky', 'static/assets/sky.png')
+        this.load.image('ground', 'static/assets/platform.png');
+        this.load.image('star', 'static/assets/star.png');
+        this.load.image('bomb', 'static/assets/bomb.png');
+        this.load.image('projectile', 'static/images/whiteball.png');
+        this.load.image('hitbox', 'static/assets/hitbox_square.png');
+        this.load.spritesheet('mouse', 'static/images/mouse_walk.png',
                               {frameWidth: 34, frameHeight: 48 } );
-        this.load.spritesheet('dude', 'assets/dude.png',
+        this.load.spritesheet('dude', 'static/assets/dude.png',
                               {frameWidth: 32, frameHeight: 48 }  );
           
-        this.load.multiatlas('kitchenScene', 'images/atlas.json', 'images')
+        this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images')
       }
+      
+      var origin = window.location.origin;
+      var socket = io.connect(origin);
+      var socket_id;
+      socket.on('connect', function() {
+          socket_id = socket.id;
+          socket.emit('newPlayer');
+      });
       
       function create()
       {
@@ -106,7 +116,7 @@
           // a Dynamic Physics body by default
          // player = this.physics.add.sprite(100, 450, 'dude');
           
-          player = this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+          player = this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png'); 
           player.displayWidth = DISPLAY;
           player.displayHeight = DISPLAY;
           //player.setScale(0.75, 0.75); 
@@ -297,12 +307,82 @@
           
         player.setRotation(targetAngle + Math.PI / 2);
     
-        console.log("mousePOinter.x: " + this.game.input.mousePointer.x + "\nmousePointer.y: " + this.game.input.mousePointer.y);
+        //console.log("mousePOinter.x: " + this.game.input.mousePointer.x + "\nmousePointer.y: " + this.game.input.mousePointer.y);
                    
         moveProjectiles();
           
         hitbox.setPosition(player.x, player.y);
-
+          
+        var myPosition = {x: player.x , y: player.y};
+        var myVelocity = {x: player.body.velocity.x , y: player.body.velocity.y };
+        var info = {position: myPosition, velocity: myVelocity, r: player.rotation};
+        socket.emit('movement', info);
+          
+        socket.on('state', function(objs) {
+             //console.log(objs);
+            //console.log("Hello?");
+            for (var id in objs) {
+                if(socket_id === id){
+                    //console.log(id + ' continued');
+                    continue;
+                }
+                //console.log("state: " + id);
+                
+                if(!(id in clientSprites)){
+                    clientSprites[id] = [];
+                    for(i=0; i < objs[id].length; i++){
+                        //console.log(id + ' for');
+                        var otherPlayer = this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png')
+                        otherPlayer.displayWidth = DISPLAY;
+                        otherPlayer.displayHeight = DISPLAY;
+                        //player.setScale(0.75, 0.75); 
+                        otherPlayer.setSize(HITBOX, HITBOX);
+                        otherPlayer.setOffset(125, 50);
+                        otherPlayer.setCollideWorldBounds(true);
+                        otherPlayer.body.setAllowGravity(false);
+                        
+                        clientSprites[id].push(otherPlayer);;
+                        clientSprites[id][i].x = objs[id][i].x;
+                        clientSprites[id][i].y = objs[id][i].y;
+                        clientSprites[id][i].rotation = objs[id][i].rotation;
+                        // set the point of rotation to be at the center of the sprite
+                        clientSprites[id][i].anchor.set(0.5, 0.5);
+                        //app.stage.addChild(clientSprites[id][i]);
+                        console.log('add new obj ' + objs[id][i].name + ' ' + id);
+                        //console.log('added ' + objs[id][i].name);
+                    }
+                }
+                
+                for(i=0; i < objs[id].length; i++){
+                    if(objs[id][i].render){
+                        /*
+                        if(objs[id].length > clientSprites[id].length){
+                            // for loop to add missing sprites
+                            var len = clientSprites[id].length;
+                            for(i=0; i < (objs[id].length - clientSprites[id].length); i++){
+                                clientSprites[id].push(this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png'));
+                                clientSprites[id][len + i].x = objs[id][len + i].x;
+                                clientSprites[id][len + i].y = objs[id][len + i].y;
+                                clientSprites[id][len + i].rotation = objs[id][len + i].rotation;
+                                //console.log('Added new sprite elements');
+                            }
+                        }
+                        */
+                        
+                        if(objs[id].length < clientSprites[id].length) {
+                            console.log('error with amount of sprites');
+                        }
+                        
+                        //console.log('Updating locations');
+                        clientSprites[id][i].setVelocityX(objs[id][i].velocity.x);
+                        clientSprites[id][i].setVelocityY(objs[id][i].velocity.y);
+                        clientSprites[id][i].rotation = objs[id][i].rotation;
+                        player.anims.play('left', true);
+                    }
+                    //console.log('In client for loop');
+                }
+            }
+         });
     }  
           
       
