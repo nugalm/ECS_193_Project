@@ -54,7 +54,7 @@
       var hitbox;
       var DISPLAY = 150;
       var HITBOX = 110;
-      var clientSprites = {};
+      var otherPlayers = {};
       
       var game = new Phaser.Game(config);
       
@@ -86,6 +86,32 @@
       
       function create()
       {
+          var self = this;
+           socket.on('updatePlayers', function(server){
+               for (var id in server){
+                    if(socket_id === id){
+                          continue;
+                    }
+                   
+                    if(!(id in otherPlayers)){
+                        otherPlayers[id] = self.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+                        otherPlayers[id].displayWidth = DISPLAY;
+                        otherPlayers[id].displayHeight = DISPLAY; 
+                        otherPlayers[id].setSize(HITBOX, HITBOX);
+                        otherPlayers[id].setOffset(125, 50);
+                        otherPlayers[id].setCollideWorldBounds(true);
+                        otherPlayers[id].body.setAllowGravity(false);
+                        
+                        self.physics.add.collider(otherPlayers, platforms);
+                        self.physics.add.collider(otherPlayers, stars);
+                        otherPlayers[id].x = server[id].position.x;
+                        otherPlayers[id].y = server[id].position.y;
+                        otherPlayers[id].rotation = server[id].rotation;
+                        //otherPlayers[id] = otherPlayer;
+                    }
+               }
+           });
+          
           this.add.image(400, 300, 'sky');
           //to reset the sky image to 0, 0 coords
          // this.add.image(0, 0, 'sky').setOrigin(0, 0);
@@ -317,72 +343,17 @@
         var myVelocity = {x: player.body.velocity.x , y: player.body.velocity.y };
         var info = {position: myPosition, velocity: myVelocity, r: player.rotation};
         socket.emit('movement', info);
-          
-        socket.on('state', function(objs) {
-             //console.log(objs);
-            //console.log("Hello?");
-            for (var id in objs) {
-                if(socket_id === id){
-                    //console.log(id + ' continued');
-                    continue;
-                }
-                //console.log("state: " + id);
-                
-                if(!(id in clientSprites)){
-                    clientSprites[id] = [];
-                    for(i=0; i < objs[id].length; i++){
-                        //console.log(id + ' for');
-                        var otherPlayer = this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png')
-                        otherPlayer.displayWidth = DISPLAY;
-                        otherPlayer.displayHeight = DISPLAY;
-                        //player.setScale(0.75, 0.75); 
-                        otherPlayer.setSize(HITBOX, HITBOX);
-                        otherPlayer.setOffset(125, 50);
-                        otherPlayer.setCollideWorldBounds(true);
-                        otherPlayer.body.setAllowGravity(false);
-                        
-                        clientSprites[id].push(otherPlayer);;
-                        clientSprites[id][i].x = objs[id][i].x;
-                        clientSprites[id][i].y = objs[id][i].y;
-                        clientSprites[id][i].rotation = objs[id][i].rotation;
-                        // set the point of rotation to be at the center of the sprite
-                        clientSprites[id][i].anchor.set(0.5, 0.5);
-                        //app.stage.addChild(clientSprites[id][i]);
-                        console.log('add new obj ' + objs[id][i].name + ' ' + id);
-                        //console.log('added ' + objs[id][i].name);
-                    }
-                }
-                
-                for(i=0; i < objs[id].length; i++){
-                    if(objs[id][i].render){
-                        /*
-                        if(objs[id].length > clientSprites[id].length){
-                            // for loop to add missing sprites
-                            var len = clientSprites[id].length;
-                            for(i=0; i < (objs[id].length - clientSprites[id].length); i++){
-                                clientSprites[id].push(this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png'));
-                                clientSprites[id][len + i].x = objs[id][len + i].x;
-                                clientSprites[id][len + i].y = objs[id][len + i].y;
-                                clientSprites[id][len + i].rotation = objs[id][len + i].rotation;
-                                //console.log('Added new sprite elements');
-                            }
-                        }
-                        */
-                        
-                        if(objs[id].length < clientSprites[id].length) {
-                            console.log('error with amount of sprites');
-                        }
-                        
-                        //console.log('Updating locations');
-                        clientSprites[id][i].setVelocityX(objs[id][i].velocity.x);
-                        clientSprites[id][i].setVelocityY(objs[id][i].velocity.y);
-                        clientSprites[id][i].rotation = objs[id][i].rotation;
-                        player.anims.play('left', true);
-                    }
-                    //console.log('In client for loop');
-                }
-            }
-         });
+        
+        socket.on('moveUpdates', function(object){ 
+            //if(object.id in otherPlayers){
+            otherPlayers[object.id].setVelocityX(object.player.velocity.x);
+            otherPlayers[object.id].setVelocityY(object.player.velocity.y);
+            otherPlayers[object.id].rotation = object.player.rotation;
+            // Leave animations on constantly for now
+            otherPlayers[object.id].anims.play('left', true);
+            //}
+        });
+        
     }  
           
       
@@ -419,7 +390,7 @@
             bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
             bomb.allowGravity = false;
 
-    }
+            }
         }
       
       

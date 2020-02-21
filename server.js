@@ -21,21 +21,19 @@ server.listen(8080, function() {
     console.log('Starting server on port 8080');
 });
 
-var objs = {};
+var serverPlayers = {};
 io.on('connection', function(socket) {
     socket.on('newPlayer', function() {
-        console.log('New player arrives');
-        objs[socket.id] = [];
-        objs[socket.id].push(
+        serverPlayers[socket.id] = 
         {
             name: 'player',
             position: {x: 100, y: 450},
+            oldPosition: {x: 100, y: 450},
             velocity: {x: 0, y: 0},
             render: true,
             object: 'mouse_walk/mouse_walk-2.png',
             rotation: 0
-        });
-        //console.log(objs);
+        };
     });
     
     /*
@@ -67,32 +65,22 @@ io.on('connection', function(socket) {
     */
 
     socket.on('movement', function(data) {
-        //var player = (objs[socket.id][0] || {});
         
-        function findPlayer(myObj){
-            if(myObj.name === 'player'){
-                return true;
-            }
-        }
+        serverPlayers[socket.id].oldPosition = serverPlayers[socket.id].position;
+        serverPlayers[socket.id].position = data.position;
+        serverPlayers[socket.id].velocity = data.velocity;
+        serverPlayers[socket.id].rotation = data.r;
+        serverPlayers[socket.id].render = true;
         
+        var object = {id: socket.id, player: serverPlayers[socket.id]};
         
-        if(!(typeof objs[socket.id] === 'undefined')){
-            var index = objs[socket.id].findIndex(findPlayer);
-            //var player =  objs[socket.id][index]
-            objs[socket.id][index].name = 'player';
-            objs[socket.id][index].position = data.position;
-            objs[socket.id][index].velocity = data.velocity;
-            objs[socket.id][index].rotation = data.r;
-            objs[socket.id][index].render = true;
-            objs[socket.id][index].object = 'mouse_walk/mouse_walk-2.png';
-            //objs[socket.id][0] = player;
-        }
+        socket.broadcast.emit('moveUpdates', object);
     });
     
     socket.on('disconnect', function() {
         //console.log('user disconnected');
         // remove this player from our players object
-        delete objs[socket.id];
+        delete serverPlayers[socket.id];
         // emit a message to all players to remove this player
         io.emit('disconnect', socket.id);
         //console.log('removed player ' + socket.id);
@@ -101,6 +89,6 @@ io.on('connection', function(socket) {
 
 // Send out the update state function 60 times a second
 setInterval(function() {
-  io.sockets.emit('state', objs);
+  io.sockets.emit('updatePlayers', serverPlayers);
     //console.log('Server emitting to client');
 }, 1000 / 60);
