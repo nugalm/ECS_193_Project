@@ -1,0 +1,720 @@
+{
+	"textures": [
+		{
+			"image": "atlas.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1877,
+				"h": 1940
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "atlas.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 1741,
+						"h": 1294
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1740,
+						"h": 1293
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 1740,
+						"h": 1293
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-16.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 116,
+						"y": 2,
+						"w": 133,
+						"h": 254
+					},
+					"frame": {
+						"x": 1743,
+						"y": 1,
+						"w": 133,
+						"h": 254
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-6.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 116,
+						"y": 2,
+						"w": 133,
+						"h": 248
+					},
+					"frame": {
+						"x": 1743,
+						"y": 257,
+						"w": 133,
+						"h": 248
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-14.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 116,
+						"y": 2,
+						"w": 133,
+						"h": 246
+					},
+					"frame": {
+						"x": 1743,
+						"y": 507,
+						"w": 133,
+						"h": 246
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-15.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 116,
+						"y": 2,
+						"w": 133,
+						"h": 246
+					},
+					"frame": {
+						"x": 1743,
+						"y": 507,
+						"w": 133,
+						"h": 246
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 116,
+						"y": 2,
+						"w": 133,
+						"h": 246
+					},
+					"frame": {
+						"x": 1743,
+						"y": 755,
+						"w": 133,
+						"h": 246
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 116,
+						"y": 2,
+						"w": 133,
+						"h": 246
+					},
+					"frame": {
+						"x": 1743,
+						"y": 755,
+						"w": 133,
+						"h": 246
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-17.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 121,
+						"y": 8,
+						"w": 123,
+						"h": 248
+					},
+					"frame": {
+						"x": 1743,
+						"y": 1003,
+						"w": 123,
+						"h": 248
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-7.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 121,
+						"y": 5,
+						"w": 123,
+						"h": 245
+					},
+					"frame": {
+						"x": 1743,
+						"y": 1253,
+						"w": 123,
+						"h": 245
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333
+					}
+				},
+				{
+					"filename": "sky.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 800,
+						"h": 600
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 800,
+						"h": 600
+					},
+					"frame": {
+						"x": 1,
+						"y": 1296,
+						"w": 800,
+						"h": 600
+					},
+					"anchor": {
+						"x": 0,
+						"y": 0
+					}
+				},
+				{
+					"filename": "whiteball.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 36,
+						"h": 20
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 36,
+						"h": 20
+					},
+					"frame": {
+						"x": 1,
+						"y": 1898,
+						"w": 36,
+						"h": 20
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "placeholderBox.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 260,
+						"h": 280
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 260,
+						"h": 280
+					},
+					"frame": {
+						"x": 803,
+						"y": 1500,
+						"w": 260,
+						"h": 280
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-12.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 76,
+						"y": 2,
+						"w": 173,
+						"h": 202
+					},
+					"frame": {
+						"x": 803,
+						"y": 1296,
+						"w": 173,
+						"h": 202
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-13.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 76,
+						"y": 2,
+						"w": 173,
+						"h": 202
+					},
+					"frame": {
+						"x": 803,
+						"y": 1296,
+						"w": 173,
+						"h": 202
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 116,
+						"y": 2,
+						"w": 167,
+						"h": 202
+					},
+					"frame": {
+						"x": 978,
+						"y": 1296,
+						"w": 167,
+						"h": 202
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 116,
+						"y": 2,
+						"w": 167,
+						"h": 202
+					},
+					"frame": {
+						"x": 978,
+						"y": 1296,
+						"w": 167,
+						"h": 202
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 600,
+						"h": 480
+					},
+					"spriteSourceSize": {
+						"x": 27,
+						"y": 0,
+						"w": 542,
+						"h": 446
+					},
+					"frame": {
+						"x": 1147,
+						"y": 1296,
+						"w": 542,
+						"h": 446
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-8.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 88,
+						"y": 10,
+						"w": 154,
+						"h": 195
+					},
+					"frame": {
+						"x": 1065,
+						"y": 1744,
+						"w": 154,
+						"h": 195
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-9.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 88,
+						"y": 10,
+						"w": 154,
+						"h": 195
+					},
+					"frame": {
+						"x": 1065,
+						"y": 1744,
+						"w": 154,
+						"h": 195
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-0.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 121,
+						"y": 5,
+						"w": 154,
+						"h": 193
+					},
+					"frame": {
+						"x": 1221,
+						"y": 1744,
+						"w": 154,
+						"h": 193
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 121,
+						"y": 5,
+						"w": 154,
+						"h": 193
+					},
+					"frame": {
+						"x": 1221,
+						"y": 1744,
+						"w": 154,
+						"h": 193
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-10.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 83,
+						"y": 8,
+						"w": 161,
+						"h": 190
+					},
+					"frame": {
+						"x": 1377,
+						"y": 1744,
+						"w": 161,
+						"h": 190
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-18.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 123,
+						"y": 9,
+						"w": 142,
+						"h": 187
+					},
+					"frame": {
+						"x": 1540,
+						"y": 1744,
+						"w": 142,
+						"h": 187
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-19.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 123,
+						"y": 9,
+						"w": 142,
+						"h": 187
+					},
+					"frame": {
+						"x": 1540,
+						"y": 1744,
+						"w": 142,
+						"h": 187
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333333333335
+					}
+				},
+				{
+					"filename": "george.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 192,
+						"h": 192
+					},
+					"spriteSourceSize": {
+						"x": 9,
+						"y": 10,
+						"w": 175,
+						"h": 178
+					},
+					"frame": {
+						"x": 1691,
+						"y": 1500,
+						"w": 175,
+						"h": 178
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "blueObject.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 64,
+						"h": 64
+					},
+					"frame": {
+						"x": 1065,
+						"y": 1500,
+						"w": 64,
+						"h": 64
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "placeholderCircle.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 64,
+						"h": 64
+					},
+					"frame": {
+						"x": 1065,
+						"y": 1566,
+						"w": 64,
+						"h": 64
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "mouse_walk/mouse_walk-11.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 360,
+						"h": 360
+					},
+					"spriteSourceSize": {
+						"x": 83,
+						"y": 2,
+						"w": 166,
+						"h": 196
+					},
+					"frame": {
+						"x": 1691,
+						"y": 1680,
+						"w": 166,
+						"h": 196
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.31333333
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:6b3b085c8ab33df669b2260ead22ddb3:f8261957a4228afbeb89d300bde46122:cbce6b53f0f49e0bf15173c25c41f876$"
+	}
+}
