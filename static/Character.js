@@ -20,6 +20,7 @@ class Character {
         this.positionY;
         this.startPositionX = 100;
         this.startPositionY = 450;
+
 	}
 
 	printStat(){
@@ -32,6 +33,7 @@ class Character {
                 + "stamina: " + this.stamina
 				);
 	}
+
     
     initSprite() 
     {
@@ -107,7 +109,7 @@ class Character {
             this.sprite.anims.play('turn');
         }
     }
-    
+
 }
 
 

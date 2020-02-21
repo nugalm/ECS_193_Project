@@ -1,0 +1,491 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hello World</title>
+
+</head>
+  <script src="static/phaser.min.js"></script>
+    <script src="static/phaser.js"></script>
+     <script src="static/Character.js"></script>
+    <script src="static/IceCharacter.js"></script>
+    <script src="static/FireCharacter.js"></script>
+    <script src="static/EarthCharacter.js"></script>
+    <script src="static/WindCharacter.js"></script>
+    <script src="static/CollisionDetector.js"></script>
+    <script src="static/CollisionAction.js"></script>
+    <script src="static/ContainCharacter.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+<body>
+  <script type="text/javascript">
+   
+      var config = {
+          // .AUTO tells phaser to default to WEBGL, else default to canvas
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+          // tells Phaser that our game requires the Arcade Physics system
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 300 },
+                    debug: false
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+      };
+      
+      var cursor;
+      var projectiles;
+      var platforms;
+      var player;
+      var cursors;
+      var stars;
+      var score = 0;
+      var scoreText;
+      var bombs;
+      var gameOver = false;
+      var dragging = false;
+      var mouse;
+      var hitbox;
+      var DISPLAY = 150;
+      var HITBOX = 110;
+      var clientSprites = {};
+      
+      var game = new Phaser.Game(config);
+      
+      function preload()
+      {
+          // the string sky is link to the loaded asset. used in code when creating
+          // Game Objects
+        this.load.image('sky', 'static/assets/sky.png')
+        this.load.image('ground', 'static/assets/platform.png');
+        this.load.image('star', 'static/assets/star.png');
+        this.load.image('bomb', 'static/assets/bomb.png');
+        this.load.image('projectile', 'static/images/whiteball.png');
+        this.load.image('hitbox', 'static/assets/hitbox_square.png');
+        this.load.spritesheet('mouse', 'static/images/mouse_walk.png',
+                              {frameWidth: 34, frameHeight: 48 } );
+        this.load.spritesheet('dude', 'static/assets/dude.png',
+                              {frameWidth: 32, frameHeight: 48 }  );
+          
+        this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images')
+      }
+      
+      var origin = window.location.origin;
+      var socket = io.connect(origin);
+      var socket_id;
+      socket.on('connect', function() {
+          socket_id = socket.id;
+          socket.emit('newPlayer');
+      });
+      
+      function create()
+      {
+          this.add.image(400, 300, 'sky');
+          //to reset the sky image to 0, 0 coords
+         // this.add.image(0, 0, 'sky').setOrigin(0, 0);
+          //order in which game objects are displayed matches order
+          // of creation
+          // this.add.image creates new Image Game Object and adds it to current Scenes display
+          // list
+
+          
+
+          // creates new static physics group and assigns to platforms
+          // in Arcade Physics, two types of physics bodies:
+          // Dynamic: moves around via forces like velocity/acceleration/collides/bounces
+          // Static: only has position and size, not touched by gravity, when collides, it doesn't move
+          platforms = this.physics.add.staticGroup();
+          
+          // refresh body tells Phaser we changed a Static physics body
+          platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+          
+          platforms.create(600, 400, 'ground');
+          platforms.create (50, 250, 'ground');
+          platforms.create(750, 220, 'ground');
+        //  hitbox = this.add.image(100, 450, 'ground');
+        //  hitbox.displayWidth = 50;
+        //  hitbox.displayHeight = 50;
+          // creates sprite positioned at 100, 450
+          // created by Physics Game Object Factor (this.physics.add) which means it has 
+          // a Dynamic Physics body by default
+         // player = this.physics.add.sprite(100, 450, 'dude');
+          
+          player = this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png'); 
+          player.displayWidth = DISPLAY;
+          player.displayHeight = DISPLAY;
+          //player.setScale(0.75, 0.75); 
+          player.setSize(HITBOX, HITBOX);
+          player.setOffset(125, 50);
+            // when sprite lands after jumping it will bounce slightly
+         //   player.setBounce(0.2);
+          // set to collide with world bounds (which is outside of game dimensions)
+          // we defined as 800 x 600
+            player.setCollideWorldBounds(true);
+          player.body.setAllowGravity(false);
+          // Animation Manager is a global system, defining an animation allows us
+          // to apply it to as many Game Objects as we want
+
+          
+          hitbox = this.add.image(100, 450, 'hitbox');
+          hitbox.displayWidth = HITBOX;
+          hitbox.displayHeight = HITBOX;
+                    
+            var frameNames = this.anims.generateFrameNames('kitchenScene', {
+                start: 0, end: 19, zeroPad: 0, 
+                prefix: 'mouse_walk/mouse_walk-', suffix:'.png'
+            });
+
+            this.anims.create({
+                key: 'left',
+                frames: frameNames,
+                frameRate: 25,
+                repeat: -1
+            });
+                  
+          this.anims.create({
+                key: 'turn',
+                frames: frameNames,
+                frameRate: 0,
+                //repeat: -1
+            });
+          
+          this.anims.create({
+                key: 'right',
+                frames: frameNames,
+                frameRate: 25,
+                repeat: -1
+            });
+
+
+          
+           /* this.anims.create({
+                key: 'right',
+                frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+                frameRate: 10,
+                repeat: -1
+            });*/
+          
+        // Phaser's built-in Keyboard manager
+        // populates cursors object with up, down left, right properties
+        // the four directions are instances of Key objects
+       // cursors = this.input.keyboard.createCursorKeys();
+        cursors = this.input.keyboard.addKeys({'up': Phaser.Input.Keyboard.KeyCodes.W, 
+                                     'down': Phaser.Input.Keyboard.KeyCodes.S,                     'left': Phaser.Input.Keyboard.KeyCodes.A,     
+                                    'right': Phaser.Input.Keyboard.KeyCodes.D,
+                                                          
+                                    
+                                    });
+        
+        // creating dynamic physics group instead of static to make it bounce
+        stars = this.physics.add.group({
+            // any children created will be fiven the star texture by default
+            key: 'star',
+            // create 1 child then repeat 11 times = 12 stars total
+            repeat: 11,
+            // set the stars starting at 12, 0
+            // first one at 12, 0  - second one 12+70, 0 => 82, 0
+            // third at 152, 0 etc.
+            setXY: { x: 12, y: 0, stepX: 70 }
+        });
+
+        // iterates through all the stars in the star Group and gives them random Y bounce value between 0.4 and 0.8 (the range is 0 to 1)
+        stars.children.iterate(function (child) {
+
+            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+        });
+          
+          bombs = this.physics.add.group();
+          
+          createProjectiles(this);
+                
+          cursor = this.physics.add.image(0,0,'cursor').setVisible(false);
+          
+          this.input.on('pointerdown', function(p)
+        {
+           // cursor.setPosition(p.x, p.y);
+            var projectile = projectiles.create(player.x, player.y, 'projectile');
+            projectile.setCollideWorldBounds(false);
+            projectile.body.setAllowGravity(false); 
+            projectile.rotation = player.rotation - (Math.PI / 2); 
+          });
+          
+          // 16 x 16 coords
+          // score: 0 is default display
+          scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+          
+          // creates Collider object that checks collision between player and platforms Group
+          this.physics.add.collider(player, platforms);
+          // check collision with platforms
+          this.physics.add.collider(stars, platforms);
+          //check if player overlaps this a star or not
+          // if overlap, then call function collectStar
+          this.physics.add.overlap(player, stars, collectStar, null, this);
+         // this.physics.add.collider(player, stars, collectStar, null, this);
+          this.physics.add.collider(projectiles, platforms);
+          
+          this.physics.add.collider(bombs, platforms);
+          // call hitBomb if player hits a bomb
+          this.physics.add.collider(player, bombs, hitBomb, null, this);
+          
+           this.cameras.main.startFollow(player, true, 0.05, 0.05);
+          
+          this.cameras.main.zoom = 1.5;
+          
+          
+          
+      }
+      
+      
+      function update()
+      {
+        if (gameOver)
+        {
+           // gameOver = false;
+            return;   
+        }
+          
+        // Read in keys and play animations
+        // every animation is same for now since sprite changes
+        // the sprite angle/rotation anyway
+          
+        //left  
+        if (cursors.left.isDown)
+        {
+           // player.setVelocityY(0);
+            player.setVelocityX(-160);
+
+            player.anims.play('left', true);
+        }
+        
+        //right  
+        else if (cursors.right.isDown)
+        {
+            player.setVelocityX(160);
+
+            player.anims.play('left', true);
+        }
+        
+        // down  
+        if (cursors.down.isDown)
+        {
+
+            player.setVelocityY(160);
+
+            player.anims.play('left', true);
+        }
+
+        // up  
+        else if (cursors.up.isDown)
+        {
+            player.setVelocityY(-160);
+            
+            player.anims.play('left', true);
+        }
+          
+        // none  
+        if (cursors.up.isUp && cursors.down.isUp && cursors.left.isUp && cursors.right.isUp) 
+        {
+            player.setVelocityX(0);
+            player.setVelocityY(0);
+            player.anims.play('turn');
+        }
+        
+          
+    
+        var temp = player.getWorldTransformMatrix();
+          //getWorldTransformMatrix 
+        var targetAngle =  Phaser.Math.Angle.Between(
+          player.x, player.y,
+          this.game.input.activePointer.worldX, this.game.input.activePointer.worldY);
+          
+        player.setRotation(targetAngle + Math.PI / 2);
+    
+        //console.log("mousePOinter.x: " + this.game.input.mousePointer.x + "\nmousePointer.y: " + this.game.input.mousePointer.y);
+                   
+        moveProjectiles();
+          
+        hitbox.setPosition(player.x, player.y);
+          
+        var myPosition = {x: player.x , y: player.y};
+        var myVelocity = {x: player.body.velocity.x , y: player.body.velocity.y };
+        var info = {position: myPosition, velocity: myVelocity, r: player.rotation};
+        socket.emit('movement', info);
+          
+        socket.on('state', function(objs) {
+             //console.log(objs);
+            //console.log("Hello?");
+            for (var id in objs) {
+                if(socket_id === id){
+                    //console.log(id + ' continued');
+                    continue;
+                }
+                //console.log("state: " + id);
+                
+                if(!(id in clientSprites)){
+                    clientSprites[id] = [];
+                    for(i=0; i < objs[id].length; i++){
+                        //console.log(id + ' for');
+                        var otherPlayer = this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png')
+                        otherPlayer.displayWidth = DISPLAY;
+                        otherPlayer.displayHeight = DISPLAY;
+                        //player.setScale(0.75, 0.75); 
+                        otherPlayer.setSize(HITBOX, HITBOX);
+                        otherPlayer.setOffset(125, 50);
+                        otherPlayer.setCollideWorldBounds(true);
+                        otherPlayer.body.setAllowGravity(false);
+                        
+                        clientSprites[id].push(otherPlayer);;
+                        clientSprites[id][i].x = objs[id][i].x;
+                        clientSprites[id][i].y = objs[id][i].y;
+                        clientSprites[id][i].rotation = objs[id][i].rotation;
+                        // set the point of rotation to be at the center of the sprite
+                        clientSprites[id][i].anchor.set(0.5, 0.5);
+                        //app.stage.addChild(clientSprites[id][i]);
+                        console.log('add new obj ' + objs[id][i].name + ' ' + id);
+                        //console.log('added ' + objs[id][i].name);
+                    }
+                }
+                
+                for(i=0; i < objs[id].length; i++){
+                    if(objs[id][i].render){
+                        /*
+                        if(objs[id].length > clientSprites[id].length){
+                            // for loop to add missing sprites
+                            var len = clientSprites[id].length;
+                            for(i=0; i < (objs[id].length - clientSprites[id].length); i++){
+                                clientSprites[id].push(this.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png'));
+                                clientSprites[id][len + i].x = objs[id][len + i].x;
+                                clientSprites[id][len + i].y = objs[id][len + i].y;
+                                clientSprites[id][len + i].rotation = objs[id][len + i].rotation;
+                                //console.log('Added new sprite elements');
+                            }
+                        }
+                        */
+                        
+                        if(objs[id].length < clientSprites[id].length) {
+                            console.log('error with amount of sprites');
+                        }
+                        
+                        //console.log('Updating locations');
+                        clientSprites[id][i].setVelocityX(objs[id][i].velocity.x);
+                        clientSprites[id][i].setVelocityY(objs[id][i].velocity.y);
+                        clientSprites[id][i].rotation = objs[id][i].rotation;
+                        player.anims.play('left', true);
+                    }
+                    //console.log('In client for loop');
+                }
+            }
+         });
+    }  
+          
+      
+       // physics body disabled and parent Game Object is made inactive and invisible 
+        // removing it from display
+        function collectStar(player, star)
+        {
+            
+            star.disableBody(true, true);      
+            
+            // increment player score when he gets a star
+            score += 10;
+            scoreText.setText('Score: ' + score);
+            
+            // use Group method countActive to see how many stars are left alive
+            // if player collects them all, re-enable all the stars and reset their y position
+            //to 0 => make stars drop from the top of the screen again
+            if (stars.countActive(true) === 0)
+            {
+                //  A new batch of stars to collect
+                stars.children.iterate(function (child) {
+
+                child.enableBody(true, child.x, 0, true, true);
+
+            });
+
+                
+            /// create bombs, with x coordinate opposite side of the player to give them a chance lmao
+            var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+
+            var bomb = bombs.create(x, 16, 'bomb');
+            bomb.setBounce(1);
+            bomb.setCollideWorldBounds(true);
+            bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+            bomb.allowGravity = false;
+
+    }
+        }
+      
+      
+      // stops the game and turns player Red
+      function hitBomb()
+      
+      {
+        this.physics.pause();
+
+        player.setTint(0xff0000);
+
+        player.anims.play('turn');
+
+        gameOver = true;
+          
+          
+      }
+      
+      
+    function createProjectiles(e)
+      {
+            projectiles = e.physics.add.group();
+          
+          
+      }
+      
+      function disableProjectiles()
+      {
+            projectiles.children.iterate(function (child) 
+            {
+                child.disableBody(true, true);
+                                
+            });    
+      }
+      
+      function enableProjectiles()
+      {
+            projectiles.children.iterate(function(child) 
+            {
+                child.enableBody(true, player.x, player.y, true, true);
+            });
+      }
+      
+      function moveProjectiles()
+      {
+            projectiles.children.iterate(function(child)
+            {                            
+                child.x += Math.cos(child.rotation) * 10;
+                child.y += Math.sin(child.rotation) * 10;
+                
+            });    
+      }
+      
+      function rotateProjectile() 
+      {
+          projectile.rotation = player.rotation;
+      }
+                                         
+     function fire()
+        {
+            var projectile = projectiles.create(player.x, player.y, 'projectile');
+            projectile.setCollideWorldBounds(true);
+            this.physics.moveToObject(projectile, this.game.input.activePointer, 240);
+                
+        }
+      
+  </script>
+</body>
+</html>
