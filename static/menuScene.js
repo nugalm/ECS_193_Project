@@ -64,7 +64,7 @@ class menuScene extends Phaser.Scene
         this.saltyButton.on('pointerdown', function() 
         {
             alert('everything tastes better with salt');
-            this.scene.start('gameScene', { player: new SaltyCharacter()});
+            this.scene.start('armoryScene', { player: new SaltyCharacter()});
         }, this);
         
         //spicy
@@ -81,7 +81,7 @@ class menuScene extends Phaser.Scene
         this.spicyButton.on('pointerdown', function() 
         {
             alert('is it hot in here..or is it just you?');
-            this.scene.start('gameScene', { player: new SpicyCharacter()});
+            this.scene.start('armoryScene', { player: new SpicyCharacter()});
         }, this);
         
         //sour
@@ -98,7 +98,7 @@ class menuScene extends Phaser.Scene
         this.sourButton.on('pointerdown', function() 
         {
             alert('here, have a token of sour gratitude');
-            this.scene.start('gameScene', { player: new SourCharacter()});
+            this.scene.start('armoryScene', { player: new SourCharacter()});
         }, this);
         
         //sweet
@@ -116,7 +116,7 @@ class menuScene extends Phaser.Scene
         this.sweetButton.on('pointerdown', function() 
         {
             alert('mm.. the sweet smell of a winner');
-            this.scene.start('gameScene', { player: new SweetCharacter()});
+            this.scene.start('armoryScene', { player: new SweetCharacter()});
         }, this);
             
             

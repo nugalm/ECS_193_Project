@@ -24,7 +24,7 @@ class Character {
 	}
 
 	printStat(){
-        alert("Creating " + this.element + " character!");
+        //alert("Creating " + this.element + " character!");
 		alert("health: " + this.health + "\n"     
 				+ "power: " + this.power + "\n"
 				+ "mana: " + this.mana + "\n"
