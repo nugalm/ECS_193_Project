@@ -66,7 +66,7 @@ class loadScene extends Phaser.Scene
         
         this.input.on('pointerdown', function(p)
         {       
-                this.scene.start('gameScene'); 
+                this.scene.start('menuScene'); 
         }, this);
         
     }

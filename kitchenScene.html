@@ -8,10 +8,10 @@
   <script src="static/phaser.min.js"></script>
     <script src="static/phaser.js"></script>
      <script src="static/Character.js"></script>
-    <script src="static/IceCharacter.js"></script>
-    <script src="static/FireCharacter.js"></script>
-    <script src="static/EarthCharacter.js"></script>
-    <script src="static/WindCharacter.js"></script>
+    <script src="static/SweetCharacter.js"></script>
+    <script src="static/SpicyCharacter.js"></script>
+    <script src="static/SaltyCharacter.js"></script>
+    <script src="static/SourCharacter.js"></script>
     <script src="static/CollisionDetector.js"></script>
     <script src="static/CollisionAction.js"></script>
     <script src="static/ContainCharacter.js"></script>
@@ -19,6 +19,7 @@
     <script src="static/drawer.js"></script>
     <script src="static/colliderHandler.js"></script>
     <script src="static/loadScene.js"></script>
+    <script src="static/menuScene.js"></script>
     <script src="static/gameScene.js"></script>
 <body>
   <script type="text/javascript">
@@ -37,7 +38,7 @@
                 }
             },
             scene:
-                [loadScene, gameScene] 
+                [loadScene, menuScene, gameScene] 
       };
       
       var game = new Phaser.Game(config);

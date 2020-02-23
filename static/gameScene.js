@@ -26,7 +26,9 @@ class gameScene extends Phaser.Scene {
     // If we ever need to load specific data from previous scene.
     init(data)
     {
-
+        // From user selection in menu scene
+        this.player = data.player;
+        this.player.printStat();
     }
     
     // No need to preload here. We frontload all images/sprites/in loadScene 
@@ -39,7 +41,6 @@ class gameScene extends Phaser.Scene {
     create()
     {   
         this.platforms = this.physics.add.staticGroup();
-        this.player = new Character();
         // drawing sky, platforms, stars, player
         this.drawer.draw();     
     
