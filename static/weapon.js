@@ -22,7 +22,6 @@ class Weapon
         alert(     
 				+ "power: " + this.power + "\n"
 				+ "speed: " + this.speed + "\n"
-				+ "element: " + this.element + "\n"
                 + "cooldown: " + this.cooldown + "\n"
                 + "type: " + this.type + "\n"
         );
