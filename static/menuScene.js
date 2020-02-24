@@ -61,10 +61,12 @@ class menuScene extends Phaser.Scene
         {
             this.saltyButton.setTint(0xffffff);
         }, this);
-        this.saltyButton.on('pointerdown', function() 
+        this.saltyButton.on('pointerdown', function(p) 
         {
-            alert('everything tastes better with salt');
-            this.scene.start('armoryScene', { player: new SaltyCharacter()});
+            if (p.leftButtonDown()){           
+                alert('everything tastes better with salt');
+                this.scene.start('armoryScene', { player: new SaltyCharacter()});
+            }
         }, this);
         
         //spicy
@@ -78,10 +80,12 @@ class menuScene extends Phaser.Scene
         {
             this.spicyButton.setTint(0xffffff);
         }, this);
-        this.spicyButton.on('pointerdown', function() 
+        this.spicyButton.on('pointerdown', function(p) 
         {
-            alert('is it hot in here..or is it just you?');
-            this.scene.start('armoryScene', { player: new SpicyCharacter()});
+            if (p.leftButtonDown()){  
+                alert('is it hot in here..or is it just you?');
+                this.scene.start('armoryScene', { player: new SpicyCharacter()});
+            }
         }, this);
         
         //sour
@@ -95,10 +99,12 @@ class menuScene extends Phaser.Scene
         {
             this.sourButton.setTint(0xffffff);
         }, this);
-        this.sourButton.on('pointerdown', function() 
+        this.sourButton.on('pointerdown', function(p) 
         {
-            alert('here, have a token of sour gratitude');
-            this.scene.start('armoryScene', { player: new SourCharacter()});
+            if (p.leftButtonDown()){  
+                alert('here, have a token of sour gratitude');
+                this.scene.start('armoryScene', { player: new SourCharacter()});
+            }
         }, this);
         
         //sweet
@@ -113,10 +119,12 @@ class menuScene extends Phaser.Scene
         {
             this.sweetButton.setTint(0xffffff);
         }, this);
-        this.sweetButton.on('pointerdown', function() 
+        this.sweetButton.on('pointerdown', function(p) 
         {
-            alert('mm.. the sweet smell of a winner');
-            this.scene.start('armoryScene', { player: new SweetCharacter()});
+            if (p.leftButtonDown()){  
+                alert('mm.. the sweet smell of a winner');
+                this.scene.start('armoryScene', { player: new SweetCharacter()});
+            }
         }, this);
             
             

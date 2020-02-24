@@ -58,8 +58,12 @@ class gameScene extends Phaser.Scene {
         this.bombs = this.physics.add.group();
           
         this.input.on('pointerdown', function(p)
-        {       
-            this.projectileHandler.createProjectile();       
+        {    
+            
+            if (p.leftButtonDown()){
+                this.projectileHandler.createProjectile();
+            }
+            
         }, this);
           
         this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });

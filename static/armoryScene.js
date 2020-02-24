@@ -21,8 +21,9 @@ class armoryScene extends Phaser.Scene
         this.add.text(100, 100, 'Armory Scene, click anywhere to go to game', { fontSize: '24px', fill: 'white' });
         this.input.on('pointerdown', function(p)
         {       
-                this.scene.start('gameScene', {player: this.player}); 
-                
+                if (p.leftButtonDown()){
+                    this.scene.start('gameScene', {player: this.player}); 
+                }
         }, this);
     }
     
