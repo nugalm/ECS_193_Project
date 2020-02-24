@@ -14,6 +14,7 @@ class Character {
         this.stamina = 50;
         this.element = "none"; 
         this.sprite;
+        this.weapon;
         this.DISPLAY = 150;
         this.HITBOX = 110;
         this.positionX;
@@ -32,8 +33,13 @@ class Character {
 				+ "element: " + this.element + "\n"
                 + "stamina: " + this.stamina
 				);
-	}
-
+    }
+    
+    setWeapon(_weapon, context)
+    {
+        //TODO: this.weapon = _weapon;
+            
+    }
     
     initSprite() 
     {
@@ -45,6 +51,11 @@ class Character {
         //   player.setBounce(0.2);
         this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setAllowGravity(false);
+    }
+    
+    initWeapon()
+    {
+        
     }
     
     update(context)

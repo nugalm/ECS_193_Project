@@ -11,6 +11,7 @@ class armoryScene extends Phaser.Scene
     {
         this.player = data.player;
     }
+    
     preload()
     {
         

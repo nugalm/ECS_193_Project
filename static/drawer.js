@@ -48,6 +48,8 @@ class Drawer
         this.context.player.initSprite();
     }
     
+   
+    
     drawPlatforms()
     {
         // refresh body tells Phaser we changed a Static physics body

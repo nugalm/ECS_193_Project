@@ -29,6 +29,7 @@ class gameScene extends Phaser.Scene {
         // From user selection in menu scene
         this.player = data.player;
         this.player.printStat();
+        //this.player.setWeapon(data.weapon)
     }
     
     // No need to preload here. We frontload all images/sprites/in loadScene 
@@ -60,8 +61,14 @@ class gameScene extends Phaser.Scene {
         this.input.on('pointerdown', function(p)
         {    
             
-            if (p.leftButtonDown()){
+            if (p.leftButtonDown())
+            {
                 this.projectileHandler.createProjectile();
+            }
+            
+            else if (p.rightButtonDown())
+            {
+                //TODO: Melee
             }
             
         }, this);
