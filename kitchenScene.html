@@ -19,6 +19,7 @@
     <script src="static/menuScene.js"></script>
     <script src="static/armoryScene.js"></script>
     <script src="static/gameScene.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 <body>
   <script type="text/javascript">
       
@@ -40,7 +41,7 @@
       };
       
       var game = new Phaser.Game(config);
-      
+      var dumPhysics = this.physics;
            
  
       

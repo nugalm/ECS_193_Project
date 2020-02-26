@@ -24,6 +24,7 @@ class armoryScene extends Phaser.Scene
         {       
                 if (p.leftButtonDown()){
                     this.scene.start('gameScene', {player: this.player}); 
+                    
                 }
         }, this);
     }
