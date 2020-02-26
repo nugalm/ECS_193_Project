@@ -14,14 +14,19 @@ app.use('/static', express.static(__dirname + '/static'));
 
 // Routing
 app.get('/', function(request, response) {
-    response.sendFile(path.join(__dirname, 'index.html')); // was index.html
+    response.sendFile(path.join(__dirname, 'kitchenScene.html')); // was index.html
 });
 
 server.listen(8080, function() {
     console.log('Starting server on port 8080');
 });
 
+//Java script object to hold player info
 var serverPlayers = {};
+// Java script object to hold an array of player related objects/sprites
+// Like projectiles and such
+var miscObjs = {};
+
 io.on('connection', function(socket) {
     socket.on('newPlayer', function() {
         serverPlayers[socket.id] = 
@@ -34,21 +39,16 @@ io.on('connection', function(socket) {
             object: 'mouse_walk/mouse_walk-2.png',
             rotation: 0
         };
+        miscObjs[socket.id] = [];
     });
     
-    /*
+    
     socket.on('addProjectile', function(obj){
-        if(typeof objs[obj.id] === 'undefined'){
-            objs[obj.id] = [];
-            console.log('what is happening here');
-            //socket.emit('disconnect');
-        }
-        //console.log("projectile added");
         var added = {name: 'projectile' + obj.num, x: obj.x, y: obj.y, render: true, object: obj.obj};
         objs[obj.id].push(added);
     });
     
-    
+    /*
    socket.on('updateProjectile', function(obj){
        function firstProjectile(arr){
            return (arr.name === 'projectile' + obj.num);

@@ -5,6 +5,16 @@
 */
 
 class Character {
+    
+    var origin = window.location.origin;
+    var socket = io.connect(origin);
+    var socket_id;
+    socket.on('connect', function() {
+        socket_id = socket.id;
+        socket.emit('newPlayer');
+    });
+
+    var otherPlayers = {};
 
     constructor() {
         this.health = 50;
@@ -22,6 +32,31 @@ class Character {
         this.startPositionX = 100;
         this.startPositionY = 450;
 
+        var self = this;
+        socket.on('updatePlayers', function(server){
+            for (var id in server){
+                if(socket_id === id){
+                    continue;
+                }
+                   
+                if(!(id in otherPlayers)){
+                        otherPlayers[id] = self.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+                        otherPlayers[id].displayWidth = DISPLAY;
+                        otherPlayers[id].displayHeight = DISPLAY; 
+                        otherPlayers[id].setSize(HITBOX, HITBOX);
+                        otherPlayers[id].setOffset(125, 50);
+                        otherPlayers[id].setCollideWorldBounds(true);
+                        otherPlayers[id].body.setAllowGravity(false);
+                        
+                        self.physics.add.collider(otherPlayers, platforms);
+                        self.physics.add.collider(otherPlayers, stars);
+                        otherPlayers[id].x = server[id].position.x;
+                        otherPlayers[id].y = server[id].position.y;
+                        otherPlayers[id].rotation = server[id].rotation;
+                        //otherPlayers[id] = otherPlayer;
+                    }
+               }
+           });
 	}
 
 	printStat(){
@@ -119,9 +154,21 @@ class Character {
             this.sprite.setVelocityY(0);
             this.sprite.anims.play('turn');
         }
+        
+        var myPosition = {x: this.x , y: this.y};
+        var myVelocity = {x: this.body.velocity.x , y: this.body.velocity.y };
+        var info = {position: myPosition, velocity: myVelocity, r: this.rotation};
+        socket.emit('movement', info);
+        
+        socket.on('moveUpdates', function(object){ 
+            //if(object.id in otherPlayers){
+            otherPlayers[object.id].setVelocityX(object.player.velocity.x);
+            otherPlayers[object.id].setVelocityY(object.player.velocity.y);
+            otherPlayers[object.id].rotation = object.player.rotation;
+            // Leave animations on constantly for now
+            otherPlayers[object.id].anims.play('left', true);
+            //}
+        });
     }
 
 }
-
-
-
