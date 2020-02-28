@@ -33,16 +33,16 @@ class menuScene extends Phaser.Scene
     addButtonSprites()
     {
         this.saltyButton = this.add.sprite(this.buttonPositionX, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.saltyButton.x - 50, this.saltyButton.y - 50, 'Salty af');
+        this.add.text(this.saltyButton.x - 50, this.saltyButton.y - 50, 'Salty');
         
         this.spicyButton = this.add.sprite(this.buttonPositionX + 100, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.spicyButton.x - 50, this.spicyButton.y - 50, 'IS HOT');
+        this.add.text(this.spicyButton.x - 50, this.spicyButton.y - 50, 'Spicy');
         
         this.sourButton = this.add.sprite(this.buttonPositionX + 200, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.sourButton.x - 50, this.sourButton.y - 50, 'nnnnggg');
+        this.add.text(this.sourButton.x - 50, this.sourButton.y - 50, 'Sour');
         
         this.sweetButton = this.add.sprite(this.buttonPositionX + 300, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.sweetButton.x - 50, this.sweetButton.y - 50, 'hey sweetie :)');
+        this.add.text(this.sweetButton.x - 50, this.sweetButton.y - 50, 'Sweet');
         
         
         
