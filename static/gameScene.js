@@ -73,7 +73,7 @@ class gameScene extends Phaser.Scene {
                     self.otherPlayers[id].displayHeight = self.DISPLAY; 
                     self.otherPlayers[id].setSize(self.HITBOX, self.HITBOX);
                     self.otherPlayers[id].setOffset(125, 50);
-                    self.otherPlayers[id].setCollideWorldBounds(true);
+                    //self.otherPlayers[id].setCollideWorldBounds(true);
                     self.otherPlayers[id].body.setAllowGravity(false);
                     
                     //self.physics.add.collider(self.otherPlayers, platforms);
@@ -149,6 +149,7 @@ class gameScene extends Phaser.Scene {
         //this.drawer.drawCharacter();
         this.collidableLayer.setCollisionByProperty( {collides:true} );
         this.physics.add.collider(this.player.sprite, this.collidableLayer);
+        this.physics.add.collider(this.otherPlayers, this.collidableLayer);
         
         //camera
         this.cameras.main.startFollow(this.player.sprite, true, 0.05, 0.05);
