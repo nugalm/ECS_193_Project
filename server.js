@@ -49,8 +49,8 @@ app.get('/', function(request, response) {
     response.sendFile(path.join(__dirname, 'index.html')); // was index.html
 });
 
-server.listen(8080, function() {
-    console.log('Starting server on port 8080');
+server.listen(port, function() {
+    console.log("Starting server on port " + port);
 });
 /*
 app.listen(port, () => {
