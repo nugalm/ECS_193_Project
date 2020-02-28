@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Hello World</title>
+  <title>The Marfare</title>
 
 </head>
   <script src="static/phaser.min.js"></script>
@@ -26,23 +26,26 @@
       var config = {
           // .AUTO tells phaser to default to WEBGL, else default to canvas
             type: Phaser.AUTO,
-            width: 800,
-            height: 600,
+         // scale: {
+            width: window.innerWidth,
+            height: window.innerHeight,
+          //}
           // tells Phaser that our game requires the Arcade Physics system
             physics: {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 300 },
-                    debug: false
+                    debug: true
                 }
             },
             scene:
                 [loadScene, menuScene, armoryScene, gameScene] 
       };
-      
+ 
       var game = new Phaser.Game(config);
+
       var dumPhysics = this.physics;
-           
+
  
       
   </script>

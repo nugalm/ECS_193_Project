@@ -48,7 +48,7 @@ class Character {
         this.sprite.setOffset(125, 50);
         // when sprite lands after jumping it will bounce slightly
         //   player.setBounce(0.2);
-        this.sprite.setCollideWorldBounds(true);
+        //this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setAllowGravity(false);
     }
     

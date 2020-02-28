@@ -26,6 +26,14 @@ class loadScene extends Phaser.Scene
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
         
+        
+        // trying tile map
+        this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
+        this.load.tilemapTiledJSON('Real_Map', 'static/images/TileMap/Real_Map.json');
+        
+        
+        
+        
 
         
     }

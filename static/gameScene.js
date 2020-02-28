@@ -20,6 +20,11 @@ class gameScene extends Phaser.Scene {
         this.drawer = new Drawer(this);
         this.colliderHandler = new ColliderHandler(this);
         this.projectileHandler = new ProjectileHandler(this);
+        this.map;
+        this.floor;
+        this.hidableLayer;
+        this.collidableLayer;
+        this.tileset;
                 
     }
     
@@ -41,9 +46,10 @@ class gameScene extends Phaser.Scene {
     
     create()
     {   
-        this.platforms = this.physics.add.staticGroup();
+        //this.platforms = this.physics.add.staticGroup();
         // drawing sky, platforms, stars, player
-        this.drawer.draw();     
+       // this.drawer.draw(); 
+        //this.drawer.drawCharacter();
     
         // Phaser's built-in Keyboard manager
         // populates cursors object with up, down left, right properties
@@ -56,7 +62,7 @@ class gameScene extends Phaser.Scene {
         });
         
         this.projectileHandler.initProjectiles();
-        this.bombs = this.physics.add.group();
+     //   this.bombs = this.physics.add.group();
           
         this.input.on('pointerdown', function(p)
         {    
@@ -68,6 +74,7 @@ class gameScene extends Phaser.Scene {
             
             else if (p.rightButtonDown())
             {
+                alert("you're meleeing, but we dont have the assets :(");
                 //TODO: Melee
             }
             
@@ -76,11 +83,38 @@ class gameScene extends Phaser.Scene {
         this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
         
         // set up collision detection between objects
-        this.colliderHandler.initColliders();
+       // this.colliderHandler.initColliders();
         
+        
+        // trying TILEmap
+        this.map = this.add.tilemap("Real_Map");
+        this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
+        this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
+        this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
+        this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
+        
+        
+        this.drawer.drawCharacter();
+        this.collidableLayer.setCollisionByProperty( {collides:true} );
+        this.physics.add.collider(this.player.sprite, this.collidableLayer);
+        
+        //camera
         this.cameras.main.startFollow(this.player.sprite, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
-
+        
+        
+        // highlight collides tiles for debugging
+        /*
+        const debugGraphics = this.add.graphics().setAlpha(0.75);
+        this.collidableLayer.renderDebug(debugGraphics, {
+    tileColor: null, // Color of non-colliding tiles
+    collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+    faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        });
+        */
+        
+        
+        
           
     } 
     update()
@@ -95,5 +129,9 @@ class gameScene extends Phaser.Scene {
 
 
     }  
-            
+           
+    isCollision()
+    {
+        alert("collided");
+    }
 }
