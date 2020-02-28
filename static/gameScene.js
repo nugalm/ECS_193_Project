@@ -90,11 +90,12 @@ class gameScene extends Phaser.Scene {
         this.map = this.add.tilemap("Real_Map");
         this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
         this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
+        this.drawer.drawCharacter();
         this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
         
         
-        this.drawer.drawCharacter();
+        //this.drawer.drawCharacter();
         this.collidableLayer.setCollisionByProperty( {collides:true} );
         this.physics.add.collider(this.player.sprite, this.collidableLayer);
         
