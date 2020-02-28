@@ -1,0 +1,25 @@
+version: '3'
+services:
+    # Running the container for the application
+    app:
+        image: ecs193project
+        restart: always
+        build: .
+        command: "npm start"
+        ports:
+            - "8080:8080"
+        depends_on:
+            - "mongo"
+#            - "nginx"
+           
+    mongo:
+        image: mongo
+        ports:
+          - "27017:27017"
+    #    volumes:
+    #      - ./data:/data/db
+    # will most likely include nginx x here as well
+#    nginx:
+#        image: nginx
+#        ports:
+#            - "80:8080"
