@@ -13,6 +13,11 @@ class menuScene extends Phaser.Scene
         this.buttonPositionY = 250;
     }
     
+    init(data)
+    {
+        this.socket = data.socket;
+    }
+    
     // loadScene should have loaded everything we need.
     preload()
     {
@@ -65,7 +70,7 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){           
                 alert('everything tastes better with salt');
-                this.scene.start('armoryScene', { player: new SaltyCharacter()});
+                this.scene.start('armoryScene', { player: new SaltyCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -84,7 +89,7 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){  
                 alert('is it hot in here..or is it just you?');
-                this.scene.start('armoryScene', { player: new SpicyCharacter()});
+                this.scene.start('armoryScene', { player: new SpicyCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -103,7 +108,7 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){  
                 alert('here, have a token of sour gratitude');
-                this.scene.start('armoryScene', { player: new SourCharacter()});
+                this.scene.start('armoryScene', { player: new SourCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -123,7 +128,7 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){  
                 alert('mm.. the sweet smell of a winner');
-                this.scene.start('armoryScene', { player: new SweetCharacter()});
+                this.scene.start('armoryScene', { player: new SweetCharacter(), socket: this.socket});
             }
         }, this);
             
