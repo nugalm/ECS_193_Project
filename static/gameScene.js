@@ -36,6 +36,9 @@ class gameScene extends Phaser.Scene {
         // From user selection in menu scene
         this.player = data.player;
         this.player.printStat();
+        if (this.player.weapon != null){
+            this.player.weapon.printWeaponStats();
+        }
         this.socket = data.socket;
         //this.player.setWeapon(data.weapon)
     }
@@ -51,7 +54,7 @@ class gameScene extends Phaser.Scene {
     
     create()
     {
-        this.client.socket.emit('startPlayer');
+       /* this.client.socket.emit('startPlayer');
         //this.client.socket.emit('newPlayer');
         // serves to inform other players of your existence in game
         //this.client.socket.emit('newPlayer');
@@ -83,7 +86,7 @@ class gameScene extends Phaser.Scene {
                     self.otherPlayers[id].rotation = server[id].rotation;
                 }
             }
-        });
+        });*/
         /*
         this.client.socket.on('moveUpdates', function(object){ 
             //if(object.id in otherPlayers){
@@ -126,7 +129,6 @@ class gameScene extends Phaser.Scene {
             else if (p.rightButtonDown())
             {
                 alert("you're meleeing, but we dont have the assets :(");
-                this.scene.start('loadScene');
                 //TODO: Melee
             }
             
@@ -182,7 +184,7 @@ class gameScene extends Phaser.Scene {
         this.player.update(this);            
         this.projectileHandler.moveProjectiles();
 
-        var myPosition = {x: this.player.sprite.x , y: this.player.sprite.y};
+      /*  var myPosition = {x: this.player.sprite.x , y: this.player.sprite.y};
         var myVelocity = {x: this.player.sprite.body.velocity.x , y: this.player.sprite.body.velocity.y };
         var info = {position: myPosition, velocity: myVelocity, r: this.player.sprite.rotation};
         this.client.socket.emit('movement', info);
@@ -196,7 +198,7 @@ class gameScene extends Phaser.Scene {
             self.otherPlayers[object.id].anims.play('left', true);
             //console.log("move updates");
             //}
-        });    
+        }); */   
 
     }  
            

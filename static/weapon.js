@@ -14,16 +14,20 @@ class Weapon
         this.cooldown;
         // what taste is the character who is using the weapon (used for damage calculation)
         this.taste = _taste;
+        // name of the weapon
+        this.name;
         
     }
     
     printWeaponStats()
     {
         alert(     
+                "weapon: "+ this.name + "\n"
 				+ "power: " + this.power + "\n"
 				+ "speed: " + this.speed + "\n"
                 + "cooldown: " + this.cooldown + "\n"
-                + "type: " + this.type + "\n"
+                + "taste: " + this.taste + "\n"
+        
         );
         
         

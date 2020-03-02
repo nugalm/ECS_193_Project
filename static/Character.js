@@ -120,4 +120,15 @@ class Character {
         }
     }
 
+    takeDamage(damageAmount) 
+    {
+        this.health = this.health - damageAmount;
+        
+        if (this.health < 0) 
+        {
+            this.health = 0;
+        }
+    }
+    
+    
 }

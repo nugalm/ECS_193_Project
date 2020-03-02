@@ -8,6 +8,7 @@ class Fork extends Weapon
         this.speed = "medium";
         this.cooldown = 1;
         this.taste = _taste;
+        this.name = "fork";
     }
     
     
