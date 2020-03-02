@@ -10,6 +10,7 @@ class armoryScene extends Phaser.Scene
     init(data)
     {
         this.player = data.player;
+        this.socket = data.socket;
     }
     
     preload()
@@ -23,7 +24,7 @@ class armoryScene extends Phaser.Scene
         this.input.on('pointerdown', function(p)
         {       
                 if (p.leftButtonDown()){
-                    this.scene.start('gameScene', {player: this.player}); 
+                    this.scene.start('gameScene', {player: this.player, socket: this.socket}); 
                     
                 }
         }, this);

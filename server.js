@@ -35,11 +35,15 @@ io.on('connection', function(socket) {
             position: {x: 100, y: 450},
             oldPosition: {x: 100, y: 450},
             velocity: {x: 0, y: 0},
-            render: true,
+            render: false,
             object: 'mouse_walk/mouse_walk-2.png',
             rotation: 0
         };
         miscObjs[socket.id] = [];
+    });
+    
+    socket.on('startPlayer', function(){
+        serverPlayers[socket.id].render = true; 
     });
     
     

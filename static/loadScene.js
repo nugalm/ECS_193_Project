@@ -6,6 +6,11 @@ class loadScene extends Phaser.Scene
         this.loadText;
     }
     
+    init(data)
+    {
+        this.socket = data.socket;
+    }
+    
     // Frontload all sprites/images in loading screen
     preload()
     {
@@ -74,7 +79,7 @@ class loadScene extends Phaser.Scene
         
         this.input.on('pointerdown', function(p)
         {       if (p.leftButtonDown()){  
-                    this.scene.start('menuScene'); 
+                    this.scene.start('menuScene', {socket: this.socket}); 
                 }
         }, this);
         

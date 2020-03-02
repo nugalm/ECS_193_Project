@@ -1,6 +1,5 @@
 //import { Scene } from "phaser.js"
 class gameScene extends Phaser.Scene {
-
     constructor()
     {
         super({key: 'gameScene'});
@@ -25,7 +24,10 @@ class gameScene extends Phaser.Scene {
         this.hidableLayer;
         this.collidableLayer;
         this.tileset;
-                
+        this.client = new Client();
+        this.otherPlayers = {};
+        this.DISPLAY = 150; 
+        this.HITBOX = 110;
     }
     
     // If we ever need to load specific data from previous scene.
@@ -34,6 +36,7 @@ class gameScene extends Phaser.Scene {
         // From user selection in menu scene
         this.player = data.player;
         this.player.printStat();
+        this.socket = data.socket;
         //this.player.setWeapon(data.weapon)
     }
     
@@ -41,11 +44,59 @@ class gameScene extends Phaser.Scene {
     // and can refer to the keywords we initialized there as we like
     preload() 
     {
-
+        
     }
     
+    //this.client.socket.emit('newPlayer');
+    
     create()
-    {   
+    {
+        this.client.socket.emit('startPlayer');
+        //this.client.socket.emit('newPlayer');
+        // serves to inform other players of your existence in game
+        //this.client.socket.emit('newPlayer');
+        var self = this;
+        
+        this.client.socket.on('updatePlayers', function(server){
+            for (var id in server){
+                if(self.client.socket.id === id){
+                    continue;
+                }
+                
+                if(!server[id].render){
+                    continue;
+                }
+                   
+                if(!(id in self.otherPlayers)){
+                    self.otherPlayers[id] = self.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+                    self.otherPlayers[id].displayWidth = self.DISPLAY;
+                    self.otherPlayers[id].displayHeight = self.DISPLAY; 
+                    self.otherPlayers[id].setSize(self.HITBOX, self.HITBOX);
+                    self.otherPlayers[id].setOffset(125, 50);
+                    //self.otherPlayers[id].setCollideWorldBounds(true);
+                    self.otherPlayers[id].body.setAllowGravity(false);
+                    
+                    //self.physics.add.collider(self.otherPlayers, platforms);
+                    //self.physics.add.collider(self.otherPlayers, stars);
+                    self.otherPlayers[id].x = server[id].position.x;
+                    self.otherPlayers[id].y = server[id].position.y;
+                    self.otherPlayers[id].rotation = server[id].rotation;
+                }
+            }
+        });
+        /*
+        this.client.socket.on('moveUpdates', function(object){ 
+            //if(object.id in otherPlayers){
+            self.otherPlayers[object.id].setVelocityX(object.player.velocity.x);
+            self.otherPlayers[object.id].setVelocityY(object.player.velocity.y);
+            self.otherPlayers[object.id].rotation = object.player.rotation;
+            // Leave animations on constantly for now
+            self.otherPlayers[object.id].anims.play('left', true);
+            //console.log("move updates");
+            //}
+        });
+        */
+        
         //this.platforms = this.physics.add.staticGroup();
         // drawing sky, platforms, stars, player
        // this.drawer.draw(); 
@@ -99,6 +150,7 @@ class gameScene extends Phaser.Scene {
         //this.drawer.drawCharacter();
         this.collidableLayer.setCollisionByProperty( {collides:true} );
         this.physics.add.collider(this.player.sprite, this.collidableLayer);
+        this.physics.add.collider(this.otherPlayers, this.collidableLayer);
         
         //camera
         this.cameras.main.startFollow(this.player.sprite, true, 0.05, 0.05);
@@ -121,6 +173,7 @@ class gameScene extends Phaser.Scene {
     } 
     update()
       {
+        var self = this;
           
         if (this.gameOver)
         {
@@ -129,6 +182,21 @@ class gameScene extends Phaser.Scene {
         this.player.update(this);            
         this.projectileHandler.moveProjectiles();
 
+        var myPosition = {x: this.player.sprite.x , y: this.player.sprite.y};
+        var myVelocity = {x: this.player.sprite.body.velocity.x , y: this.player.sprite.body.velocity.y };
+        var info = {position: myPosition, velocity: myVelocity, r: this.player.sprite.rotation};
+        this.client.socket.emit('movement', info);
+          
+        this.client.socket.on('moveUpdates', function(object){ 
+            //if(object.id in otherPlayers){
+            self.otherPlayers[object.id].setVelocityX(object.player.velocity.x);
+            self.otherPlayers[object.id].setVelocityY(object.player.velocity.y);
+            self.otherPlayers[object.id].rotation = object.player.rotation;
+            // Leave animations on constantly for now
+            self.otherPlayers[object.id].anims.play('left', true);
+            //console.log("move updates");
+            //}
+        });    
 
     }  
            
