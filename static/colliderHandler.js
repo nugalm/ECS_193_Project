@@ -63,19 +63,28 @@ class ColliderHandler
             } //end if
     }
     
-    setCollider(object1, object2)
+    
+    /**
+        function to calculate damage from a projectile hit
+    */
+    projectileHit(player, projectile) 
     {
+        
         
     }
     
-    setColliderOverlap(object1, object2)
+    /**
+        function to calculate damage from a melee hit
+    */
+    meleeHit(player1, player2)
     {
+        
+        
+        
         
     }
     
-    setColliderCollision(object1, object2)
-    {
-        
-    }
+    
+    
     
 }

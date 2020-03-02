@@ -9,5 +9,5 @@ class SaltyCharacter extends Character {
         this.element = "salty";
     }
     
-    
+
 }

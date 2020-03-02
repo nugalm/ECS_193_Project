@@ -75,6 +75,7 @@ class gameScene extends Phaser.Scene {
             else if (p.rightButtonDown())
             {
                 alert("you're meleeing, but we dont have the assets :(");
+                this.scene.start('loadScene');
                 //TODO: Melee
             }
             
