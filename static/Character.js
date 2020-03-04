@@ -21,7 +21,6 @@ class Character {
         this.positionY;
         this.startPositionX = 100;
         this.startPositionY = 450;
-
 	}
 
 	printStat(){
@@ -49,7 +48,7 @@ class Character {
         this.sprite.setOffset(125, 50);
         // when sprite lands after jumping it will bounce slightly
         //   player.setBounce(0.2);
-        this.sprite.setCollideWorldBounds(true);
+        //this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setAllowGravity(false);
     }
     
@@ -121,7 +120,15 @@ class Character {
         }
     }
 
+    takeDamage(damageAmount) 
+    {
+        this.health = this.health - damageAmount;
+        
+        if (this.health < 0) 
+        {
+            this.health = 0;
+        }
+    }
+    
+    
 }
-
-
-

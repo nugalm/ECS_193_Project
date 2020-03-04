@@ -7,7 +7,8 @@ class SaltyCharacter extends Character {
         this.mana = 70;
         this.speed = 60;
         this.element = "salty";
+        this.weapon = new Fork(this.element);
     }
     
-    
+
 }

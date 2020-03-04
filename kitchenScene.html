@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Hello World</title>
+  <title>The Marfare</title>
 
 </head>
   <script src="static/phaser.min.js"></script>
@@ -19,14 +19,20 @@
     <script src="static/menuScene.js"></script>
     <script src="static/armoryScene.js"></script>
     <script src="static/gameScene.js"></script>
+    <script src="static/weapon.js"></script>
+    <script src="static/fork.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="static/client.js"></script>
 <body>
   <script type="text/javascript">
       
       var config = {
           // .AUTO tells phaser to default to WEBGL, else default to canvas
             type: Phaser.AUTO,
-            width: 800,
-            height: 600,
+         // scale: {
+            width: window.innerWidth,
+            height: window.innerHeight,
+          //}
           // tells Phaser that our game requires the Arcade Physics system
             physics: {
                 default: 'arcade',
@@ -39,9 +45,22 @@
                 [loadScene, menuScene, armoryScene, gameScene] 
       };
       
+      var origin = window.location.origin;
+    /*  var socket = io.connect(origin);
+      var socket_id;
+      socket.on('connect', function() {
+          socket_id = socket.id;
+          socket.emit('newPlayer');
+      });
+      
+      var client = new Client(socket);
+      */
       var game = new Phaser.Game(config);
       
-           
+      //this.scene.start('loadScene', {socket: this.socket}); 
+      
+      //var dumPhysics = this.physics;
+
  
       
   </script>

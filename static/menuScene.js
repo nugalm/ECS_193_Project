@@ -13,6 +13,11 @@ class menuScene extends Phaser.Scene
         this.buttonPositionY = 250;
     }
     
+    init(data)
+    {
+        this.socket = data.socket;
+    }
+    
     // loadScene should have loaded everything we need.
     preload()
     {
@@ -33,16 +38,16 @@ class menuScene extends Phaser.Scene
     addButtonSprites()
     {
         this.saltyButton = this.add.sprite(this.buttonPositionX, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.saltyButton.x - 50, this.saltyButton.y - 50, 'Salty af');
+        this.add.text(this.saltyButton.x - 50, this.saltyButton.y - 50, 'Salty');
         
         this.spicyButton = this.add.sprite(this.buttonPositionX + 100, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.spicyButton.x - 50, this.spicyButton.y - 50, 'IS HOT');
+        this.add.text(this.spicyButton.x - 50, this.spicyButton.y - 50, 'Spicy');
         
         this.sourButton = this.add.sprite(this.buttonPositionX + 200, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.sourButton.x - 50, this.sourButton.y - 50, 'nnnnggg');
+        this.add.text(this.sourButton.x - 50, this.sourButton.y - 50, 'Sour');
         
         this.sweetButton = this.add.sprite(this.buttonPositionX + 300, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.sweetButton.x - 50, this.sweetButton.y - 50, 'hey sweetie :)');
+        this.add.text(this.sweetButton.x - 50, this.sweetButton.y - 50, 'Sweet');
         
         
         
@@ -65,7 +70,7 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){           
                 alert('everything tastes better with salt');
-                this.scene.start('armoryScene', { player: new SaltyCharacter()});
+                this.scene.start('armoryScene', { player: new SaltyCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -84,7 +89,7 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){  
                 alert('is it hot in here..or is it just you?');
-                this.scene.start('armoryScene', { player: new SpicyCharacter()});
+                this.scene.start('armoryScene', { player: new SpicyCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -103,7 +108,7 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){  
                 alert('here, have a token of sour gratitude');
-                this.scene.start('armoryScene', { player: new SourCharacter()});
+                this.scene.start('armoryScene', { player: new SourCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -123,7 +128,7 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){  
                 alert('mm.. the sweet smell of a winner');
-                this.scene.start('armoryScene', { player: new SweetCharacter()});
+                this.scene.start('armoryScene', { player: new SweetCharacter(), socket: this.socket});
             }
         }, this);
             

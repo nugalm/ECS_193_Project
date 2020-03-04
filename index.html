@@ -231,7 +231,7 @@
           cursor = this.physics.add.image(0,0,'cursor').setVisible(false);
           
           this.input.on('pointerdown', function(p)
-        {
+          {
            // cursor.setPosition(p.x, p.y);
             var projectile = projectiles.create(player.x, player.y, 'projectile');
             projectile.setCollideWorldBounds(false);
@@ -333,6 +333,7 @@
         //console.log("mousePOinter.x: " + this.game.input.mousePointer.x + "\nmousePointer.y: " + this.game.input.mousePointer.y);
                    
         moveProjectiles();
+        // updateProjectilesServer here 
           
         hitbox.setPosition(player.x, player.y);
           
