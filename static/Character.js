@@ -122,7 +122,7 @@ class Character {
         var myPosition = {x: this.sprite.x , y: this.sprite.y};
         var myVelocity = {x: this.sprite.body.velocity.x , y: this.sprite.body.velocity.y };
         var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
-        this.client.socket.emit('movement', info);
+        socket.emit('movement', info);
     }
 
     takeDamage(damageAmount) 
