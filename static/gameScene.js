@@ -54,51 +54,24 @@ class gameScene extends Phaser.Scene {
     
     create()
     {
-       /* this.client.socket.emit('startPlayer');
-        //this.client.socket.emit('newPlayer');
-        // serves to inform other players of your existence in game
-        //this.client.socket.emit('newPlayer');
+        this.client.socket.emit('startPlayer');
+       
         var self = this;
         
-        this.client.socket.on('updatePlayers', function(server){
-            for (var id in server){
-                if(self.client.socket.id === id){
-                    continue;
-                }
-                
-                if(!server[id].render){
-                    continue;
-                }
-                   
-                if(!(id in self.otherPlayers)){
-                    self.otherPlayers[id] = self.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
-                    self.otherPlayers[id].displayWidth = self.DISPLAY;
-                    self.otherPlayers[id].displayHeight = self.DISPLAY; 
-                    self.otherPlayers[id].setSize(self.HITBOX, self.HITBOX);
-                    self.otherPlayers[id].setOffset(125, 50);
-                    //self.otherPlayers[id].setCollideWorldBounds(true);
-                    self.otherPlayers[id].body.setAllowGravity(false);
-                    
-                    //self.physics.add.collider(self.otherPlayers, platforms);
-                    //self.physics.add.collider(self.otherPlayers, stars);
-                    self.otherPlayers[id].x = server[id].position.x;
-                    self.otherPlayers[id].y = server[id].position.y;
-                    self.otherPlayers[id].rotation = server[id].rotation;
-                }
-            }
-        });*/
-        /*
         this.client.socket.on('moveUpdates', function(object){ 
-            //if(object.id in otherPlayers){
+            
             self.otherPlayers[object.id].setVelocityX(object.player.velocity.x);
             self.otherPlayers[object.id].setVelocityY(object.player.velocity.y);
             self.otherPlayers[object.id].rotation = object.player.rotation;
-            // Leave animations on constantly for now
-            self.otherPlayers[object.id].anims.play('left', true);
-            //console.log("move updates");
-            //}
+            
+            if((object.player.position.x != object.player.oldPosition.x) || 
+               (object.player.position.y != object.player.oldPosition.y))
+            {
+                self.otherPlayers[object.id].anims.play('left', true);
+            }
+            
         });
-        */
+        
         
         //this.platforms = this.physics.add.staticGroup();
         // drawing sky, platforms, stars, player
@@ -152,7 +125,6 @@ class gameScene extends Phaser.Scene {
         //this.drawer.drawCharacter();
         this.collidableLayer.setCollisionByProperty( {collides:true} );
         this.physics.add.collider(this.player.sprite, this.collidableLayer);
-        this.physics.add.collider(this.otherPlayers, this.collidableLayer);
         
         //camera
         this.cameras.main.startFollow(this.player.sprite, true, 0.05, 0.05);
@@ -169,7 +141,35 @@ class gameScene extends Phaser.Scene {
         });
         */
         
-        
+      
+        this.client.socket.on('updatePlayers', function(server){
+            for (var id in server){
+                if(self.client.socket.id === id){
+                    continue;
+                }
+                
+                if(!server[id].render){
+                    continue;
+                }
+                   
+                if(!(id in self.otherPlayers)){
+                    self.otherPlayers[id] = self.physics.add.sprite(100, 450, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+                    self.otherPlayers[id].displayWidth = self.DISPLAY;
+                    self.otherPlayers[id].displayHeight = self.DISPLAY; 
+                    self.otherPlayers[id].setSize(self.HITBOX, self.HITBOX);
+                    self.otherPlayers[id].setOffset(125, 50);
+                    //self.otherPlayers[id].setCollideWorldBounds(true);
+                    self.otherPlayers[id].body.setAllowGravity(false);
+                    
+                    //self.physics.add.collider(self.otherPlayers, platforms);
+                    //self.physics.add.collider(self.otherPlayers, stars);
+                    self.otherPlayers[id].x = server[id].position.x;
+                    self.otherPlayers[id].y = server[id].position.y;
+                    self.otherPlayers[id].rotation = server[id].rotation;
+                    self.physics.add.collider(self.otherPlayers[id], self.collidableLayer);
+                }
+            }
+        });  
         
           
     } 
