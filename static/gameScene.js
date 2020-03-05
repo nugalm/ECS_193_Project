@@ -167,6 +167,7 @@ class gameScene extends Phaser.Scene {
                     self.otherPlayers[id].y = server[id].position.y;
                     self.otherPlayers[id].rotation = server[id].rotation;
                     self.physics.add.collider(self.otherPlayers[id], self.collidableLayer);
+                    self.physics.add.collider(self.otherPlayers[id], self.player.sprite);
                 }
             }
         });  
@@ -184,7 +185,7 @@ class gameScene extends Phaser.Scene {
         this.player.update(this);            
         this.projectileHandler.moveProjectiles();
 
-      /*  var myPosition = {x: this.player.sprite.x , y: this.player.sprite.y};
+      /*var myPosition = {x: this.player.sprite.x , y: this.player.sprite.y};
         var myVelocity = {x: this.player.sprite.body.velocity.x , y: this.player.sprite.body.velocity.y };
         var info = {position: myPosition, velocity: myVelocity, r: this.player.sprite.rotation};
         this.client.socket.emit('movement', info);
