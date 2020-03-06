@@ -46,7 +46,7 @@
       };
       
       var origin = window.location.origin;
-    /*  var socket = io.connect(origin);
+      var socket = io.connect(origin);
       var socket_id;
       socket.on('connect', function() {
           socket_id = socket.id;
@@ -54,7 +54,7 @@
       });
       
       var client = new Client(socket);
-      */
+      
       var game = new Phaser.Game(config);
       
       //this.scene.start('loadScene', {socket: this.socket}); 
