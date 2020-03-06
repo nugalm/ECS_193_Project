@@ -14,7 +14,7 @@ class loadScene extends Phaser.Scene
     // Frontload all sprites/images in loading screen
     preload()
     {
-        alert('loading in assets');
+        //alert('loading in assets');
         // TODO: make this nice looking graphics
         this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
         this.load.image('sky', 'static/assets/sky.png')
@@ -35,12 +35,6 @@ class loadScene extends Phaser.Scene
         // trying tile map
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
         this.load.tilemapTiledJSON('Real_Map', 'static/images/TileMap/Real_Map.json');
-        
-        
-        
-        
-
-        
     }
     
     // Creating animations to be used in gameScene
@@ -78,7 +72,8 @@ class loadScene extends Phaser.Scene
         
         
         this.input.on('pointerdown', function(p)
-        {       if (p.leftButtonDown()){  
+        {       if (p.leftButtonDown())
+                {  
                     this.scene.start('menuScene', {socket: this.socket}); 
                 }
         }, this);

@@ -1,7 +1,6 @@
 // Scene where user picks his type of character / enters username
 class menuScene extends Phaser.Scene
-{
-    
+{   
     constructor()
     {   
         super( {key: 'menuScene'} );
@@ -9,6 +8,8 @@ class menuScene extends Phaser.Scene
         this.spicyButton;
         this.sourButton;
         this.sweetButton;
+        this.username;
+        this.playerType;
         this.buttonPositionX = 250;
         this.buttonPositionY = 250;
     }
@@ -21,8 +22,7 @@ class menuScene extends Phaser.Scene
     // loadScene should have loaded everything we need.
     preload()
     {
-        
-        
+        this.load.html('username', 'static/data/username.html');
     }
     
     create()
@@ -31,12 +31,13 @@ class menuScene extends Phaser.Scene
         
         // Create the four different character selections
         this.addButtonSprites();
-        this.turnButtonsOn();       
-        
+        this.userPrompt();
+        this.turnButtonsOn();
     }
     
     addButtonSprites()
     {
+        console.log("addButton");
         this.saltyButton = this.add.sprite(this.buttonPositionX, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
         this.add.text(this.saltyButton.x - 50, this.saltyButton.y - 50, 'Salty');
         
@@ -48,11 +49,49 @@ class menuScene extends Phaser.Scene
         
         this.sweetButton = this.add.sprite(this.buttonPositionX + 300, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
         this.add.text(this.sweetButton.x - 50, this.sweetButton.y - 50, 'Sweet');
-        
-        
-        
     }
     
+    userPrompt()
+    {
+        var text = this.add.text(this.cameras.main.centerX - this.cameras.main.centerX/3.5, 
+            this.cameras.main.centerY + 50, 
+            'Please enter your name', 
+            { color: 'white', fontSize: '24px '});
+
+        // Prompt for the username
+        var element = this.add.dom(this.cameras.main.centerX/2, this.cameras.main.centerY/2).createFromCache('username');
+
+        element.addListener('click');
+
+        // Username entry
+        element.on('click', function (event) {
+    
+            if (event.target.name === 'playButton')
+            {
+                var username = this.getChildByName('userName');
+    
+                //  Have they entered anything?
+                if (username.value !== '')
+                {
+                    //  Turn off the click events
+                    this.removeListener('click');
+    
+                    //  Hide the login element
+                    this.setVisible(false);
+    
+                    //  Populate the text with whatever they typed in
+                    text.setText('Welcome ' + username.value);
+                    this.username = username.value;
+                }
+                else
+                {
+                    //  Flash the prompt
+                    this.scene.add(username);
+                }
+            }
+        });
+    }
+
     turnButtonsOn()
     {
         //salty
@@ -68,9 +107,16 @@ class menuScene extends Phaser.Scene
         }, this);
         this.saltyButton.on('pointerdown', function(p) 
         {
-            if (p.leftButtonDown()){           
+            if (p.leftButtonDown())
+            {           
                 alert('everything tastes better with salt');
-                this.scene.start('armoryScene', { player: new SaltyCharacter(), socket: this.socket});
+                this.playerType = new SaltyCharacter();
+                this.scene.start('armoryScene', { 
+                    player: new SaltyCharacter(),
+                    socket: this.socket, 
+                });
+                //return;
+                //console.log("Sending to GameScene ", this.username);
             }
         }, this);
         
@@ -89,7 +135,14 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){  
                 alert('is it hot in here..or is it just you?');
-                this.scene.start('armoryScene', { player: new SpicyCharacter(), socket: this.socket});
+                this.playerType = new SpicyCharacter();
+                this.scene.start('armoryScene', { 
+                    player: new SpicyCharacter(), 
+                    socket: this.socket,
+                    username: this.username
+                });
+                //return;
+                //console.log("Sending to GameScene ", this.username);
             }
         }, this);
         
@@ -108,7 +161,14 @@ class menuScene extends Phaser.Scene
         {
             if (p.leftButtonDown()){  
                 alert('here, have a token of sour gratitude');
-                this.scene.start('armoryScene', { player: new SourCharacter(), socket: this.socket});
+                this.playerType = new SourCharacter();
+                this.scene.start('armoryScene', {
+                    player: new SourCharacter(),
+                    socket: this.socket,
+                    username: this.username
+                });
+                //return;
+                //console.log("Sending to GameScene ", this.username);
             }
         }, this);
         
@@ -116,7 +176,6 @@ class menuScene extends Phaser.Scene
         this.sweetButton.setInteractive();
         this.sweetButton.on('pointerover', function()
         {
-            //alert('you chose salty mouse');
             this.sweetButton.setTint(0xf0ff00);
         }, this);
         
@@ -127,20 +186,28 @@ class menuScene extends Phaser.Scene
         this.sweetButton.on('pointerdown', function(p) 
         {
             if (p.leftButtonDown()){  
+
                 alert('mm.. the sweet smell of a winner');
-                this.scene.start('armoryScene', { player: new SweetCharacter(), socket: this.socket});
+                this.playerType = new SweetCharacter();
+                this.scene.start('armoryScene', {
+                    player: new SweetCharacter(), 
+                    socket: this.socket,
+                    username: this.username
+                });
+                //return;
+                //console.log("Sending to GameScene ", this.username);
             }
-        }, this);
-            
-            
-        
+        }, this);   
     }
-    
-    
-    
-    
-    
-    
-    
-    
+/*
+    startGame()
+    {
+        this.scene.start('armoryScene', {
+            player: this.playerType, 
+            socket: this.socket,
+            username: this.username
+        });
+
+    }
+    */
 }

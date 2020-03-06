@@ -7,6 +7,7 @@ class gameScene extends Phaser.Scene {
         this.projectiles;
         this.platforms;
         this.player;
+        this.username;
         this.cursors;
         this.stars;
         this.score = 0;
@@ -26,7 +27,7 @@ class gameScene extends Phaser.Scene {
         this.tileset;
         this.client = new Client();
         this.otherPlayers = {};
-        this.DISPLAY = 150; 
+        this.DISPLAY = 200; 
         this.HITBOX = 110;
     }
     
@@ -34,11 +35,15 @@ class gameScene extends Phaser.Scene {
     init(data)
     {
         // From user selection in menu scene
-        this.player = data.player;
+        this.username = data.username;
+        console.log("gameScene ", this.username);
+        /*
         this.player.printStat();
         if (this.player.weapon != null){
             this.player.weapon.printWeaponStats();
         }
+        */
+        this.player = data.player;
         this.socket = data.socket;
         //this.player.setWeapon(data.weapon)
     }
@@ -177,11 +182,15 @@ class gameScene extends Phaser.Scene {
     update()
       {
         var self = this;
-          
+        //console.log(this.scene.username);
         if (this.gameOver)
         {
             return;   
-        }     
+        }
+        this.add.text(this.cameras.main.centerX/2,
+            this.cameras.main.centerY/2,
+            this.username,
+            { fontSize: '24px', fill: 'white' });     
         this.player.update(this);            
         this.projectileHandler.moveProjectiles();
 
