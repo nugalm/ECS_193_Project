@@ -30,7 +30,7 @@ class armoryScene extends Phaser.Scene
                         socket: this.socket,
                         username: this.username
                     }); 
-                    //console.log(this.username);
+                    console.log(this.username);
                 }
         }, this);
     }

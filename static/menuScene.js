@@ -31,7 +31,6 @@ class menuScene extends Phaser.Scene
         
         // Create the four different character selections
         this.addButtonSprites();
-        this.userPrompt();
         this.turnButtonsOn();
     }
     
@@ -50,8 +49,8 @@ class menuScene extends Phaser.Scene
         this.sweetButton = this.add.sprite(this.buttonPositionX + 300, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
         this.add.text(this.sweetButton.x - 50, this.sweetButton.y - 50, 'Sweet');
     }
-    
-    userPrompt()
+
+    turnButtonsOn()
     {
         var text = this.add.text(this.cameras.main.centerX - this.cameras.main.centerX/3.5, 
             this.cameras.main.centerY + 50, 
@@ -90,10 +89,7 @@ class menuScene extends Phaser.Scene
                 }
             }
         });
-    }
 
-    turnButtonsOn()
-    {
         //salty
         this.saltyButton.setInteractive();
         this.saltyButton.on('pointerover', function()
@@ -113,7 +109,8 @@ class menuScene extends Phaser.Scene
                 this.playerType = new SaltyCharacter();
                 this.scene.start('armoryScene', { 
                     player: new SaltyCharacter(),
-                    socket: this.socket, 
+                    socket: this.socket,
+                    username: this.username
                 });
                 //return;
                 //console.log("Sending to GameScene ", this.username);
