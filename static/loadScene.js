@@ -4,6 +4,7 @@ class loadScene extends Phaser.Scene
     {
         super( {key: 'loadScene'} );
         this.loadText;
+        this.bg;
     }
     
     init(data)
@@ -14,7 +15,7 @@ class loadScene extends Phaser.Scene
     // Frontload all sprites/images in loading screen
     preload()
     {
-        alert('loading in assets');
+       // alert('loading in assets');
         // TODO: make this nice looking graphics
         this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
         this.load.image('sky', 'static/assets/sky.png')
@@ -30,14 +31,16 @@ class loadScene extends Phaser.Scene
          
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
-        
+        //menu scene chars
+        this.load.image('loadingSpicy', 'static/images/spicyMouse.png')
         
         // trying tile map
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
         this.load.tilemapTiledJSON('Real_Map', 'static/images/TileMap/Real_Map.json');
+        this.load.image('logo', 'static/images/IntroThemeV2.png');   
         
-        
-        
+          
+       
         
 
         
@@ -48,7 +51,12 @@ class loadScene extends Phaser.Scene
     create()
     {
         this.loadText.setVisible(false);
-        this.add.text(100, 150, 'Click to enter the Marfare!', { fontSize: '32px', fill: 'white' });        
+        this.add.text(100, 150, 'Click to enter the Marfare!', { fontSize: '32px', fill: 'white' });
+        
+        
+        this.bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'logo');
+        
+        this.bg.setDisplaySize(this.game.config.width, this.game.config.height);
         
             var frameNames = this.anims.generateFrameNames('kitchenScene', {
                 start: 0, end: 19, zeroPad: 0, 
