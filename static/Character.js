@@ -19,7 +19,7 @@ class Character {
         this.HITBOX = 110;
         this.positionX;
         this.positionY;
-        this.startPositionX = 100;
+        this.startPositionX = 200;
         this.startPositionY = 450;
 	}
 
@@ -62,6 +62,13 @@ class Character {
         this.updateRotation(context);
         this.updateMovement(context);
     }
+    
+    updateMelee(context)
+    {
+        alert("playing fork stab");
+        this.sprite.anims.play('fork_stab', false);
+    }
+    
     
     updateRotation(context)
     {
@@ -122,16 +129,20 @@ class Character {
         var myPosition = {x: this.sprite.x , y: this.sprite.y};
         var myVelocity = {x: this.sprite.body.velocity.x , y: this.sprite.body.velocity.y };
         var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
-        socket.emit('movement', info);
+       // socket.emit('movement', info);
     }
 
     takeDamage(damageAmount) 
     {
+       // alert("youre taking damage: " + damageAmount)
         this.health = this.health - damageAmount;
-        
+      //  alert("health after taking damage: " + this.health);
         if (this.health < 0) 
         {
+            
             this.health = 0;
+            this.sprite.disableBody(true, true);
+            alert("you died you noob")
         }
     }
     
