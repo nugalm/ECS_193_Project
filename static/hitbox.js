@@ -1,6 +1,0 @@
-class Hitbox 
-{
-    constructor() 
-    {
-    }
-}
