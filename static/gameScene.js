@@ -104,12 +104,12 @@ class gameScene extends Phaser.Scene {
         this.drawer.drawCharacter();
         
             
-        
-        
-        //TESTING MELEE HITBOXES
         this.dummy = new SaltyCharacter();
         this.dummy.sprite = this.physics.add.sprite(this.player.startPositionX, this.player.startPositionY, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
         this.dummy.initSprite();
+        
+        //TESTING MELEE HITBOXES
+        
             
         
       //  this.meleeHitboxes = this.physics.add.group();
@@ -118,8 +118,8 @@ class gameScene extends Phaser.Scene {
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
         
-        
-      //  this.physics.add.overlap(this.dummy.sprite, this.meleeHitboxes, this.meleeHit, null, this);
+    
+
         
         this.physics.add.overlap(this.dummy.sprite, this.player.sprite, this.meleeHit, null, this);
         
@@ -147,15 +147,10 @@ class gameScene extends Phaser.Scene {
         
         
         // trying TILEmap
-        this.map = this.add.tilemap("Real_Map");
-        this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
-        this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
-        this.drawer.drawCharacter();
+        
         this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
         
-        
-        //this.drawer.drawCharacter();
         this.collidableLayer.setCollisionByProperty( {collides:true} );
 
         this.physics.add.collider(this.player.sprite, this.collidableLayer);
@@ -169,8 +164,6 @@ class gameScene extends Phaser.Scene {
         this.cameras.main.startFollow(this.player.sprite, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
         
-
-
         this.healthDisplay = this.add.text(this.dummy.sprite.x + 50, this.dummy.sprite.y + 50, "Health: " + this.dummy.health, { frontSize: '32px', fill: 'white'});
         
 
