@@ -8,10 +8,15 @@ class menuScene extends Phaser.Scene
         this.spicyButton;
         this.sourButton;
         this.sweetButton;
-        this.username;
-        this.playerType;
-        this.buttonPositionX = 250;
-        this.buttonPositionY = 250;
+        this.buttonPositionX = (config.width / 4) - (config.width  / 8);
+        this.buttonPositionY = config.height / 2;
+        this.buttonPositionOffset = config.width / 4;
+        this.IMAGE_SCALE = 0.07;
+        this.buttonTextOffsetY = 140;
+        
+        this.saltyButtonTint = 0x738F9E;
+        this.sourButtonTint = 0x05DE49;
+        this.sweetButtonTint = 0xFC00C4;
     }
     
     init(data)
@@ -31,34 +36,67 @@ class menuScene extends Phaser.Scene
         
         // Create the four different character selections
         this.addButtonSprites();
-        this.turnButtonsOn();
+
+        this.scaleCharImages();
+        this.tempSetTintforButtons();
+        this.addButtonTexts();
+        this.turnButtonsOn();       
+        
+
     }
     
     addButtonSprites()
     {
-        console.log("addButton");
-        this.saltyButton = this.add.sprite(this.buttonPositionX, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.saltyButton.x - 50, this.saltyButton.y - 50, 'Salty');
+        this.saltyButton = this.add.sprite(this.buttonPositionX, this.buttonPositionY, 'loadingSpicy');
+     
+        this.spicyButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset, this.buttonPositionY, 'loadingSpicy');
+
+        this.sourButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 2, this.buttonPositionY, 'loadingSpicy');
         
-        this.spicyButton = this.add.sprite(this.buttonPositionX + 100, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.spicyButton.x - 50, this.spicyButton.y - 50, 'Spicy');
+        this.sweetButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 3, this.buttonPositionY, 'loadingSpicy');
+    }
+    
+    tempSetTintforButtons()
+    {
+        this.saltyButton.setTint(this.saltyButtonTint);
+        this.sourButton.setTint(this.sourButtonTint);
+        this.sweetButton.setTint(this.sweetButtonTint);
+    }
+    
+    
+    scaleCharImages()
+    {
+        this.scaleCharImage(this.saltyButton);
+        this.scaleCharImage(this.spicyButton);
+        this.scaleCharImage(this.sourButton);
+        this.scaleCharImage(this.sweetButton);
+    }
+
+    addButtonTexts()
+    {
+        this.add.text(this.saltyButton.x - 50, this.saltyButton.y - this.buttonTextOffsetY, 'Salty');
         
-        this.sourButton = this.add.sprite(this.buttonPositionX + 200, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.sourButton.x - 50, this.sourButton.y - 50, 'Sour');
+        this.add.text(this.spicyButton.x - 50, this.spicyButton.y - this.buttonTextOffsetY, 'Spicy');
         
-        this.sweetButton = this.add.sprite(this.buttonPositionX + 300, this.buttonPositionY, 'kitchenScene', 'blueObject.png');
-        this.add.text(this.sweetButton.x - 50, this.sweetButton.y - 50, 'Sweet');
+        this.add.text(this.sourButton.x - 50, this.sourButton.y - this.buttonTextOffsetY, 'Sour');
+        
+        this.add.text(this.sweetButton.x - 50, this.sweetButton.y - this.buttonTextOffsetY, 'Sweet');
+    }
+    
+    scaleCharImage(_button)
+    {
+        _button.setScale(this.IMAGE_SCALE);
     }
 
     turnButtonsOn()
     {
         var text = this.add.text(this.cameras.main.centerX - this.cameras.main.centerX/3.5, 
-            this.cameras.main.centerY + 50, 
+            this.cameras.main.centerY + 150, 
             'Please enter your name', 
             { color: 'white', fontSize: '24px '});
 
         // Prompt for the username
-        var element = this.add.dom(this.cameras.main.centerX/2, this.cameras.main.centerY/2).createFromCache('username');
+        var element = this.add.dom(this.cameras.main.centerX/2, this.cameras.main.centerY/2 + 100).createFromCache('username');
 
         element.addListener('click');
 
@@ -99,21 +137,13 @@ class menuScene extends Phaser.Scene
         
         this.saltyButton.on('pointerout', function()
         {
-            this.saltyButton.setTint(0xffffff);
+            this.saltyButton.setTint(this.saltyButtonTint);
         }, this);
         this.saltyButton.on('pointerdown', function(p) 
         {
-            if (p.leftButtonDown())
-            {           
-                alert('everything tastes better with salt');
-                this.playerType = new SaltyCharacter();
-                this.scene.start('armoryScene', { 
-                    player: new SaltyCharacter(),
-                    socket: this.socket,
-                    username: this.username
-                });
-                //return;
-                //console.log("Sending to GameScene ", this.username);
+            if (p.leftButtonDown()){           
+               // alert('everything tastes better with salt');
+                this.scene.start('armoryScene', { player: new SaltyCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -131,15 +161,8 @@ class menuScene extends Phaser.Scene
         this.spicyButton.on('pointerdown', function(p) 
         {
             if (p.leftButtonDown()){  
-                alert('is it hot in here..or is it just you?');
-                this.playerType = new SpicyCharacter();
-                this.scene.start('armoryScene', { 
-                    player: new SpicyCharacter(), 
-                    socket: this.socket,
-                    username: this.username
-                });
-                //return;
-                //console.log("Sending to GameScene ", this.username);
+                //alert('is it hot in here..or is it just you?');
+                this.scene.start('armoryScene', { player: new SpicyCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -152,20 +175,13 @@ class menuScene extends Phaser.Scene
         
         this.sourButton.on('pointerout', function()
         {
-            this.sourButton.setTint(0xffffff);
+            this.sourButton.setTint(this.sourButtonTint);
         }, this);
         this.sourButton.on('pointerdown', function(p) 
         {
             if (p.leftButtonDown()){  
-                alert('here, have a token of sour gratitude');
-                this.playerType = new SourCharacter();
-                this.scene.start('armoryScene', {
-                    player: new SourCharacter(),
-                    socket: this.socket,
-                    username: this.username
-                });
-                //return;
-                //console.log("Sending to GameScene ", this.username);
+               // alert('here, have a token of sour gratitude');
+                this.scene.start('armoryScene', { player: new SourCharacter(), socket: this.socket});
             }
         }, this);
         
@@ -178,33 +194,14 @@ class menuScene extends Phaser.Scene
         
         this.sweetButton.on('pointerout', function()
         {
-            this.sweetButton.setTint(0xffffff);
+            this.sweetButton.setTint(this.sweetButtonTint);
         }, this);
         this.sweetButton.on('pointerdown', function(p) 
         {
             if (p.leftButtonDown()){  
-
-                alert('mm.. the sweet smell of a winner');
-                this.playerType = new SweetCharacter();
-                this.scene.start('armoryScene', {
-                    player: new SweetCharacter(), 
-                    socket: this.socket,
-                    username: this.username
-                });
-                //return;
-                //console.log("Sending to GameScene ", this.username);
+                //alert('mm.. the sweet smell of a winner');
+                this.scene.start('armoryScene', { player: new SweetCharacter(), socket: this.socket});
             }
         }, this);   
     }
-/*
-    startGame()
-    {
-        this.scene.start('armoryScene', {
-            player: this.playerType, 
-            socket: this.socket,
-            username: this.username
-        });
-
-    }
-    */
 }
