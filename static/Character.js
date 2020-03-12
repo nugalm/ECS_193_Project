@@ -7,6 +7,7 @@
 class Character {
 
     constructor() {
+        this.healthDisplay;
         this.health = 50;
         this.power = 50;
         this.mana = 50;
@@ -21,6 +22,8 @@ class Character {
         this.positionY;
         this.startPositionX = 200;
         this.startPositionY = 450;
+        this.isMeleeing;
+        this.hitCount = 1;
 	}
 
 	printStat(){
@@ -46,6 +49,7 @@ class Character {
         this.sprite.displayHeight = this.DISPLAY;
         this.sprite.setSize(this.HITBOX, this.HITBOX);
         this.sprite.setOffset(125, 50);
+        //this.sprite.anchor(0)
         // when sprite lands after jumping it will bounce slightly
         //   player.setBounce(0.2);
         //this.sprite.setCollideWorldBounds(true);
@@ -63,10 +67,12 @@ class Character {
         this.updateMovement(context);
     }
     
-    updateMelee(context)
+    updateMelee()
     {
-        alert("playing fork stab");
-        this.sprite.anims.play('fork_stab', false);
+        this.isMeleeing = true;
+        this.hitCount = 1;
+      //  alert(this.isMeleeing);
+        this.sprite.anims.play('fork_stab');
     }
     
     
@@ -83,22 +89,26 @@ class Character {
     
     updateMovement(context)
     {
-          
-        //left  
+        
+        
         if (context.cursors.left.isDown)
         {
            // player.setVelocityY(0);
             this.sprite.setVelocityX(-160);
-
-            this.sprite.anims.play('left', true);
+            
+            if (!(this.sprite.anims.isPlaying && this.sprite.anims.currentAnim.key ===          'fork_stab')) {
+                this.sprite.anims.play('left', true);
+            }
         }
         
         //right  
         else if (context.cursors.right.isDown)
         {
             this.sprite.setVelocityX(160);
-
-            this.sprite.anims.play('left', true);
+            
+            if (!(this.sprite.anims.isPlaying && this.sprite.anims.currentAnim.key ===          'fork_stab')) {
+                this.sprite.anims.play('left', true);
+            }
         }
         
         // down  
@@ -106,8 +116,10 @@ class Character {
         {
 
             this.sprite.setVelocityY(160);
-
-            this.sprite.anims.play('left', true);
+            
+            if (!(this.sprite.anims.isPlaying && this.sprite.anims.currentAnim.key ===          'fork_stab')) {
+                this.sprite.anims.play('left', true);
+            }
         }
 
         // up  
@@ -115,7 +127,9 @@ class Character {
         {
             this.sprite.setVelocityY(-160);
             
-            this.sprite.anims.play('left', true);
+            if (!(this.sprite.anims.isPlaying && this.sprite.anims.currentAnim.key ===          'fork_stab')) {
+                this.sprite.anims.play('left', true);
+            }
         }
           
         // none  
@@ -123,8 +137,14 @@ class Character {
         {
             this.sprite.setVelocityX(0);
             this.sprite.setVelocityY(0);
-            this.sprite.anims.play('turn');
+            
+            if (!(this.sprite.anims.isPlaying && this.sprite.anims.currentAnim.key ===          'fork_stab')) {
+                this.sprite.anims.play('turn');
+            }
         }
+        
+      
+       // this.healthDisplay = context.add.text(this.sprite.x + 50, this.sprite.y + 50, "Health: " + this.health, { frontSize: '32px', fill: 'white'});
         
         var myPosition = {x: this.sprite.x , y: this.sprite.y};
         var myVelocity = {x: this.sprite.body.velocity.x , y: this.sprite.body.velocity.y };

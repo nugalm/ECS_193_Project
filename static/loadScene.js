@@ -37,6 +37,13 @@ class loadScene extends Phaser.Scene
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
         this.load.tilemapTiledJSON('Real_Map', 'static/images/TileMap/Real_Map.json');
         this.load.image('logo', 'static/images/IntroThemeV2.png');   
+        
+          //fork
+      //  this.load.image('fork', 'static/images/fork.png');
+        
+        //fork stab
+        this.load.spritesheet('fork', 'static/images/temp/mouse_fork_stab.png',
+                             {frameWidth: 220.2, frameHeight: 331 } );
     }
     
     // Creating animations to be used in gameScene
@@ -77,6 +84,15 @@ class loadScene extends Phaser.Scene
                 repeat: -1
             });
         
+        //melee animation: TODO: change later
+        
+            this.anims.create({
+                key: 'fork_stab',
+                frames: this.anims.generateFrameNames('fork', {start: 0, end: 4}),
+                frameRate: 7,
+                repeat: 0
+                
+            });
         
         this.input.on('pointerdown', function(p)
         {       if (p.leftButtonDown())

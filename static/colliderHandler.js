@@ -7,18 +7,19 @@ class ColliderHandler
     
     initColliders()
     {
-        this.context.physics.add.collider(this.context.player.sprite, this.context.platforms);
-        this.context.physics.add.collider(this.context.stars, this.context.platforms);
-        this.context.physics.add.overlap(this.context.player.sprite, this.context.stars, this.collectStar, null, this);
-        this.context.physics.add.collider(this.context.projectiles, this.context.platforms);
-        this.context.physics.add.collider(this.context.bombs, this.context.platforms);
-        this.context.physics.add.collider(this.context.player.sprite, this.context.bombs, this.hitBomb, null, this);
+        this.context.physics.add.collider(this.context.player.sprite, this.context.collidableLayer);
+
+        this.context.physics.add.collider(this.context.projectiles, this.context.collidableLayer, this.lmao, null, this);
     }
     
-    
+    lmao()
+    {
+        alert("projectile colliding with collidable layer");
+        
+    }
     // stops the game and turns player Red
-      hitBomb()
-      {
+    hitBomb()
+    {
         this.context.physics.pause();
 
         this.context.player.sprite.setTint(0xff0000);
@@ -29,7 +30,12 @@ class ColliderHandler
         this.context.gameOver = true;
           
           
-      }
+    }
+    
+    initProjectileColliders()
+    {
+        //this.context.add.collider(this.context.projectiles, this.context.)    
+    }
     
         // physics body disabled and parent Game Object is made inactive and invisible 
         // removing it from display
