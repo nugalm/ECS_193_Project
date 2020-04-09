@@ -40,7 +40,8 @@ class menuScene extends Phaser.Scene
         this.scaleCharImages();
         this.tempSetTintforButtons();
         this.addButtonTexts();
-        this.turnButtonsOn();       
+        this.turnButtonsOn();
+        this.userPrompt();
         
 
     }
@@ -90,44 +91,6 @@ class menuScene extends Phaser.Scene
 
     turnButtonsOn()
     {
-        var text = this.add.text(this.cameras.main.centerX - this.cameras.main.centerX/3.5, 
-            this.cameras.main.centerY + 150, 
-            'Please enter your name', 
-            { color: 'white', fontSize: '24px '});
-
-        // Prompt for the username
-        var element = this.add.dom(this.cameras.main.centerX/2, this.cameras.main.centerY/2 + 100).createFromCache('username');
-
-        element.addListener('click');
-
-        // Username entry
-        element.on('click', function (event) {
-    
-            if (event.target.name === 'playButton')
-            {
-                var username = this.getChildByName('userName');
-    
-                //  Have they entered anything?
-                if (username.value !== '')
-                {
-                    //  Turn off the click events
-                    this.removeListener('click');
-    
-                    //  Hide the login element
-                    this.setVisible(false);
-    
-                    //  Populate the text with whatever they typed in
-                    text.setText('Welcome ' + username.value);
-                    this.username = username.value;
-                }
-                else
-                {
-                    //  Flash the prompt
-                    this.scene.add(username);
-                }
-            }
-        });
-
         //salty
         this.saltyButton.setInteractive();
         this.saltyButton.on('pointerover', function()
@@ -203,5 +166,47 @@ class menuScene extends Phaser.Scene
                 this.scene.start('armoryScene', { player: new SweetCharacter(), socket: this.socket});
             }
         }, this);   
+    }
+
+    userPrompt()
+    {
+        var text = this.add.text(this.cameras.main.centerX - this.cameras.main.centerX/3.5, 
+            this.cameras.main.centerY + 150, 
+            'Please enter your name', 
+            { color: 'white', fontSize: '24px '});
+
+        // Prompt for the username
+        var element = this.add.dom(this.cameras.main.centerX/2, this.cameras.main.centerY/2 + 100).createFromCache('username');
+
+        element.addListener('click');
+
+        // Username entry
+        element.on('click', function (event) {
+    
+            if (event.target.name === 'playButton')
+            {
+                var username = this.getChildByName('userName');
+    
+                //  Have they entered anything?
+                if (username.value !== '')
+                {
+                    //  Turn off the click events
+                    this.removeListener('click');
+    
+                    //  Hide the login element
+                    this.setVisible(false);
+    
+                    //  Populate the text with whatever they typed in
+                    text.setText('Welcome ' + username.value);
+                    this.username = username.value;
+                    sessionStorage.setItem('username', this.username);
+                }
+                else
+                {
+                    //  Flash the prompt
+                    this.scene.add(username);
+                }
+            }
+        });
     }
 }

@@ -9,7 +9,8 @@ class armoryScene extends Phaser.Scene
     
     init(data)
     {
-        this.username = data.username;
+        let username = sessionStorage.getItem('username');
+        this.username = username;
         this.player = data.player;
         this.socket = data.socket;
     }
@@ -30,7 +31,6 @@ class armoryScene extends Phaser.Scene
                         socket: this.socket,
                         username: this.username
                     }); 
-                    console.log(this.username);
                 }
         }, this);
     }
