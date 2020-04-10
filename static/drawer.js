@@ -45,7 +45,8 @@ class Drawer
     drawCharacter()
     {
         this.context.player.sprite = this.context.physics.add.sprite(this.context.player.startPositionX, this.context.player.startPositionY, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
-        this.context.player.initSprite();
+        this.context.player.initSprite(this.context);
+        //this.context.player.healthBar.initHealthBar(this.context);
     }
     
    

@@ -5,15 +5,12 @@ class gameScene extends Phaser.Scene {
         super({key: 'gameScene'});
         this.cursor;
         this.projectiles;
-        this.platforms;
         this.player;
         this.username;
         this.displayName;
-        this.cursors;
-        this.stars;
+        this.cursors; 
         this.score = 0;
         this.scoreText;
-        this.bombs;
         this.gameOver = false;
         this.dragging = false;
         this.mouse;
@@ -30,6 +27,17 @@ class gameScene extends Phaser.Scene {
         this.otherPlayers = {};
         this.DISPLAY = 150; 
         this.HITBOX = 110;
+
+        this.meleeHitboxes;
+        var dummy;
+        this.fork = new Fork('salty');
+        this.forkTime;
+        this.healthDisplay;
+        this.dummies;
+        this.sour;
+        this.sweet;
+        this.spicy;
+
     }
     
     // If we ever need to load specific data from previous scene.
@@ -37,9 +45,9 @@ class gameScene extends Phaser.Scene {
     {
         // From user selection in menu scene
         this.player = data.player;
-        this.player.printStat();
+       // this.player.printStat();
         if (this.player.weapon != null){
-            this.player.weapon.printWeaponStats();
+         //   this.player.weapon.printWeaponStats();
         }
         this.username = data.username;
         this.socket = data.socket;
@@ -51,15 +59,16 @@ class gameScene extends Phaser.Scene {
     preload() 
     {
         
+        
     }
     
     //this.client.socket.emit('newPlayer');
     
     create()
     {  
-        this.client.socket.emit('startPlayer');
+       // this.client.socket.emit('startPlayer');
        
-        var self = this;
+       /* var self = this;
         
         this.client.socket.on('moveUpdates', function(object){ 
             
@@ -73,27 +82,52 @@ class gameScene extends Phaser.Scene {
                 self.otherPlayers[object.id].anims.play('left', true);
             }
             
-        });
+        });*/
         
         
-        //this.platforms = this.physics.add.staticGroup();
-        // drawing sky, platforms, stars, player
-       // this.drawer.draw(); 
-        //this.drawer.drawCharacter();
-    
-        // Phaser's built-in Keyboard manager
-        // populates cursors object with up, down left, right properties
-        // the four directions are instances of Key objects
-       // cursors = this.input.keyboard.createCursorKeys();
-       this.cursors = this.input.keyboard.addKeys({'up': Phaser.Input.Keyboard.KeyCodes.W, 
-                                     'down': Phaser.Input.Keyboard.KeyCodes.S,                     'left': Phaser.Input.Keyboard.KeyCodes.A,     
-                                    'right': Phaser.Input.Keyboard.KeyCodes.D,
+       this.cursors = this.input.keyboard.addKeys
+       ({
+            'up': Phaser.Input.Keyboard.KeyCodes.W, 
+            'down': Phaser.Input.Keyboard.KeyCodes.S,                     
+            'left': Phaser.Input.Keyboard.KeyCodes.A,     
+            'right': Phaser.Input.Keyboard.KeyCodes.D,
+            'space': Phaser.Input.Keyboard.KeyCodes.space,
+                                        
                                                     
         });
         
         this.projectileHandler.initProjectiles();
-     //   this.bombs = this.physics.add.group();
-          
+
+        // trying TILEmap
+        this.map = this.add.tilemap("Real_Map");
+        this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
+        this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
+        this.drawer.drawCharacter();
+        
+            
+        //Dummies
+       // this.dummies = this.physics.add.group();
+        this.player.username = this.add.text(this.player.sprite.x,
+            this.player.sprite.y - 50,
+            this.username,
+         { fontSize: '24px', fill: 'white' });
+        
+        //this.player.initContainer(this);
+        
+        this.dummies = this.physics.add.group({allowGravity: false});
+        //TESTING MELEE HITBOXES
+        this.salt = new SaltyCharacter();
+        this.salt.sprite = this.physics.add.sprite(this.player.startPositionX, this.player.startPositionY, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+        this.salt.initSprite(this);
+        
+        this.dummies.add(this.salt.sprite);
+        
+        // Player melee animation callback
+        this.player.sprite.on('animationcomplete', this.animationComplete, this);
+        
+
+        this.physics.add.overlap(this.salt.sprite, this.player.sprite, this.meleeHit, null, this);
+        
         this.input.on('pointerdown', function(p)
         {    
             
@@ -104,35 +138,36 @@ class gameScene extends Phaser.Scene {
             
             else if (p.rightButtonDown())
             {
-                alert("you're meleeing, but we dont have the assets :(");
-                //TODO: Melee
+                this.player.updateMelee();
             }
             
         }, this);
           
         this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-        
-        // set up collision detection between objects
-       // this.colliderHandler.initColliders();
-        
-        
-        // trying TILEmap
-        this.map = this.add.tilemap("Real_Map");
-        this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
-        this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
-        this.drawer.drawCharacter();
+
+        this.input.keyboard.on('keydown-SPACE', function(p) 
+        {
+            this.player.dashTargetRotation = this.player.sprite.rotation;
+            this.player.dash();
+        }, this);
+
         this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
-        
-        
-        //this.drawer.drawCharacter();
         this.collidableLayer.setCollisionByProperty( {collides:true} );
+
         this.physics.add.collider(this.player.sprite, this.collidableLayer);
+        
+        this.physics.add.collider(this.projectiles, this.salt.sprite, this.bulletHit, null, this);
+
         
         //camera
         this.cameras.main.startFollow(this.player.sprite, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
         
+
+        this.healthDisplay = this.add.text(this.salt.sprite.x + 50, this.salt.sprite.y + 50, "Health: " + this.salt.health, { frontSize: '32px', fill: 'white'});
+        
+
         
         // highlight collides tiles for debugging
         /*
@@ -145,7 +180,7 @@ class gameScene extends Phaser.Scene {
         */
         
       
-        this.client.socket.on('updatePlayers', function(server){
+       /* this.client.socket.on('updatePlayers', function(server){
             for (var id in server){
                 if(self.client.socket.id === id){
                     continue;
@@ -173,7 +208,7 @@ class gameScene extends Phaser.Scene {
                     self.physics.add.collider(self.otherPlayers[id], self.player.sprite);
                 }
             }
-        });  
+        });  */
         
           
     } 
@@ -186,13 +221,26 @@ class gameScene extends Phaser.Scene {
             return;   
         }
 
-        this.displayName = this.add.text(this.player.sprite.x,
-            this.player.sprite.y - 50,
-            this.username,
-         { fontSize: '24px', fill: 'white' });
+        this.salt.updateHealth();  
+          
+          
+       // this.displayName = this.add.text(this.player.sprite.x,
+       //     this.player.sprite.y - 50,
+        //    this.username,
+       //  { fontSize: '24px', fill: 'white' });
 
         this.player.update(this);
         this.projectileHandler.moveProjectiles();
+
+        this.healthDisplay.x = this.salt.sprite.x - 25;
+        this.healthDisplay.y = this.salt.sprite.y - 60;
+       // if (this.dummy.health != 0) {
+        this.healthDisplay.setText("Health: " + this.salt.health);
+       // }
+        if (this.salt.health == 0) 
+        {
+            this.healthDisplay.visible = false;   
+        }
 
       /*var myPosition = {x: this.player.sprite.x , y: this.player.sprite.y};
         var myVelocity = {x: this.player.sprite.body.velocity.x , y: this.player.sprite.body.velocity.y };
@@ -216,4 +264,38 @@ class gameScene extends Phaser.Scene {
     {
         alert("collided");
     }
+
+    
+    meleeHit()
+    {
+        
+        if (this.player.isMeleeing && this.player.hitCount == 1)
+        {
+            this.salt.takeDamage(10);
+            this.player.hitCount = 0;
+          //  alert("health after melee hit: " + this.dummy.health);
+        }
+    }
+    
+    bulletHit(salt, bullet)
+    {
+        this.salt.takeDamage(10);
+        bullet.disableBody(true, true);
+        //alert("health after prjecitle hit: " + this.dummy.health);
+        
+    }
+    
+    animationComplete(animation, frame)
+    {
+        if (animation.key === 'fork_stab' )
+        {
+            this.player.isMeleeing = false;
+        }
+    
+        if (animation.key === 'mouse_dash')
+        {
+            this.player.isDashing = false;
+        }
+    }
+
 }

@@ -21,9 +21,9 @@
     <script src="static/gameScene.js"></script>
     <script src="static/weapon.js"></script>
     <script src="static/fork.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="static/healthBar.js"></script>
     <script src="static/client.js"></script>
-<body>
+<body oncontextmenu="return false;">
   <script type="text/javascript">
       
       var config = {
@@ -41,15 +41,18 @@
                     debug: false
                 }
             },
+
             parent: "user-input",
             dom: {
                 createContainer: true
             },
-            scene:
-                [loadScene, menuScene, armoryScene, gameScene] 
+            scene: [loadScene, menuScene, armoryScene, gameScene],
+            audio: {
+                disableWebAudio: true
+            }
       };
       
-      var origin = window.location.origin;
+     /* var origin = window.location.origin;
       var socket = io.connect(origin);
       var socket_id;
       socket.on('connect', function() {
@@ -57,7 +60,7 @@
           socket.emit('newPlayer');
       });
       
-      var client = new Client(socket);
+      var client = new Client(socket);*/
       
       var game = new Phaser.Game(config);
       

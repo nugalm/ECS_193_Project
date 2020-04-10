@@ -17,6 +17,9 @@ class menuScene extends Phaser.Scene
         this.saltyButtonTint = 0x738F9E;
         this.sourButtonTint = 0x05DE49;
         this.sweetButtonTint = 0xFC00C4;
+        
+        this.promptPositionX = (config.width / 4);
+        this.promptPositionY = (config.height / 2);
     }
     
     init(data)
@@ -28,10 +31,13 @@ class menuScene extends Phaser.Scene
     preload()
     {
         this.load.html('username', 'static/data/username.html');
+        this.sound.play('game_audio');
     }
     
     create()
     {
+      //  this.sound.play('selection_audio');
+       
         this.add.text(100, 100, 'Choose your taste!', { fontSize: '24px', fill: 'white' });
         
         // Create the four different character selections
@@ -170,13 +176,13 @@ class menuScene extends Phaser.Scene
 
     userPrompt()
     {
-        var text = this.add.text(this.cameras.main.centerX - this.cameras.main.centerX/3.5, 
-            this.cameras.main.centerY + 150, 
+        var text = this.add.text(this.promptPositionX + 125, 
+            this.promptPositionY + 220, 
             'Please enter your name', 
             { color: 'white', fontSize: '24px '});
 
         // Prompt for the username
-        var element = this.add.dom(this.cameras.main.centerX/2, this.cameras.main.centerY/2 + 100).createFromCache('username');
+        var element = this.add.dom(this.promptPositionX, this.promptPositionY).createFromCache('username');
 
         element.addListener('click');
 

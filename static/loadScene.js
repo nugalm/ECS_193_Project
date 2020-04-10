@@ -17,16 +17,8 @@ class loadScene extends Phaser.Scene
     {
         // TODO: make this nice looking graphics
         this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
-        this.load.image('sky', 'static/assets/sky.png')
-        this.load.image('ground', 'static/assets/platform.png');
-        this.load.image('star', 'static/assets/star.png');
-        this.load.image('bomb', 'static/assets/bomb.png');
         this.load.image('projectile', 'static/images/whiteball.png');
         this.load.image('hitbox', 'static/assets/hitbox_square.png');
-        this.load.spritesheet('mouse', 'static/images/mouse_walk.png',
-                              {frameWidth: 34, frameHeight: 48 } );
-        this.load.spritesheet('dude', 'static/assets/dude.png',
-                              {frameWidth: 32, frameHeight: 48 }  );
          
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
@@ -37,12 +29,33 @@ class loadScene extends Phaser.Scene
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
         this.load.tilemapTiledJSON('Real_Map', 'static/images/TileMap/Real_Map.json');
         this.load.image('logo', 'static/images/IntroThemeV2.png');   
+
+        //fork stab
+        this.load.spritesheet('fork', 'static/images/temp/mouse_fork_stab.png',
+                             {frameWidth: 220.2, frameHeight: 331 } );
+
+        //dash
+        this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
+                             {frameWidth: 220, frameHeight: 330 } );
+        
+        //audio
+        this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
+        this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3')
+     
+        //healthbar
+        this.load.image('red_bar', 'static/images/temp/RedBar.png');
+        this.load.image('green_bar', 'static/images/temp/GreenBar.png');
+        
     }
     
     // Creating animations to be used in gameScene
     // prompt user to click to enter gameScene
     create()
     {
+        this.sound.add('game_audio');
+        this.sound.add('selection_audio');
+        
+        
         this.loadText.setVisible(false);
         this.add.text(100, 150, 'Click to enter the Marfare!', { fontSize: '32px', fill: 'white' });
         
@@ -77,6 +90,22 @@ class loadScene extends Phaser.Scene
                 repeat: -1
             });
         
+        
+            this.anims.create({
+               key: 'fork_stab',
+                frames: this.anims.generateFrameNames('fork', {start: 0, end: 4}),
+                frameRate: 7,
+                repeat: 0
+                
+            });
+        
+            this.anims.create({
+                key: 'mouse_dash',
+                frames: this.anims.generateFrameNames('dash', {start: 0, end: 4} ),
+                frameRate: 10,
+                repeat: 0
+                
+            });
         
         this.input.on('pointerdown', function(p)
         {       if (p.leftButtonDown())

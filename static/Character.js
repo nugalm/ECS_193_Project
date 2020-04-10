@@ -6,7 +6,7 @@
 
 class Character {
 
-    constructor() {
+    constructor(_context) {
         this.health = 50;
         this.power = 50;
         this.mana = 50;
@@ -21,6 +21,14 @@ class Character {
         this.positionY;
         this.startPositionX = 200;
         this.startPositionY = 450;
+        this.isMeleeing = false;
+        this.isDashing = false;
+        this.hitCount = 1;
+        this.dashTargetRotation;
+        this.username;
+        this.healthBar = new HealthBar(this.startPositionX, this.startPositionY + 50)
+        this.myContainer;
+
 	}
 
 	printStat(){
@@ -40,8 +48,9 @@ class Character {
             
     }
     
-    initSprite() 
+    initSprite(context) 
     {
+
         this.sprite.displayWidth = this.DISPLAY;
         this.sprite.displayHeight = this.DISPLAY;
         this.sprite.setSize(this.HITBOX, this.HITBOX);
@@ -50,6 +59,14 @@ class Character {
         //   player.setBounce(0.2);
         //this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setAllowGravity(false);
+        this.healthBar.initHealthBar(context);
+    }
+    
+    initContainer(context)
+    {
+        this.myContainer = context.add.container(this.startPositionX, this.startPositionY);
+        this.myContainer.add(this.sprite);
+        this.myContainer.add(this.username);
     }
     
     initWeapon()
@@ -61,14 +78,35 @@ class Character {
     {
         this.updateRotation(context);
         this.updateMovement(context);
+        this.updateHealth();
+    }
+    
+    updateHealth()
+    {
+        this.healthBar.update(this.sprite.x, this.sprite.y + 50, this.health)
     }
     
     updateMelee(context)
     {
-        alert("playing fork stab");
-        this.sprite.anims.play('fork_stab', false);
+        this.isMeleeing = true;
+        this.hitCount = 1;
+      //  alert(this.isMeleeing);
+        this.sprite.anims.play('fork_stab');
+    } 
+    
+    updateWhileDashing()
+    {
+        this.sprite.x += Math.cos(this.dashTargetRotation) * 10;
+        this.sprite.y += Math.sin(this.dashTargetRotation) * 10;
     }
     
+    dash()
+    {
+        //this.sprite.x += Math.cos(this.sprite.rotation) * 10;
+       // this.sprite.y += Math.cos(this.sprite.rotation) * 10;
+      //  this.isDashing = true;
+        this.sprite.anims.play('mouse_dash');
+    }
     
     updateRotation(context)
     {
@@ -83,48 +121,75 @@ class Character {
     
     updateMovement(context)
     {
-          
-        //left  
-        if (context.cursors.left.isDown)
-        {
-           // player.setVelocityY(0);
-            this.sprite.setVelocityX(-160);
-
-            this.sprite.anims.play('left', true);
-        }
         
-        //right  
-        else if (context.cursors.right.isDown)
+        if (this.isDashing)
         {
-            this.sprite.setVelocityX(160);
-
-            this.sprite.anims.play('left', true);
+            this.updateWhileDashing();    
         }
-        
-        // down  
-        if (context.cursors.down.isDown)
-        {
+        else {
+            if (context.cursors.left.isDown)
+            {
+               // player.setVelocityY(0);
+                this.sprite.setVelocityX(-160);
 
-            this.sprite.setVelocityY(160);
+                if (!(this.sprite.anims.isPlaying 
+                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
+                {
+                    this.sprite.anims.play('left', true);
+                }
+            }
 
-            this.sprite.anims.play('left', true);
-        }
+            //right  
+            else if (context.cursors.right.isDown)
+            {
+                this.sprite.setVelocityX(160);
 
-        // up  
-        else if (context.cursors.up.isDown)
-        {
-            this.sprite.setVelocityY(-160);
+                if (!(this.sprite.anims.isPlaying 
+                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash'))))  
+                {
+                    this.sprite.anims.play('left', true);
+                }
+            }
+
+            // down  
+            if (context.cursors.down.isDown)
+            {
+                this.sprite.setVelocityY(160);
+
+                if (!(this.sprite.anims.isPlaying 
+                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
+                {
+                    this.sprite.anims.play('left', true);
+                }
+            }
+
+            // up  
+            else if (context.cursors.up.isDown)
+            {
+                this.sprite.setVelocityY(-160);
+
+                if (!(this.sprite.anims.isPlaying 
+                      && ( (this.sprite.anims.currentAnim.key === 'fork_stab') 
+                    || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
+                {
+                    this.sprite.anims.play('left', true);
+                }
+            }
+
+            // none  
+            if (context.cursors.up.isUp && context.cursors.down.isUp && context.cursors.left.isUp && context.cursors.right.isUp) 
+            {
+                this.sprite.setVelocityX(0);
+                this.sprite.setVelocityY(0);
+
+                if (!(this.sprite.anims.isPlaying 
+                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash'))))  
+                {
+                    this.sprite.anims.play('turn');
+                }
+            }
             
-            this.sprite.anims.play('left', true);
-        }
-          
-        // none  
-        if (context.cursors.up.isUp && context.cursors.down.isUp && context.cursors.left.isUp && context.cursors.right.isUp) 
-        {
-            this.sprite.setVelocityX(0);
-            this.sprite.setVelocityY(0);
-            this.sprite.anims.play('turn');
-        }
+    } //end else
         
         var myPosition = {x: this.sprite.x , y: this.sprite.y};
         var myVelocity = {x: this.sprite.body.velocity.x , y: this.sprite.body.velocity.y };
@@ -142,7 +207,7 @@ class Character {
             
             this.health = 0;
             this.sprite.disableBody(true, true);
-            alert("you died you noob")
+           // alert("you died you noob")
         }
     }
     
