@@ -105,7 +105,7 @@ class gameScene extends Phaser.Scene {
         this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
         this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
         
-        this.player.username = this.add.text(-15,
+        this.player.username = this.add.text(-20,
             -50,
             this.username,
          { fontSize: '24px', fill: 'white' });
@@ -117,9 +117,9 @@ class gameScene extends Phaser.Scene {
 
         
         this.dummies = this.physics.add.group({allowGravity: false});
-        //TESTING MELEE HITBOXES
+        
         this.salt = new SaltyCharacter();
-        this.salt.username = this.add.text(-15, -70, "enemy", { fontSize: '24px', fill: 'white' });
+        this.salt.username = this.add.text(-20, -70, "enemy", { fontSize: '24px', fill: 'white' });
         this.salt.sprite = this.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
         
         
@@ -132,7 +132,7 @@ class gameScene extends Phaser.Scene {
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
         
 
-       // this.physics.add.overlap(this.salt.sprite, this.player.sprite, this.meleeHit, null, this);
+        this.physics.add.overlap(this.salt.myContainer, this.player.myContainer, this.meleeHit, null, this);
         
         this.input.on('pointerdown', function(p)
         {    
@@ -161,9 +161,9 @@ class gameScene extends Phaser.Scene {
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
         this.collidableLayer.setCollisionByProperty( {collides:true} );
 
-        this.physics.add.collider(this.player.sprite, this.collidableLayer);
+        this.physics.add.collider(this.player.myContainer, this.collidableLayer);
         
-        //this.physics.add.collider(this.projectiles, this.salt.sprite, this.bulletHit, null, this);
+        this.physics.add.collider(this.projectiles, this.salt.myContainer, this.bulletHit, null, this);
 
         
         //camera
@@ -272,7 +272,7 @@ class gameScene extends Phaser.Scene {
         
         if (this.player.isMeleeing && this.player.hitCount == 1)
         {
-           // this.salt.takeDamage(10);
+            this.salt.takeDamage(10);
             this.player.hitCount = 0;
           //  alert("health after melee hit: " + this.dummy.health);
         }

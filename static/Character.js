@@ -16,7 +16,7 @@ class Character {
         this.sprite;
         this.weapon;
         this.DISPLAY = 150;
-        this.HITBOX = 110;
+        this.HITBOX = 50;
         this.positionX;
         this.positionY;
         this.startPositionX = 200;
@@ -53,7 +53,7 @@ class Character {
 
         this.sprite.displayWidth = this.DISPLAY;
         this.sprite.displayHeight = this.DISPLAY;
-        this.sprite.setSize(this.HITBOX, this.HITBOX);
+        this.sprite.setSize(0, 0);
         this.sprite.setOffset(125, 50);
         // when sprite lands after jumping it will bounce slightly
         //   player.setBounce(0.2);
@@ -67,7 +67,7 @@ class Character {
     {
         this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite]);
         
-        this.myContainer.setSize(0, 0);
+        this.myContainer.setSize(this.HITBOX, this.HITBOX);
        // this.myContainer.setOrigin(0.5, 0.5);
         
         
