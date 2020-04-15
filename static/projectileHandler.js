@@ -13,7 +13,7 @@ class ProjectileHandler
     
     createProjectile()
     {
-        var projectile = this.context.projectiles.create(this.context.player.sprite.x, this.context.player.sprite.y, 'projectile');
+        var projectile = this.context.projectiles.create(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
         projectile.setCollideWorldBounds(false);
         projectile.body.setAllowGravity(false); 
         projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);

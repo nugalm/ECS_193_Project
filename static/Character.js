@@ -60,13 +60,20 @@ class Character {
         //this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
+        this.initContainer(context);
     }
     
     initContainer(context)
     {
-        this.myContainer = context.add.container(this.startPositionX, this.startPositionY);
-        this.myContainer.add(this.sprite);
-        this.myContainer.add(this.username);
+        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite]);
+        
+        this.myContainer.setSize(0, 0);
+       // this.myContainer.setOrigin(0.5, 0.5);
+        
+        
+        context.physics.world.enable(this.myContainer);
+
+        this.myContainer.body.setAllowGravity(false);
     }
     
     initWeapon()
@@ -83,7 +90,7 @@ class Character {
     
     updateHealth()
     {
-        this.healthBar.update(this.sprite.x, this.sprite.y + 50, this.health)
+        this.healthBar.update(this.myContainer.x, this.myContainer.y + 50, this.health)
     }
     
     updateMelee(context)
@@ -94,17 +101,14 @@ class Character {
         this.sprite.anims.play('fork_stab');
     } 
     
-    updateWhileDashing()
-    {
-        this.sprite.x += Math.cos(this.dashTargetRotation) * 10;
-        this.sprite.y += Math.sin(this.dashTargetRotation) * 10;
-    }
+   // updateWhileDashing()
+   // {
+    //    this.sprite.x += Math.cos(this.dashTargetRotation) * 10;
+   //     this.sprite.y += Math.sin(this.dashTargetRotation) * 10;
+   // }
     
     dash()
     {
-        //this.sprite.x += Math.cos(this.sprite.rotation) * 10;
-       // this.sprite.y += Math.cos(this.sprite.rotation) * 10;
-      //  this.isDashing = true;
         this.sprite.anims.play('mouse_dash');
     }
     
@@ -113,7 +117,7 @@ class Character {
         var temp = this.sprite.getWorldTransformMatrix();
         
         var targetAngle =  Phaser.Math.Angle.Between(
-        this.sprite.x, this.sprite.y,
+        this.myContainer.x, this.myContainer.y,
         context.game.input.activePointer.worldX, context.game.input.activePointer.worldY);
           
         this.sprite.setRotation(targetAngle + Math.PI / 2);
@@ -129,8 +133,9 @@ class Character {
         else {
             if (context.cursors.left.isDown)
             {
-               // player.setVelocityY(0);
-                this.sprite.setVelocityX(-160);
+               
+                //this.sprite.setVelocityX(-160);
+                this.myContainer.body.setVelocityX(-160);
 
                 if (!(this.sprite.anims.isPlaying 
                       && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
@@ -142,8 +147,8 @@ class Character {
             //right  
             else if (context.cursors.right.isDown)
             {
-                this.sprite.setVelocityX(160);
-
+                //this.sprite.setVelocityX(160);
+                this.myContainer.body.setVelocityX(160);
                 if (!(this.sprite.anims.isPlaying 
                       && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash'))))  
                 {
@@ -154,8 +159,8 @@ class Character {
             // down  
             if (context.cursors.down.isDown)
             {
-                this.sprite.setVelocityY(160);
-
+                //this.sprite.setVelocityY(160);
+                this.myContainer.body.setVelocityY(160);
                 if (!(this.sprite.anims.isPlaying 
                       && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
                 {
@@ -166,8 +171,8 @@ class Character {
             // up  
             else if (context.cursors.up.isDown)
             {
-                this.sprite.setVelocityY(-160);
-
+                //this.sprite.setVelocityY(-160);
+                this.myContainer.body.setVelocityY(-160);
                 if (!(this.sprite.anims.isPlaying 
                       && ( (this.sprite.anims.currentAnim.key === 'fork_stab') 
                     || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
@@ -179,8 +184,10 @@ class Character {
             // none  
             if (context.cursors.up.isUp && context.cursors.down.isUp && context.cursors.left.isUp && context.cursors.right.isUp) 
             {
-                this.sprite.setVelocityX(0);
-                this.sprite.setVelocityY(0);
+               // this.sprite.setVelocityX(0);
+               // this.sprite.setVelocityY(0);
+                this.myContainer.body.setVelocityX(0);
+                this.myContainer.body.setVelocityY(0);
 
                 if (!(this.sprite.anims.isPlaying 
                       && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash'))))  

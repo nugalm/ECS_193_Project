@@ -37,6 +37,7 @@ class gameScene extends Phaser.Scene {
         this.sour;
         this.sweet;
         this.spicy;
+        this.salt;
 
     }
     
@@ -51,7 +52,7 @@ class gameScene extends Phaser.Scene {
         }
         this.username = data.username;
         this.socket = data.socket;
-        //this.player.setWeapon(data.weapon)
+       
     }
     
     // No need to preload here. We frontload all images/sprites/in loadScene 
@@ -96,37 +97,42 @@ class gameScene extends Phaser.Scene {
                                                     
         });
         
+        
         this.projectileHandler.initProjectiles();
 
         // trying TILEmap
         this.map = this.add.tilemap("Real_Map");
         this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
         this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
-        this.drawer.drawCharacter();
         
-            
-        //Dummies
-       // this.dummies = this.physics.add.group();
-        this.player.username = this.add.text(this.player.sprite.x,
-            this.player.sprite.y - 50,
+        this.player.username = this.add.text(-15,
+            -50,
             this.username,
          { fontSize: '24px', fill: 'white' });
         
-        //this.player.initContainer(this);
+
+    
+        this.drawer.drawCharacter();
+        
+
         
         this.dummies = this.physics.add.group({allowGravity: false});
         //TESTING MELEE HITBOXES
         this.salt = new SaltyCharacter();
-        this.salt.sprite = this.physics.add.sprite(this.player.startPositionX, this.player.startPositionY, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+        this.salt.username = this.add.text(-15, -70, "enemy", { fontSize: '24px', fill: 'white' });
+        this.salt.sprite = this.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+        
+        
+        
         this.salt.initSprite(this);
         
-        this.dummies.add(this.salt.sprite);
+      //  this.dummies.add(this.salt.sprite);
         
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
         
 
-        this.physics.add.overlap(this.salt.sprite, this.player.sprite, this.meleeHit, null, this);
+       // this.physics.add.overlap(this.salt.sprite, this.player.sprite, this.meleeHit, null, this);
         
         this.input.on('pointerdown', function(p)
         {    
@@ -157,27 +163,22 @@ class gameScene extends Phaser.Scene {
 
         this.physics.add.collider(this.player.sprite, this.collidableLayer);
         
-        this.physics.add.collider(this.projectiles, this.salt.sprite, this.bulletHit, null, this);
+        //this.physics.add.collider(this.projectiles, this.salt.sprite, this.bulletHit, null, this);
 
         
         //camera
-        this.cameras.main.startFollow(this.player.sprite, true, 0.05, 0.05);
+        this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
         
-
-        this.healthDisplay = this.add.text(this.salt.sprite.x + 50, this.salt.sprite.y + 50, "Health: " + this.salt.health, { frontSize: '32px', fill: 'white'});
-        
-
-        
         // highlight collides tiles for debugging
-        /*
+        
         const debugGraphics = this.add.graphics().setAlpha(0.75);
         this.collidableLayer.renderDebug(debugGraphics, {
     tileColor: null, // Color of non-colliding tiles
     collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         });
-        */
+        
         
       
        /* this.client.socket.on('updatePlayers', function(server){
@@ -232,15 +233,15 @@ class gameScene extends Phaser.Scene {
         this.player.update(this);
         this.projectileHandler.moveProjectiles();
 
-        this.healthDisplay.x = this.salt.sprite.x - 25;
-        this.healthDisplay.y = this.salt.sprite.y - 60;
+        //this.healthDisplay.x = this.salt.sprite.x - 25;
+       // this.healthDisplay.y = this.salt.sprite.y - 60;
        // if (this.dummy.health != 0) {
-        this.healthDisplay.setText("Health: " + this.salt.health);
+     //   this.healthDisplay.setText("Health: " + this.salt.health);
        // }
-        if (this.salt.health == 0) 
-        {
-            this.healthDisplay.visible = false;   
-        }
+     //   if (this.salt.health == 0) 
+      //  {
+      //      this.healthDisplay.visible = false;   
+       // }
 
       /*var myPosition = {x: this.player.sprite.x , y: this.player.sprite.y};
         var myVelocity = {x: this.player.sprite.body.velocity.x , y: this.player.sprite.body.velocity.y };
@@ -271,7 +272,7 @@ class gameScene extends Phaser.Scene {
         
         if (this.player.isMeleeing && this.player.hitCount == 1)
         {
-            this.salt.takeDamage(10);
+           // this.salt.takeDamage(10);
             this.player.hitCount = 0;
           //  alert("health after melee hit: " + this.dummy.health);
         }
