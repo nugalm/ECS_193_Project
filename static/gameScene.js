@@ -84,9 +84,6 @@ class gameScene extends Phaser.Scene {
 
     
         this.drawer.drawCharacter();
-        
-
-        
         this.dummies = this.physics.add.group({allowGravity: false});
         
         this.salt = new SaltyCharacter();
@@ -109,7 +106,8 @@ class gameScene extends Phaser.Scene {
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
         this.collidableLayer.setCollisionByProperty( {collides:true} );
 
-        this.physics.add.collider(this.player.myContainer, this.collidableLayer);
+        this.colliderHandler.initPlayerColliders();
+        
         
         this.physics.add.collider(this.projectiles, this.salt.myContainer, this.bulletHit, null, this);
 
@@ -166,7 +164,7 @@ class gameScene extends Phaser.Scene {
     bulletHit(salt, bullet)
     {
         this.salt.takeDamage(10);
-        bullet.disableBody(true, true);
+        bullet.destroy();
         //alert("health after prjecitle hit: " + this.dummy.health);
         
     }

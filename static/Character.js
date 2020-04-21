@@ -231,15 +231,11 @@ class Character {
     
     takeDamage(damageAmount) 
     {
-       // alert("youre taking damage: " + damageAmount)
         this.health = this.health - damageAmount;
-      //  alert("health after taking damage: " + this.health);
-        if (this.health < 0) 
+        if (this.health <= 0) 
         {
-            
             this.health = 0;
             this.sprite.disableBody(true, true);
-           // alert("you died you noob")
         }
     }
     
