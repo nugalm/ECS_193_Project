@@ -15,16 +15,16 @@ class Character {
         this.speed = 50;
         this.stamina = 50;
         this.element = "none"; 
-        
+        this.weapon;
+        this.gun = "bottle";
         
         this.sprite;
-        this.weapon;
+        this.myContainer;
         this.DISPLAY = 150;
         this.HITBOX = 50;
-      
-       
         this.startPositionX = 200;
         this.startPositionY = 450;
+        
         this.isMeleeing = false;
         this.isDashing = false;
         this.hitCount = 1;
@@ -32,8 +32,8 @@ class Character {
         
         this.username;
         this.healthBar = new HealthBar(this.startPositionX, this.startPositionY + 50)
-        this.myContainer;
-        this.gun = "bottle";
+       
+        
 
 	}
 

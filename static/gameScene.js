@@ -19,6 +19,7 @@ class gameScene extends Phaser.Scene {
         this.colliderHandler = new ColliderHandler(this);
         this.projectiles;
         this.projectileHandler = new ProjectileHandler(this);
+        this.keyboardHandler = new KeyboardHandler(this);
         
         
         // TiledMap vars
@@ -63,25 +64,14 @@ class gameScene extends Phaser.Scene {
         
     }
     
-    
     create()
     {  
         
-       this.cursors = this.input.keyboard.addKeys
-       ({
-            'up': Phaser.Input.Keyboard.KeyCodes.W, 
-            'down': Phaser.Input.Keyboard.KeyCodes.S,                     
-            'left': Phaser.Input.Keyboard.KeyCodes.A,     
-            'right': Phaser.Input.Keyboard.KeyCodes.D,
-            'space': Phaser.Input.Keyboard.KeyCodes.space,
-                                        
-                                                    
-        });
         
-        
+        this.keyboardHandler.initCursors();
         this.projectileHandler.initProjectiles();
 
-        // trying TILEmap
+        // TiledMap
         this.map = this.add.tilemap("Real_Map");
         this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
         this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
@@ -102,9 +92,6 @@ class gameScene extends Phaser.Scene {
         this.salt = new SaltyCharacter();
         this.salt.username = this.add.text(-20, -70, "enemy", { fontSize: '24px', fill: 'white' });
         this.salt.sprite = this.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
-        
-        
-        
         this.salt.initSprite(this);
         
       //  this.dummies.add(this.salt.sprite);
@@ -115,29 +102,8 @@ class gameScene extends Phaser.Scene {
 
         this.physics.add.overlap(this.salt.myContainer, this.player.myContainer, this.meleeHit, null, this);
         
-        this.input.on('pointerdown', function(p)
-        {    
-            
-            if (p.leftButtonDown())
-            {
-                this.player.fire();
-                this.projectileHandler.createProjectile();
-            }
-            
-            else if (p.rightButtonDown())
-            {
-                this.player.updateMelee();
-            }
-            
-        }, this);
-          
-
-
-        this.input.keyboard.on('keydown-SPACE', function(p) 
-        {
-            this.player.dashTargetRotation = this.player.sprite.rotation;
-            this.player.dash();
-        }, this);
+        
+        this.keyboardHandler.initEvents(this);
 
         this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
