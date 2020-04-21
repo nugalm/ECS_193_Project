@@ -34,9 +34,23 @@ class loadScene extends Phaser.Scene
         this.load.spritesheet('fork', 'static/images/temp/mouse_fork_stab.png',
                              {frameWidth: 220.2, frameHeight: 331 } );
 
+        //whisk twirl
+        this.load.spritesheet('whisk','static/images/temp/mouse_whisk_twirl.png',
+                             {frameWidth:262, frameHeight:332}
+                             );
+                        
+        //bottle squeeze
+        this.load.spritesheet('bottle','static/images/temp/mouse_bottle_squeeze.png',
+                             {frameWidth:255.8, frameHeight:383}
+                             );
+        
         //dash
         this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
                              {frameWidth: 220, frameHeight: 330 } );
+        
+        
+        
+        
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
@@ -100,12 +114,31 @@ class loadScene extends Phaser.Scene
             });
         
             this.anims.create({
-                key: 'mouse_dash',
-                frames: this.anims.generateFrameNames('dash', {start: 0, end: 4} ),
+               key: 'whisk_twirl',
+                frames: this.anims.generateFrameNames('whisk', {start: 0, end: 15}),
+                frameRate: 17,
+                repeat: 0
+                
+            });
+        
+            this.anims.create({
+               key: 'bottle_squeeze',
+                frames: this.anims.generateFrameNames('bottle', {start: 0, end: 5}),
                 frameRate: 10,
                 repeat: 0
                 
             });
+        
+            this.anims.create({
+                key: 'mouse_dash',
+                frames: this.anims.generateFrameNames('dash', {start: 0, end: 4} ),
+                frameRate: 9,
+                repeat: 0
+                
+            });
+        
+            
+        
         
         this.input.on('pointerdown', function(p)
         {       if (p.leftButtonDown())

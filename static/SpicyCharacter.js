@@ -7,6 +7,7 @@ class SpicyCharacter extends Character {
         this.mana = 60;
         this.speed = 70;
         this.element = "spicy";
+        this.weapon = "whisk";
     }
     
     

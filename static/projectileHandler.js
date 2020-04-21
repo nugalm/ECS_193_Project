@@ -17,6 +17,8 @@ class ProjectileHandler
         projectile.setCollideWorldBounds(false);
         projectile.body.setAllowGravity(false); 
         projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);
+        projectile.element = this.context.player.element;
+       
     }
     
     moveProjectiles()

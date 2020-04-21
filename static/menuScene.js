@@ -31,7 +31,7 @@ class menuScene extends Phaser.Scene
     preload()
     {
         this.load.html('username', 'static/data/username.html');
-        this.sound.play('game_audio');
+       // this.sound.play('game_audio');
     }
     
     create()

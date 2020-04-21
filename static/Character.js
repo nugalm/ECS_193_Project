@@ -7,32 +7,37 @@
 class Character {
 
     constructor(_context) {
+        
+        //stats
         this.health = 50;
         this.power = 50;
         this.mana = 50;
         this.speed = 50;
         this.stamina = 50;
         this.element = "none"; 
+        
+        
         this.sprite;
         this.weapon;
         this.DISPLAY = 150;
         this.HITBOX = 50;
-        this.positionX;
-        this.positionY;
+      
+       
         this.startPositionX = 200;
         this.startPositionY = 450;
         this.isMeleeing = false;
         this.isDashing = false;
         this.hitCount = 1;
-        this.dashTargetRotation;
+        
+        
         this.username;
         this.healthBar = new HealthBar(this.startPositionX, this.startPositionY + 50)
         this.myContainer;
+        this.gun = "bottle";
 
 	}
 
 	printStat(){
-        //alert("Creating " + this.element + " character!");
 		alert("health: " + this.health + "\n"     
 				+ "power: " + this.power + "\n"
 				+ "mana: " + this.mana + "\n"
@@ -55,9 +60,6 @@ class Character {
         this.sprite.displayHeight = this.DISPLAY;
         this.sprite.setSize(0, 0);
         this.sprite.setOffset(125, 50);
-        // when sprite lands after jumping it will bounce slightly
-        //   player.setBounce(0.2);
-        //this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
         this.initContainer(context);
@@ -68,12 +70,11 @@ class Character {
         this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite]);
         
         this.myContainer.setSize(this.HITBOX, this.HITBOX);
-       // this.myContainer.setOrigin(0.5, 0.5);
         
         
         context.physics.world.enable(this.myContainer);
-
         this.myContainer.body.setAllowGravity(false);
+        
     }
     
     initWeapon()
@@ -98,8 +99,22 @@ class Character {
         this.isMeleeing = true;
         this.hitCount = 1;
       //  alert(this.isMeleeing);
-        this.sprite.anims.play('fork_stab');
+        //this.sprite.anims.play('fork_stab');
+        if (this.weapon == "whisk") {
+            this.sprite.anims.play('whisk_twirl');
+        }
+        else if (this.weapon == "fork") {
+            this.sprite.anims.play('fork_stab');
+        }
+        
     } 
+    
+    fire()
+    {
+        if (this.gun == "bottle") {
+            this.sprite.anims.play('bottle_squeeze')
+        }    
+    }
     
    // updateWhileDashing()
    // {
@@ -137,8 +152,7 @@ class Character {
                 //this.sprite.setVelocityX(-160);
                 this.myContainer.body.setVelocityX(-160);
 
-                if (!(this.sprite.anims.isPlaying 
-                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
+                if (!this.isSpecialAnimating()) 
                 {
                     this.sprite.anims.play('left', true);
                 }
@@ -149,8 +163,7 @@ class Character {
             {
                 //this.sprite.setVelocityX(160);
                 this.myContainer.body.setVelocityX(160);
-                if (!(this.sprite.anims.isPlaying 
-                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash'))))  
+                if (!this.isSpecialAnimating())  
                 {
                     this.sprite.anims.play('left', true);
                 }
@@ -161,8 +174,7 @@ class Character {
             {
                 //this.sprite.setVelocityY(160);
                 this.myContainer.body.setVelocityY(160);
-                if (!(this.sprite.anims.isPlaying 
-                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
+                if (!this.isSpecialAnimating()) 
                 {
                     this.sprite.anims.play('left', true);
                 }
@@ -173,9 +185,7 @@ class Character {
             {
                 //this.sprite.setVelocityY(-160);
                 this.myContainer.body.setVelocityY(-160);
-                if (!(this.sprite.anims.isPlaying 
-                      && ( (this.sprite.anims.currentAnim.key === 'fork_stab') 
-                    || (this.sprite.anims.currentAnim.key === 'mouse_dash')))) 
+                if (!this.isSpecialAnimating()) 
                 {
                     this.sprite.anims.play('left', true);
                 }
@@ -189,8 +199,7 @@ class Character {
                 this.myContainer.body.setVelocityX(0);
                 this.myContainer.body.setVelocityY(0);
 
-                if (!(this.sprite.anims.isPlaying 
-                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') || (this.sprite.anims.currentAnim.key === 'mouse_dash'))))  
+                if (!this.isSpecialAnimating())  
                 {
                     this.sprite.anims.play('turn');
                 }
@@ -204,6 +213,22 @@ class Character {
        // socket.emit('movement', info);
     }
 
+    
+    /** 
+        Checks if the sprite is animating something other than the movement
+    */
+    isSpecialAnimating()
+    {
+        var animating = (this.sprite.anims.isPlaying 
+                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') ||
+                          (this.sprite.anims.currentAnim.key === 'whisk_twirl') ||
+                          (this.sprite.anims.currentAnim.key === 'bottle_squeeze') ||
+                          (this.sprite.anims.currentAnim.key === 'mouse_dash')));
+        
+        
+        return animating;
+    }
+    
     takeDamage(damageAmount) 
     {
        // alert("youre taking damage: " + damageAmount)
