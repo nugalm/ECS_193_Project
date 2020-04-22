@@ -35,6 +35,7 @@ class gameScene extends Phaser.Scene {
 
         // variables using to test (e.g. damage system, collision, etc.)
         this.dummies;
+        this.dummiesGroup;
         this.sour;
         this.sweet;
         this.spicy;
@@ -48,9 +49,7 @@ class gameScene extends Phaser.Scene {
         // From user selection in menu scene
         this.player = data.player;
        // this.player.printStat();
-        if (this.player.weapon != null){
-         //   this.player.weapon.printWeaponStats();
-        }
+
         this.username = data.username;
         this.socket = data.socket;
        
@@ -84,20 +83,21 @@ class gameScene extends Phaser.Scene {
 
     
         this.drawer.drawCharacter();
-        this.dummies = this.physics.add.group({allowGravity: false});
+     //   this.dummies = this.physics.add.group({allowGravity: false});
         
-        this.salt = new SaltyCharacter();
-        this.salt.username = this.add.text(-20, -70, "enemy", { fontSize: '24px', fill: 'white' });
-        this.salt.sprite = this.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
-        this.salt.initSprite(this);
+       // dummies for testing
+        this.dummies = new Dummies(this);
+        this.dummies.initAllDummies();
+        this.dummies.initGroup();
         
-      //  this.dummies.add(this.salt.sprite);
         
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
         
 
-        this.physics.add.overlap(this.salt.myContainer, this.player.myContainer, this.meleeHit, null, this);
+        
+        
+        this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.meleeHit, null, this);
         
         
         this.keyboardHandler.initEvents(this);
@@ -109,7 +109,7 @@ class gameScene extends Phaser.Scene {
         this.colliderHandler.initPlayerColliders();
         
         
-        this.physics.add.collider(this.projectiles, this.salt.myContainer, this.bulletHit, null, this);
+        this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHit, null, this);
 
         
         //camera
@@ -141,7 +141,8 @@ class gameScene extends Phaser.Scene {
             return;   
         }
 
-        this.salt.updateHealth();  
+        //this.salt.updateHealth();  
+        this.dummies.updateHealth();
 
         this.player.update(this);
         this.projectileHandler.moveProjectiles();
@@ -150,23 +151,55 @@ class gameScene extends Phaser.Scene {
 
     }  
     
-    meleeHit()
+    meleeHit(player, container)
     {
         
         if (this.player.isMeleeing && this.player.hitCount == 1)
         {
-            this.salt.takeDamage(10);
+            if (container === this.salt.myContainer)
+            {
+                this.salt.takeDamage(this.colliderHandler.meleeHit(this.salt, this.player)); 
+            }
+            else if (container === this.sour.myContainer)
+            {
+                this.sour.takeDamage(this.colliderHandler.meleeHit(this.sour, this.player));
+            }
+            else if (container === this.sweet.myContainer)
+            {
+                this.sweet.takeDamage(this.colliderHandler.meleeHit(this.sweet, this.player));
+            }
+            else if (container === this.spicy.myContainer) 
+            {
+                this.spicy.takeDamage(this.colliderHandler.meleeHit(this.spicy, this.player));
+            }
+            
             this.player.hitCount = 0;
-          //  alert("health after melee hit: " + this.dummy.health);
+          
         }
     }
     
-    bulletHit(salt, bullet)
+    bulletHit(bullet, container)
     {
-        this.salt.takeDamage(10);
-        bullet.destroy();
-        //alert("health after prjecitle hit: " + this.dummy.health);
+        if (container === this.salt.myContainer)
+        {
+            this.salt.takeDamage(this.colliderHandler.projectileHit(bullet, this.salt, this.player));
+         
+        }
+        else if (container === this.sour.myContainer)
+        {
+            this.sour.takeDamage(this.colliderHandler.projectileHit(bullet, this.sour, this.player));
+        }
+        else if (container === this.sweet.myContainer)
+        {
+            this.sweet.takeDamage(this.colliderHandler.projectileHit(bullet, this.sweet, this.player));
+        }
+        else if (container === this.spicy.myContainer) 
+        {
+            this.spicy.takeDamage(this.colliderHandler.projectileHit(bullet, this.spicy, this.player));
+        }
         
+        bullet.destroy();
+   
     }
     
     animationComplete(animation, frame)

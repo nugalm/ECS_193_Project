@@ -7,6 +7,7 @@
 class Character {
 
     constructor(_context) {
+    
         
         //stats
         this.health = 50;
@@ -98,8 +99,7 @@ class Character {
     {
         this.isMeleeing = true;
         this.hitCount = 1;
-      //  alert(this.isMeleeing);
-        //this.sprite.anims.play('fork_stab');
+        
         if (this.weapon == "whisk") {
             this.sprite.anims.play('whisk_twirl');
         }
@@ -231,7 +231,9 @@ class Character {
     
     takeDamage(damageAmount) 
     {
+        alert("health before hit: " + this.health);
         this.health = this.health - damageAmount;
+        alert("health after hit: " + this.health);
         if (this.health <= 0) 
         {
             this.health = 0;

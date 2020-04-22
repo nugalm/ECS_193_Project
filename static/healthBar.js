@@ -9,7 +9,7 @@ class HealthBar
         this.positionY = y;
         this.DISPLAY_WIDTH = 80;
         this.DISPLAY_HEIGHT = 60;
-        this.max_value = 100;
+        this.max_value = 500;
     }
     
     
