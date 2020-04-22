@@ -101,7 +101,7 @@ class ColliderHandler
         
         var damage = 0.25 * attacker.power * multiplier;
         
-        alert("player power: " + attacker.power + "\n multiplier: " + multiplier + "\n total damage taken: " + damage);
+      //  alert("player power: " + attacker.power + "\n multiplier: " + multiplier + "\n total damage taken: " + damage);
         return damage; 
         
     }
@@ -193,7 +193,7 @@ class ColliderHandler
         
         var damage = 0.25 * player.power * multiplier;
         
-        alert("player power: " + player.power + "\n multiplier: " + multiplier + "\n total damage taken: " + damage);
+     //   alert("player power: " + player.power + "\n multiplier: " + multiplier + "\n total damage taken: " + damage);
         return damage; 
         
         

@@ -32,7 +32,7 @@ class Character {
         
         
         this.username;
-        this.healthBar = new HealthBar(this.startPositionX, this.startPositionY + 50)
+        this.healthBar = new HealthBar();
        
         
 
@@ -68,7 +68,7 @@ class Character {
     
     initContainer(context)
     {
-        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite]);
+        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar]);
         
         this.myContainer.setSize(this.HITBOX, this.HITBOX);
         
@@ -92,7 +92,7 @@ class Character {
     
     updateHealth()
     {
-        this.healthBar.update(this.myContainer.x, this.myContainer.y + 50, this.health)
+        this.healthBar.update(this.health);
     }
     
     updateMelee(context)
@@ -231,13 +231,14 @@ class Character {
     
     takeDamage(damageAmount) 
     {
-        alert("health before hit: " + this.health);
+      //  alert("health before hit: " + this.health);
         this.health = this.health - damageAmount;
-        alert("health after hit: " + this.health);
+       // alert("health after hit: " + this.health);
         if (this.health <= 0) 
         {
             this.health = 0;
-            this.sprite.disableBody(true, true);
+            this.myContainer.destroy();
+            //this.sprite.disableBody(true, true);
         }
     }
     
