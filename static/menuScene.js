@@ -1,7 +1,6 @@
 // Scene where user picks his type of character / enters username
 class menuScene extends Phaser.Scene
-{
-    
+{   
     constructor()
     {   
         super( {key: 'menuScene'} );
@@ -28,8 +27,7 @@ class menuScene extends Phaser.Scene
     // loadScene should have loaded everything we need.
     preload()
     {
-        
-        
+        this.load.html('username', 'static/data/username.html');
     }
     
     create()
@@ -38,11 +36,14 @@ class menuScene extends Phaser.Scene
         
         // Create the four different character selections
         this.addButtonSprites();
+
         this.scaleCharImages();
         this.tempSetTintforButtons();
         this.addButtonTexts();
-        this.turnButtonsOn();       
+        this.turnButtonsOn();
+        this.userPrompt();
         
+
     }
     
     addButtonSprites()
@@ -52,11 +53,8 @@ class menuScene extends Phaser.Scene
         this.spicyButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset, this.buttonPositionY, 'loadingSpicy');
 
         this.sourButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 2, this.buttonPositionY, 'loadingSpicy');
-
         
         this.sweetButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 3, this.buttonPositionY, 'loadingSpicy');
-
-        
     }
     
     tempSetTintforButtons()
@@ -74,23 +72,23 @@ class menuScene extends Phaser.Scene
         this.scaleCharImage(this.sourButton);
         this.scaleCharImage(this.sweetButton);
     }
+
     addButtonTexts()
     {
-        this.add.text(this.saltyButton.x - 50, this.saltyButton.y -                                     this.buttonTextOffsetY, 'Salty');
+        this.add.text(this.saltyButton.x - 50, this.saltyButton.y - this.buttonTextOffsetY, 'Salty');
         
-        this.add.text(this.spicyButton.x - 50, this.spicyButton.y -                                     this.buttonTextOffsetY, 'Spicy');
+        this.add.text(this.spicyButton.x - 50, this.spicyButton.y - this.buttonTextOffsetY, 'Spicy');
         
-        this.add.text(this.sourButton.x - 50, this.sourButton.y - 
-                      this.buttonTextOffsetY, 'Sour');
+        this.add.text(this.sourButton.x - 50, this.sourButton.y - this.buttonTextOffsetY, 'Sour');
         
-         this.add.text(this.sweetButton.x - 50, this.sweetButton.y -                                    this.buttonTextOffsetY, 'Sweet');
+        this.add.text(this.sweetButton.x - 50, this.sweetButton.y - this.buttonTextOffsetY, 'Sweet');
     }
     
     scaleCharImage(_button)
     {
         _button.setScale(this.IMAGE_SCALE);
     }
-    
+
     turnButtonsOn()
     {
         //salty
@@ -154,7 +152,6 @@ class menuScene extends Phaser.Scene
         this.sweetButton.setInteractive();
         this.sweetButton.on('pointerover', function()
         {
-            //alert('you chose salty mouse');
             this.sweetButton.setTint(0xf0ff00);
         }, this);
         
@@ -168,10 +165,48 @@ class menuScene extends Phaser.Scene
                 //alert('mm.. the sweet smell of a winner');
                 this.scene.start('armoryScene', { player: new SweetCharacter(), socket: this.socket});
             }
-        }, this);
-            
-            
-        
+        }, this);   
     }
+
+    userPrompt()
+    {
+        var text = this.add.text(this.cameras.main.centerX - this.cameras.main.centerX/3.5, 
+            this.cameras.main.centerY + 150, 
+            'Please enter your name', 
+            { color: 'white', fontSize: '24px '});
+
+        // Prompt for the username
+        var element = this.add.dom(this.cameras.main.centerX/2, this.cameras.main.centerY/2 + 100).createFromCache('username');
+
+        element.addListener('click');
+
+        // Username entry
+        element.on('click', function (event) {
     
+            if (event.target.name === 'playButton')
+            {
+                var username = this.getChildByName('userName');
+    
+                //  Have they entered anything?
+                if (username.value !== '')
+                {
+                    //  Turn off the click events
+                    this.removeListener('click');
+    
+                    //  Hide the login element
+                    this.setVisible(false);
+    
+                    //  Populate the text with whatever they typed in
+                    text.setText('Welcome ' + username.value);
+                    this.username = username.value;
+                    sessionStorage.setItem('username', this.username);
+                }
+                else
+                {
+                    //  Flash the prompt
+                    this.scene.add(username);
+                }
+            }
+        });
+    }
 }
