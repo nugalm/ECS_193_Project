@@ -7,6 +7,8 @@ class SourCharacter extends Character {
         this.mana = 60;
         this.speed = 500;
         this.element = "sour";
+        this.weapon = "knife";
+        this.gun = "frosting_bag";
     }
     
     

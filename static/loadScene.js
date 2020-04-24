@@ -48,8 +48,23 @@ class loadScene extends Phaser.Scene
         this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
                              {frameWidth: 220, frameHeight: 330 } );
         
+        //knife swipe
+        this.load.spritesheet('knife', 'static/images/temp/mouse_knife_swipe.png',
+                             {frameWidth: 242, frameHeight: 332 });
+        
+        //frosting bag squeeze 
+        this.load.spritesheet('frosting_bag', 'static/images/temp/mouse_frosting_bag_squeeze.png',
+                              {frameWidth: 256.3, frameHeight: 383});
         
         
+        //salt shaker shake
+        this.load.spritesheet('salt_shaker', 'static/images/temp/mouse_salt_shaker_shake.png',
+                              {frameWidth: 222, frameHeight: 332});
+        
+        
+        //frosting bag drop
+        
+        //knife drop
         
         
         //audio
@@ -137,7 +152,26 @@ class loadScene extends Phaser.Scene
                 
             });
         
-            
+            this.anims.create({
+               key: 'knife_swipe',
+                frames: this.anims.generateFrameNames('knife', {start: 0, end: 10}),
+                frameRate: 20,
+                repeat: 0
+            });
+        
+            this.anims.create({
+               key: 'frosting_bag_squeeze',
+                frames: this.anims.generateFrameNames('frosting_bag', {start: 0, end: 8}),
+                frameRate: 10,
+                repeat: 0
+            });
+        
+            this.anims.create({
+               key: 'salt_shaker_shake',
+                frames: this.anims.generateFrameNames('salt_shaker', {start: 0, end: 5}),
+                frameRate: 10,
+                repeat: 0
+            });
         
         
         this.input.on('pointerdown', function(p)

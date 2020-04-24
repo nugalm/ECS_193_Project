@@ -9,6 +9,7 @@ class SaltyCharacter extends Character {
         this.element = "salty";
         //this.weapon = new Fork(this.element);
         this.weapon = "fork";
+        this.gun = "salt_shaker";
     }
     
 

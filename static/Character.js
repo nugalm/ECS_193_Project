@@ -106,14 +106,23 @@ class Character {
         else if (this.weapon == "fork") {
             this.sprite.anims.play('fork_stab');
         }
+        else if (this.weapon == "knife") {
+            this.sprite.anims.play('knife_swipe');
+        }
         
     } 
     
     fire()
     {
         if (this.gun == "bottle") {
-            this.sprite.anims.play('bottle_squeeze')
+            this.sprite.anims.play('bottle_squeeze');
         }    
+        else if (this.gun == "frosting_bag") {
+            this.sprite.anims.play('frosting_bag_squeeze');
+        }
+        else if (this.gun == "salt_shaker") {
+            this.sprite.anims.play('salt_shaker_shake')
+        }
     }
     
    // updateWhileDashing()
@@ -223,6 +232,9 @@ class Character {
                       && ((this.sprite.anims.currentAnim.key === 'fork_stab') ||
                           (this.sprite.anims.currentAnim.key === 'whisk_twirl') ||
                           (this.sprite.anims.currentAnim.key === 'bottle_squeeze') ||
+                          (this.sprite.anims.currentAnim.key === 'knife_swipe') ||
+                          (this.sprite.anims.currentAnim.key === 'frosting_bag_squeeze') ||
+                          (this.sprite.anims.currentAnim.key === 'salt_shaker_shake') ||
                           (this.sprite.anims.currentAnim.key === 'mouse_dash')));
         
         

@@ -140,8 +140,7 @@ class gameScene extends Phaser.Scene {
         {
             return;   
         }
-
-        //this.salt.updateHealth();  
+ 
         this.dummies.updateHealth();
 
         this.player.update(this);
