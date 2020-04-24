@@ -40,6 +40,9 @@ class gameScene extends Phaser.Scene {
         this.sweet;
         this.spicy;
         this.salt;
+        
+        //drops
+        this.knife;
 
     }
     
@@ -116,7 +119,12 @@ class gameScene extends Phaser.Scene {
         this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
         
+        //trying drops
+        this.knife = new Knife({scene: this, x:200, y:200, key:"knife_drop_image"});
+        this.knife.anims.play('knife_idle');
         
+        
+        this.physics.add.overlap(this.player.myContainer, this.knife, this.pickUpWeapon, null, this);
         
         // highlight collides tiles for debugging
         /*
@@ -149,6 +157,11 @@ class gameScene extends Phaser.Scene {
     
 
     }  
+    
+    pickUpWeapon(weapon, player_container)
+    {
+        //if (weapon)
+    }
     
     meleeHit(player, container)
     {

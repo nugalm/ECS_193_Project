@@ -64,8 +64,11 @@ class loadScene extends Phaser.Scene
         
         //frosting bag drop
         
-        //knife drop
         
+        //knife drop
+        this.load.spritesheet('knife_drop', 'static/images/temp/knife_drop.png', 
+                              {frameWidth: 222, frameHeight: 332});
+        this.load.image('knife_drop_image', 'static/images/temp/knife_drop_still.png');
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
@@ -172,6 +175,15 @@ class loadScene extends Phaser.Scene
                 frameRate: 10,
                 repeat: 0
             });
+        
+            // drops
+            this.anims.create({
+               key: 'knife_idle',
+                frames: this.anims.generateFrameNames('knife_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
         
         
         this.input.on('pointerdown', function(p)
