@@ -43,7 +43,7 @@ class gameScene extends Phaser.Scene {
         
         //drops
         this.knife;
-
+        this.hi;
     }
     
     // If we ever need to load specific data from previous scene.
@@ -121,10 +121,11 @@ class gameScene extends Phaser.Scene {
         
         //trying drops
         this.knife = new Knife({scene: this, x:200, y:200, key:"knife_drop_image"});
-        this.knife.anims.play('knife_idle');
+      //  this.knife.anims.play('knife_idle');
+       
         
         
-        this.physics.add.overlap(this.player.myContainer, this.knife, this.pickUpWeapon, null, this);
+        this.hi = this.physics.add.overlap(this.knife, this.player.myContainer, this.pickUpWeapon, null, this);
         
         // highlight collides tiles for debugging
         /*
@@ -160,7 +161,11 @@ class gameScene extends Phaser.Scene {
     
     pickUpWeapon(weapon, player_container)
     {
-        //if (weapon)
+        if (weapon instanceof Knife)
+        {
+            this.player.weapon = "knife";
+            weapon.destroy();
+        }
     }
     
     meleeHit(player, container)
