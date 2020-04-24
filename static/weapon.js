@@ -1,22 +1,17 @@
 // base class for weapons
 
-class Weapon 
+class Weapon extends Phaser.Physics.Arcade.Sprite
 {
-    constructor(_taste)
+    constructor(config)
     {
-        // what sprite to use
-        this.sprite;
-        // how much base dmg this weapon will deal
-        this.power;
-        // how fast it will come out (slow, medium, fast; will affect the animation speed)
-        this.speed;
-        // how often it can be used (int)
-        this.cooldown;
-        // what taste is the character who is using the weapon (used for damage calculation)
-        this.taste = _taste;
-        // name of the weapon
-        this.name;
+        super(config.scene, config.x, config.y, config.key);
+        //this.setSize(31,115);
+       // this.setInteractive();
+        config.scene.physics.world.enable(this);
         
+        config.scene.add.existing(this);
+      //  this.setSize(31,115);
+       // this.setSize(220, 332);
     }
     
     printWeaponStats()

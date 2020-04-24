@@ -46,7 +46,7 @@ var Player = mongoose.model("Player", playerSchema);
 
 // Routing
 app.get('/', function(request, response) {
-    response.sendFile(path.join(__dirname, 'kitchenScene.html')); // was index.html
+    response.sendFile(path.join(__dirname, 'index.html'));
 });
 
 server.listen(port, function() {
@@ -99,21 +99,6 @@ io.on('connection', function(socket) {
         objs[obj.id].push(added);
     });
     
-    /*
-   socket.on('updateProjectile', function(obj){
-       function firstProjectile(arr){
-           return (arr.name === 'projectile' + obj.num);
-       }
-        var added = {name: 'projectile' + obj.num, x: obj.x, y: obj.y, render: true, object: obj.obj};
-       if(!(typeof objs[obj.id] === 'undefined')){
-            var index = objs[obj.id].findIndex(firstProjectile);
-            objs[obj.id][index] = added;
-       }
-       else{
-           objs[obj.id] = []
-       }
-    }); 
-    */
 
     socket.on('movement', function(data) {
         

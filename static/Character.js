@@ -6,25 +6,39 @@
 
 class Character {
 
-    constructor() {
+    constructor(_context) {
+    
+        
+        //stats
         this.health = 50;
         this.power = 50;
         this.mana = 50;
         this.speed = 50;
         this.stamina = 50;
         this.element = "none"; 
-        this.sprite;
         this.weapon;
+        this.gun = "bottle";
+        
+        this.sprite;
+        this.myContainer;
         this.DISPLAY = 150;
-        this.HITBOX = 110;
-        this.positionX;
-        this.positionY;
+        this.HITBOX = 50;
         this.startPositionX = 200;
         this.startPositionY = 450;
+        
+        this.isMeleeing = false;
+        this.isDashing = false;
+        this.hitCount = 1;
+        
+        
+        this.username;
+        this.healthBar = new HealthBar();
+       
+        
+
 	}
 
 	printStat(){
-        //alert("Creating " + this.element + " character!");
 		alert("health: " + this.health + "\n"     
 				+ "power: " + this.power + "\n"
 				+ "mana: " + this.mana + "\n"
@@ -40,16 +54,28 @@ class Character {
             
     }
     
-    initSprite() 
+    initSprite(context) 
     {
+
         this.sprite.displayWidth = this.DISPLAY;
         this.sprite.displayHeight = this.DISPLAY;
-        this.sprite.setSize(this.HITBOX, this.HITBOX);
+        this.sprite.setSize(0, 0);
         this.sprite.setOffset(125, 50);
-        // when sprite lands after jumping it will bounce slightly
-        //   player.setBounce(0.2);
-        //this.sprite.setCollideWorldBounds(true);
         this.sprite.body.setAllowGravity(false);
+        this.healthBar.initHealthBar(context);
+        this.initContainer(context);
+    }
+    
+    initContainer(context)
+    {
+        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar]);
+        
+        this.myContainer.setSize(this.HITBOX, this.HITBOX);
+        
+        
+        context.physics.world.enable(this.myContainer);
+        this.myContainer.body.setAllowGravity(false);
+        
     }
     
     initWeapon()
@@ -61,21 +87,61 @@ class Character {
     {
         this.updateRotation(context);
         this.updateMovement(context);
+        this.updateHealth();
+    }
+    
+    updateHealth()
+    {
+        this.healthBar.update(this.health);
     }
     
     updateMelee(context)
     {
-        alert("playing fork stab");
-        this.sprite.anims.play('fork_stab', false);
+        this.isMeleeing = true;
+        this.hitCount = 1;
+        
+        if (this.weapon == "whisk") {
+            this.sprite.anims.play('whisk_twirl');
+        }
+        else if (this.weapon == "fork") {
+            this.sprite.anims.play('fork_stab');
+        }
+        else if (this.weapon == "knife") {
+            this.sprite.anims.play('knife_swipe');
+        }
+        
+    } 
+    
+    fire()
+    {
+        if (this.gun == "bottle") {
+            this.sprite.anims.play('bottle_squeeze');
+        }    
+        else if (this.gun == "frosting_bag") {
+            this.sprite.anims.play('frosting_bag_squeeze');
+        }
+        else if (this.gun == "salt_shaker") {
+            this.sprite.anims.play('salt_shaker_shake')
+        }
     }
     
+   // updateWhileDashing()
+   // {
+    //    this.sprite.x += Math.cos(this.dashTargetRotation) * 10;
+   //     this.sprite.y += Math.sin(this.dashTargetRotation) * 10;
+   // }
+    
+    dash()
+    {
+        this.sprite.anims.play('mouse_dash');
+    }
     
     updateRotation(context)
     {
         var temp = this.sprite.getWorldTransformMatrix();
         
         var targetAngle =  Phaser.Math.Angle.Between(
-        this.sprite.x, this.sprite.y,
+        this.myContainer.x, this.myContainer.y,
         context.game.input.activePointer.worldX, context.game.input.activePointer.worldY);
           
         this.sprite.setRotation(targetAngle + Math.PI / 2);
@@ -83,48 +149,72 @@ class Character {
     
     updateMovement(context)
     {
-          
-        //left  
-        if (context.cursors.left.isDown)
-        {
-           // player.setVelocityY(0);
-            this.sprite.setVelocityX(-160);
-
-            this.sprite.anims.play('left', true);
-        }
         
-        //right  
-        else if (context.cursors.right.isDown)
+        if (this.isDashing)
         {
-            this.sprite.setVelocityX(160);
-
-            this.sprite.anims.play('left', true);
+            this.updateWhileDashing();    
         }
-        
-        // down  
-        if (context.cursors.down.isDown)
-        {
+        else {
+            if (context.cursors.left.isDown)
+            {
+               
+                //this.sprite.setVelocityX(-160);
+                this.myContainer.body.setVelocityX(-160);
 
-            this.sprite.setVelocityY(160);
+                if (!this.isSpecialAnimating()) 
+                {
+                    this.sprite.anims.play('left', true);
+                }
+            }
 
-            this.sprite.anims.play('left', true);
-        }
+            //right  
+            else if (context.cursors.right.isDown)
+            {
+                //this.sprite.setVelocityX(160);
+                this.myContainer.body.setVelocityX(160);
+                if (!this.isSpecialAnimating())  
+                {
+                    this.sprite.anims.play('left', true);
+                }
+            }
 
-        // up  
-        else if (context.cursors.up.isDown)
-        {
-            this.sprite.setVelocityY(-160);
+            // down  
+            if (context.cursors.down.isDown)
+            {
+                //this.sprite.setVelocityY(160);
+                this.myContainer.body.setVelocityY(160);
+                if (!this.isSpecialAnimating()) 
+                {
+                    this.sprite.anims.play('left', true);
+                }
+            }
+
+            // up  
+            else if (context.cursors.up.isDown)
+            {
+                //this.sprite.setVelocityY(-160);
+                this.myContainer.body.setVelocityY(-160);
+                if (!this.isSpecialAnimating()) 
+                {
+                    this.sprite.anims.play('left', true);
+                }
+            }
+
+            // none  
+            if (context.cursors.up.isUp && context.cursors.down.isUp && context.cursors.left.isUp && context.cursors.right.isUp) 
+            {
+               // this.sprite.setVelocityX(0);
+               // this.sprite.setVelocityY(0);
+                this.myContainer.body.setVelocityX(0);
+                this.myContainer.body.setVelocityY(0);
+
+                if (!this.isSpecialAnimating())  
+                {
+                    this.sprite.anims.play('turn');
+                }
+            }
             
-            this.sprite.anims.play('left', true);
-        }
-          
-        // none  
-        if (context.cursors.up.isUp && context.cursors.down.isUp && context.cursors.left.isUp && context.cursors.right.isUp) 
-        {
-            this.sprite.setVelocityX(0);
-            this.sprite.setVelocityY(0);
-            this.sprite.anims.play('turn');
-        }
+    } //end else
         
         var myPosition = {x: this.sprite.x , y: this.sprite.y};
         var myVelocity = {x: this.sprite.body.velocity.x , y: this.sprite.body.velocity.y };
@@ -132,17 +222,35 @@ class Character {
        // socket.emit('movement', info);
     }
 
+    
+    /** 
+        Checks if the sprite is animating something other than the movement
+    */
+    isSpecialAnimating()
+    {
+        var animating = (this.sprite.anims.isPlaying 
+                      && ((this.sprite.anims.currentAnim.key === 'fork_stab') ||
+                          (this.sprite.anims.currentAnim.key === 'whisk_twirl') ||
+                          (this.sprite.anims.currentAnim.key === 'bottle_squeeze') ||
+                          (this.sprite.anims.currentAnim.key === 'knife_swipe') ||
+                          (this.sprite.anims.currentAnim.key === 'frosting_bag_squeeze') ||
+                          (this.sprite.anims.currentAnim.key === 'salt_shaker_shake') ||
+                          (this.sprite.anims.currentAnim.key === 'mouse_dash')));
+        
+        
+        return animating;
+    }
+    
     takeDamage(damageAmount) 
     {
-       // alert("youre taking damage: " + damageAmount)
+      //  alert("health before hit: " + this.health);
         this.health = this.health - damageAmount;
-      //  alert("health after taking damage: " + this.health);
-        if (this.health < 0) 
+       // alert("health after hit: " + this.health);
+        if (this.health <= 0) 
         {
-            
             this.health = 0;
-            this.sprite.disableBody(true, true);
-            alert("you died you noob")
+            this.myContainer.destroy();
+            //this.sprite.disableBody(true, true);
         }
     }
     

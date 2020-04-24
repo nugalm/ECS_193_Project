@@ -2,11 +2,12 @@ class SpicyCharacter extends Character {
     
     constructor() {        
         super();
-        this.health = 70;
-        this.power = 70;
+        this.health = 200;
+        this.power = 500;
         this.mana = 60;
-        this.speed = 70;
+        this.speed = 300;
         this.element = "spicy";
+        this.weapon = "whisk";
     }
     
     

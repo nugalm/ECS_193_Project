@@ -17,16 +17,8 @@ class loadScene extends Phaser.Scene
     {
         // TODO: make this nice looking graphics
         this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
-        this.load.image('sky', 'static/assets/sky.png')
-        this.load.image('ground', 'static/assets/platform.png');
-        this.load.image('star', 'static/assets/star.png');
-        this.load.image('bomb', 'static/assets/bomb.png');
         this.load.image('projectile', 'static/images/whiteball.png');
         this.load.image('hitbox', 'static/assets/hitbox_square.png');
-        this.load.spritesheet('mouse', 'static/images/mouse_walk.png',
-                              {frameWidth: 34, frameHeight: 48 } );
-        this.load.spritesheet('dude', 'static/assets/dude.png',
-                              {frameWidth: 32, frameHeight: 48 }  );
          
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
@@ -37,12 +29,65 @@ class loadScene extends Phaser.Scene
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
         this.load.tilemapTiledJSON('Real_Map', 'static/images/TileMap/Real_Map.json');
         this.load.image('logo', 'static/images/IntroThemeV2.png');   
+
+        //fork stab
+        this.load.spritesheet('fork', 'static/images/temp/mouse_fork_stab.png',
+                             {frameWidth: 220.2, frameHeight: 331 } );
+
+        //whisk twirl
+        this.load.spritesheet('whisk','static/images/temp/mouse_whisk_twirl.png',
+                             {frameWidth:262, frameHeight:332}
+                             );
+                        
+        //bottle squeeze
+        this.load.spritesheet('bottle','static/images/temp/mouse_bottle_squeeze.png',
+                             {frameWidth:255.8, frameHeight:383}
+                             );
+        
+        //dash
+        this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
+                             {frameWidth: 220, frameHeight: 330 } );
+        
+        //knife swipe
+        this.load.spritesheet('knife', 'static/images/temp/mouse_knife_swipe.png',
+                             {frameWidth: 242, frameHeight: 332 });
+        
+        //frosting bag squeeze 
+        this.load.spritesheet('frosting_bag', 'static/images/temp/mouse_frosting_bag_squeeze.png',
+                              {frameWidth: 256.3, frameHeight: 383});
+        
+        
+        //salt shaker shake
+        this.load.spritesheet('salt_shaker', 'static/images/temp/mouse_salt_shaker_shake.png',
+                              {frameWidth: 222, frameHeight: 332});
+        
+        
+        //frosting bag drop
+        
+        
+        //knife drop
+        this.load.spritesheet('knife_drop', 'static/images/temp/knife_drop.png', 
+                              {frameWidth: 222, frameHeight: 332});
+        this.load.image('knife_drop_image', 'static/images/temp/knife_drop_still.png');
+        
+        //audio
+        this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
+        this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3')
+     
+        //healthbar
+        this.load.image('red_bar', 'static/images/temp/RedBar.png');
+        this.load.image('green_bar', 'static/images/temp/GreenBar.png');
+        
     }
     
     // Creating animations to be used in gameScene
     // prompt user to click to enter gameScene
     create()
     {
+        this.sound.add('game_audio');
+        this.sound.add('selection_audio');
+        
+        
         this.loadText.setVisible(false);
         this.add.text(100, 150, 'Click to enter the Marfare!', { fontSize: '32px', fill: 'white' });
         
@@ -76,6 +121,69 @@ class loadScene extends Phaser.Scene
                 frameRate: 25,
                 repeat: -1
             });
+        
+        
+            this.anims.create({
+               key: 'fork_stab',
+                frames: this.anims.generateFrameNames('fork', {start: 0, end: 4}),
+                frameRate: 7,
+                repeat: 0
+                
+            });
+        
+            this.anims.create({
+               key: 'whisk_twirl',
+                frames: this.anims.generateFrameNames('whisk', {start: 0, end: 15}),
+                frameRate: 17,
+                repeat: 0
+                
+            });
+        
+            this.anims.create({
+               key: 'bottle_squeeze',
+                frames: this.anims.generateFrameNames('bottle', {start: 0, end: 5}),
+                frameRate: 10,
+                repeat: 0
+                
+            });
+        
+            this.anims.create({
+                key: 'mouse_dash',
+                frames: this.anims.generateFrameNames('dash', {start: 0, end: 4} ),
+                frameRate: 9,
+                repeat: 0
+                
+            });
+        
+            this.anims.create({
+               key: 'knife_swipe',
+                frames: this.anims.generateFrameNames('knife', {start: 0, end: 10}),
+                frameRate: 20,
+                repeat: 0
+            });
+        
+            this.anims.create({
+               key: 'frosting_bag_squeeze',
+                frames: this.anims.generateFrameNames('frosting_bag', {start: 0, end: 8}),
+                frameRate: 10,
+                repeat: 0
+            });
+        
+            this.anims.create({
+               key: 'salt_shaker_shake',
+                frames: this.anims.generateFrameNames('salt_shaker', {start: 0, end: 5}),
+                frameRate: 10,
+                repeat: 0
+            });
+        
+            // drops
+            this.anims.create({
+               key: 'knife_idle',
+                frames: this.anims.generateFrameNames('knife_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
         
         
         this.input.on('pointerdown', function(p)
