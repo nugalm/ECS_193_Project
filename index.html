@@ -7,6 +7,7 @@
 </head>
   <script src="static/phaser.min.js"></script>
     <script src="static/phaser.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
      <script src="static/Character.js"></script>
     <script src="static/SweetCharacter.js"></script>
     <script src="static/SpicyCharacter.js"></script>
@@ -55,7 +56,7 @@
             }
       };
       
-     /* var origin = window.location.origin;
+      var origin = window.location.origin;
       var socket = io.connect(origin);
       var socket_id;
       socket.on('connect', function() {
@@ -63,7 +64,7 @@
           socket.emit('newPlayer');
       });
       
-      var client = new Client(socket);*/
+      var client = new Client(socket);
       
       var game = new Phaser.Game(config);
       

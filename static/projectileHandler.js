@@ -19,6 +19,8 @@ class ProjectileHandler
         projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);
         projectile.element = this.context.player.element;
        
+        var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation};
+        socket.emit('addProjectileServer', info);
     }
     
     moveProjectiles()
@@ -27,6 +29,7 @@ class ProjectileHandler
              child.x += Math.cos(child.rotation) * 10;
             child.y += Math.sin(child.rotation) * 10;  
            
+             socket.emit('updateProjectileServer', socket.id);
         });
     }
     

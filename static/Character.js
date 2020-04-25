@@ -34,7 +34,11 @@ class Character {
         this.username;
         this.healthBar = new HealthBar();
        
-        
+        this.left = false;
+        this.right = false;
+        this.up = false;
+        this.down = false;
+        this.oldRotation = 0;
 
 	}
 
@@ -216,10 +220,26 @@ class Character {
             
     } //end else
         
-        var myPosition = {x: this.sprite.x , y: this.sprite.y};
-        var myVelocity = {x: this.sprite.body.velocity.x , y: this.sprite.body.velocity.y };
-        var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
-       // socket.emit('movement', info);
+        // Multiplayer
+        // Send player movement to server when state changes
+        if ((context.cursors.up.isDown != this.up)
+            || (context.cursors.down.isDown != this.down)
+            || (context.cursors.left.isDown != this.left)
+            || (context.cursors.right.isDown != this.right)
+            || (this.sprite.rotation != this.oldRotation)
+            ) 
+        {
+            this.left = context.cursors.left.isDown;
+            this.right = context.cursors.right.isDown;
+            this.down = context.cursors.down.isDown;
+            this.up = context.cursors.up.isDown;
+            this.oldRotation = this.sprite.rotation;
+                        
+            var myPosition = {x: this.sprite.x , y: this.sprite.y};
+            var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
+            var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
+            socket.emit('movement', info);
+        }
     }
 
     
