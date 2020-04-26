@@ -157,6 +157,8 @@ io.on('connection', function(socket) {
             serverPlayers[socket.id].gun = "none";
         }
         
+        serverPlayers[socket.id].position = player.position;
+        
         //Give update to everyone
         // New player adds all old players
         // Old players add new player
@@ -187,20 +189,9 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('addProjectileClient', info);
     });
     
+    /*
     socket.on('updateProjectileServer', function(id){
-       /*
-       function firstProjectile(arr){
-           return (arr.name === 'projectile' + obj.num);
-       }
-        var added = {name: 'projectile' + obj.num, x: obj.x, y: obj.y, render: true, object: obj.obj};
-       if(!(typeof objs[obj.id] === 'undefined')){
-            var index = objs[obj.id].findIndex(firstProjectile);
-            objs[obj.id][index] = added;
-       }
-       else{
-           objs[obj.id] = []
-       }
-       */
+        
             //console.log("server proj update");
             if(!(id in serverProj)){
                 serverProj[id] = [];
@@ -211,10 +202,13 @@ io.on('connection', function(socket) {
                 serverProj[id][i].x += Math.cos(serverProj[id][i].rotation) * 10;
                 serverProj[id][i].y += Math.sin(serverProj[id][i].rotation) * 10;  
             }
+        
        
        var info = {id: id, objs: serverProj[id]};
        socket.broadcast.emit('updateProjectileClient', info);
-    }); 
+    });
+    */
+    
     
     
     socket.on('disconnect', function() {

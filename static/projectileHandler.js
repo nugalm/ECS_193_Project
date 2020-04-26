@@ -29,8 +29,20 @@ class ProjectileHandler
              child.x += Math.cos(child.rotation) * 10;
             child.y += Math.sin(child.rotation) * 10;  
            
-             socket.emit('updateProjectileServer', socket.id);
+             //socket.emit('updateProjectileServer', socket.id);
         });
+        
+        for(var id in this.context.otherPlayers){
+            if(!(id in this.context.otherProjectiles)){
+                continue;
+            }
+            
+            this.context.otherProjectiles[id].children.iterate(function(child) {
+                    child.x += Math.cos(child.rotation) * 10;
+                    child.y += Math.sin(child.rotation) * 10;  
+            });
+            
+        }
     }
     
     /*moveProjectile(projectile)

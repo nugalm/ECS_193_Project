@@ -65,6 +65,7 @@ class gameScene extends Phaser.Scene {
         var info = {
             name: this.username,
             element:  this.player.element,
+            position: {x: this.player.startPositionX, y: this.player.startPositionY}
         };
         
         
@@ -189,18 +190,21 @@ class gameScene extends Phaser.Scene {
                     }
                     
                     if(!(typeof self.otherPlayers[id] == 'undefined')) {
-                        console.log("Displaying character");
+                        //Add in other player characte
+                        //console.log("x: " server[id].position.x + " y: " + server[id].position.y);
                         //self.otherPlayers[id].startPositionY = server[id].position.y;
                         //self.otherPlayers[id].startPositionX = server[id].position.x;
-                        self.otherPlayers[id].username = self.add.text(-20, -70, server[id].name, { fontSize: '24px', fill: 'white' });
+                        self.otherPlayers[id].username = self.add.text(-20, -70, (server[id].element + ' ' + server[id].name), { fontSize: '24px', fill: 'white' });
                         self.otherPlayers[id].sprite = self.physics.add.sprite(0,
                             0,
                             'kitchenScene', 'mouse_walk/mouse_walk-2.png');
                         self.otherPlayers[id].initSprite(self);
                         
+                        self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
                         
-                        self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id], self.meleeHit, null, self);
-                        self.physics.add.collider(self.projectiles, self.otherPlayers[id], self.bulletHit, null, self);
+                        self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].sprite, self.meleeHit, null, self);
+                        
+                        self.physics.add.collider(self.projectiles, self.otherPlayers[id].sprite, self.bulletHitPlayer, null, self);
                     }      
 
                     /*
@@ -256,9 +260,15 @@ class gameScene extends Phaser.Scene {
         
          this.client.socket.on('addProjectileClient', function(projs){
             if(!(projs.id in self.otherProjectiles)){
-                self.otherProjectiles[projs.id] = [];
+                self.otherProjectiles[projs.id] = self.physics.add.group();
+                
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHit, null, self);
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.player.sprite, self.bulletHitPlayer, null, self);
             }
             
+            
+             
+            /*
             //console.log("Doing some proj adding from " + projs);
             
             self.otherProjectiles[projs.id].push({sprite: (self.physics.add.sprite(projs.obj.x, projs.obj.y, 'projectile'))
@@ -273,16 +283,31 @@ class gameScene extends Phaser.Scene {
                 //console.log("rotation: " + projs.obj.rotation);
                 self.physics.add.collider(self.otherProjectiles[projs.id][self.otherProjectiles[projs.id].length - 1].sprite, self.player.sprite);
             }
-            
+            */
+             
+            var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
+            projectile.setCollideWorldBounds(false);
+            projectile.body.setAllowGravity(false); 
+            projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
+            projectile.element = self.otherPlayers[projs.id].element;
+             
+             
         });
         
+        /*
          // update projectiles from other players
         this.client.socket.on('updateProjectileClient', function(server){
             var projs = server.objs;
             var id = server.id;
             if(!(id in self.otherProjectiles)){
-                self.otherProjectiles[id] = [];
+                self.otherProjectiles[id] = self.physics.add.group();
             }
+            
+            self.otherProjectiles[id].children.iterate(function(child) {
+                child.x += Math.cos(child.rotation) * 10;
+                child.y += Math.sin(child.rotation) * 10;  
+            });
+            
             
             var i = 0;
             //console.log(self.otherProjectiles[id].length);
@@ -292,7 +317,9 @@ class gameScene extends Phaser.Scene {
                 self.otherProjectiles[id][i].sprite.y = projs[i].y;
                 self.otherProjectiles[id][i].sprite.rotation = projs[i].rotation;
             }
+            
         });
+        */
           
     } 
     
@@ -372,6 +399,11 @@ class gameScene extends Phaser.Scene {
         
         bullet.destroy();
    
+    }
+    
+    bulletHitPlayer(bullet, player){
+        this.player.takeDamage(this.colliderHandler.projectileHit(bullet, this.player, this.player));
+        bullet.destroy();
     }
     
     animationComplete(animation, frame)
