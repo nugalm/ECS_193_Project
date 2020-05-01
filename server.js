@@ -217,6 +217,10 @@ io.on('connection', function(socket) {
         socket.broadcast.emit("updateDamage", info);
     })
     
+    socket.on('doAnim', function(info){
+        socket.broadcast.emit('updateAnim', {id: socket.id, info: info});
+    });
+    
     
     socket.on('disconnect', function() {
         //console.log('user disconnected');

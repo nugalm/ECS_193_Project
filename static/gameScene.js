@@ -107,7 +107,8 @@ class gameScene extends Phaser.Scene {
 
         
         
-        this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.meleeHit, null, this);
+        this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
+        
         
         
         this.keyboardHandler.initEvents(this);
@@ -152,6 +153,12 @@ class gameScene extends Phaser.Scene {
         this.playerGroup.add(this.player.myContainer);
         
         this.otherPlayersGroup = this.physics.add.group();
+        
+        this.physics.add.collider(this.projectiles, this.otherPlayersGroup, this.bulletHitOther, null, this);
+        
+        //this.physics.add.overlap(this.dummiesGroup, this.otherPlayersGroup, this.otherMeleeHitDummy, null, this);
+        
+        this.physics.add.overlap(this.otherPlayersGroup, this.playerGroup, this.meleeHitPlayer, null, this);
         
         /*
         var info = {
@@ -211,9 +218,11 @@ class gameScene extends Phaser.Scene {
                         
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
                         
+                        self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
+                        
                         //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].sprite, self.meleeHit, null, self);
                         
-                        self.physics.add.collider(self.projectiles, self.otherPlayersGroup, self.bulletHitOther, null, self);
+                        //self.physics.add.collider(self.projectiles, self.otherPlayersGroup, self.bulletHitOther, null, self);
                     }      
 
                     /*
@@ -245,11 +254,13 @@ class gameScene extends Phaser.Scene {
         // To update add .sprite to the end of otherPlayers[object.id]
         this.client.socket.on('moveUpdates', function(object){ 
             
+            /*
             if((object.player.position.x != object.player.oldPosition.x)
                || (object.player.position.y != object.player.oldPosition.y))
             {
                 self.otherPlayers[object.id].sprite.anims.play('left', true);
             }
+            */
             
             /*
             self.otherPlayers[object.id].sprite.setVelocityX(object.player.velocity.x);
@@ -275,25 +286,6 @@ class gameScene extends Phaser.Scene {
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
             }
             
-            
-             
-            /*
-            //console.log("Doing some proj adding from " + projs);
-            
-            self.otherProjectiles[projs.id].push({sprite: (self.physics.add.sprite(projs.obj.x, projs.obj.y, 'projectile'))
-                                               ,info: projs.obj});
-            
-            //console.log("len at add: " + self.otherProjectiles[projs.id].length);
-            if(self.otherProjectiles[projs.id].length > 0){
-                //console.log("len " + self.otherProjectiles[projs.id].length);
-                self.otherProjectiles[projs.id][self.otherProjectiles[projs.id].length - 1].sprite.body.setAllowGravity(false);
-                //self.otherProjectiles[projs.id][self.otherProjectiles[projs.id].length - 1].setCollideWorldBounds(false);
-                self.otherProjectiles[projs.id][self.otherProjectiles[projs.id].length - 1].sprite.rotation = projs.obj.rotation;
-                //console.log("rotation: " + projs.obj.rotation);
-                self.physics.add.collider(self.otherProjectiles[projs.id][self.otherProjectiles[projs.id].length - 1].sprite, self.player.sprite);
-            }
-            */
-             
             var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
             projectile.setCollideWorldBounds(false);
             projectile.body.setAllowGravity(false); 
@@ -305,38 +297,18 @@ class gameScene extends Phaser.Scene {
         
         this.client.socket.on('updateDamage', function(info){
             
-            console.log(self.otherPlayers[info.id].username._text, info.damage);
             
             self.otherPlayers[info.id].takeDamage(info.damage);
             self.otherPlayers[info.id].updateHealth();
         });
         
-        /*
-         // update projectiles from other players
-        this.client.socket.on('updateProjectileClient', function(server){
-            var projs = server.objs;
-            var id = server.id;
-            if(!(id in self.otherProjectiles)){
-                self.otherProjectiles[id] = self.physics.add.group();
-            }
+        this.client.socket.on('updateAnim', function(player){
+            self.otherPlayers[player.id].isMeleeing = player.info.melee;
+            self.otherPlayers[player.id].hitCount = player.info.hitCount;
             
-            self.otherProjectiles[id].children.iterate(function(child) {
-                child.x += Math.cos(child.rotation) * 10;
-                child.y += Math.sin(child.rotation) * 10;  
-            });
-            
-            
-            var i = 0;
-            //console.log(self.otherProjectiles[id].length);
-            for(i = 0; i < self.otherProjectiles[id].length; i++){
-                //console.log("updating proj");
-                self.otherProjectiles[id][i].sprite.x = projs[i].x;
-                self.otherProjectiles[id][i].sprite.y = projs[i].y;
-                self.otherProjectiles[id][i].sprite.rotation = projs[i].rotation;
-            }
-            
+            self.otherPlayers[player.id].sprite.anims.play(player.info.anims);
+           
         });
-        */
           
     } 
     
@@ -367,7 +339,7 @@ class gameScene extends Phaser.Scene {
         }
     }
     
-    meleeHit(player, container)
+    playerMeleeHitDummy(player, container)
     {
         
         if (this.player.isMeleeing && this.player.hitCount == 1)
@@ -392,6 +364,65 @@ class gameScene extends Phaser.Scene {
             this.player.hitCount = 0;
           
         }
+    }
+    
+    otherMeleeHitDummy(otherPlayerContainer, container)
+    {
+        for(var id in this.otherPlayers){
+            if(this.otherPlayers[id].myContainer === otherPlayerContainer){
+                var player = this.otherPlayers[id];
+            }
+        }
+        
+        if(player == null){
+            console.log("Not found");
+            return;
+        }
+        
+        if (player.isMeleeing && player.hitCount == 1)
+        {
+            if (container === this.salt.myContainer)
+            {
+                this.salt.takeDamage(this.colliderHandler.meleeHit(this.salt, player)); 
+            }
+            else if (container === this.sour.myContainer)
+            {
+                this.sour.takeDamage(this.colliderHandler.meleeHit(this.sour, player));
+            }
+            else if (container === this.sweet.myContainer)
+            {
+                this.sweet.takeDamage(this.colliderHandler.meleeHit(this.sweet, player));
+            }
+            else if (container === this.spicy.myContainer) 
+            {
+                this.spicy.takeDamage(this.colliderHandler.meleeHit(this.spicy, player));
+            }
+            
+            this.otherPlayers[id].hitCount = 0;
+          
+        }
+    }
+    
+    meleeHitPlayer(otherPlayerContainer, player)
+    {
+        for(var id in this.otherPlayers){
+            if(!(this.otherPlayers[id].myContainer === otherPlayerContainer)){
+                continue;
+            }
+            
+            console.log("found container");
+                
+            if(this.otherPlayers[id].isMeleeing && this.otherPlayers[id].hitCount == 1) {
+                var damageAmount = this.colliderHandler.meleeHit(this.otherPlayers[id], this.player);
+        
+                this.player.takeDamage(damageAmount);
+
+                this.client.socket.emit("doDamage", damageAmount);
+                
+                this.otherPlayers[id].hitCount = 0;
+            }
+        }
+        
     }
     
     bulletHitDummy(bullet, container)
@@ -429,7 +460,7 @@ class gameScene extends Phaser.Scene {
         bullet.destroy();
     }
     
-     bulletHitOther(bullet, player){
+    bulletHitOther(bullet, player){
         //this.player.takeDamage(this.colliderHandler.projectileHit(bullet, this.player, this.player));
         bullet.destroy();
     }

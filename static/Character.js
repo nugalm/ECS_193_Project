@@ -111,12 +111,24 @@ class Character {
         
         if (this.weapon == "whisk") {
             this.sprite.anims.play('whisk_twirl');
+            
+            var info = {anims: 'whisk_twirl', melee: true, hitCount: 1};
+            
+            this.client.socket.emit('doAnim', info);
         }
         else if (this.weapon == "fork") {
             this.sprite.anims.play('fork_stab');
+            
+            var info = {anims: 'fork_stab', melee: true, hitCount: 1};
+            
+            this.client.socket.emit('doAnim', info);
         }
         else if (this.weapon == "knife") {
             this.sprite.anims.play('knife_swipe');
+            
+            var info = {anims: 'knife_swipe', melee: true, hitCount: 1};
+            
+            this.client.socket.emit('doAnim', info);
         }
         
     } 
@@ -129,13 +141,28 @@ class Character {
         
         if (this.gun == "bottle") {
             this.sprite.anims.play('bottle_squeeze');
+            
+            
+            var info = {anims: 'bottle_squeeze', melee: false, hitCount: 0};
+            
+            this.client.socket.emit('doAnim', info);
+            
         }    
         else if (this.gun == "frosting_bag") {
             this.sprite.anims.play('frosting_bag_squeeze');
+            
+            var info = {anims: 'frosting_bag_squeeze', melee: false, hitCount: 0};
+            
+            this.client.socket.emit('doAnim', info);
         }
         else if (this.gun == "salt_shaker") {
             this.sprite.anims.play('salt_shaker_shake')
+            
+            var info = {anims: 'salt_shaker_shake', melee: false, hitCount: 0};
+            
+            this.client.socket.emit('doAnim', info);
         }
+        
     }
     
    // updateWhileDashing()
@@ -147,6 +174,10 @@ class Character {
     dash()
     {
         this.sprite.anims.play('mouse_dash');
+        
+        var info = {anims: 'mouse_dash', melee: false, hitCount: 0};
+            
+        this.client.socket.emit('doAnim', info);
     }
     
     updateRotation(context)
@@ -177,6 +208,10 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.sprite.anims.play('left', true);
+                    
+                    var info = {anims: 'left', melee: false, hitCount: 0};
+            
+                    this.client.socket.emit('doAnim', info);
                 }
             }
 
@@ -188,6 +223,10 @@ class Character {
                 if (!this.isSpecialAnimating())  
                 {
                     this.sprite.anims.play('left', true);
+                    
+                    var info = {anims: 'left', melee: false, hitCount: 0};
+            
+                    this.client.socket.emit('doAnim', info);
                 }
             }
 
@@ -199,6 +238,10 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.sprite.anims.play('left', true);
+                    
+                    var info = {anims: 'left', melee: false, hitCount: 0};
+            
+                    this.client.socket.emit('doAnim', info);
                 }
             }
 
@@ -210,6 +253,10 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.sprite.anims.play('left', true);
+                    
+                    var info = {anims: 'left', melee: false, hitCount: 0};
+            
+                    this.client.socket.emit('doAnim', info);
                 }
             }
 
@@ -224,6 +271,10 @@ class Character {
                 if (!this.isSpecialAnimating())  
                 {
                     this.sprite.anims.play('turn');
+                    
+                    var info = {anims: 'turn', melee: false, hitCount: 0};
+            
+                    this.client.socket.emit('doAnim', info);
                 }
             }
             
@@ -247,7 +298,6 @@ class Character {
             var myPosition = {x: this.myContainer.x , y: this.myContainer.y};
             var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
             var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
-            console.log("myPosition ", myPosition);
             socket.emit('movement', info);
         }
     }
