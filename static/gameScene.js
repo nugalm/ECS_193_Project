@@ -303,6 +303,14 @@ class gameScene extends Phaser.Scene {
              
         });
         
+        this.client.socket.on('updateDamage', function(info){
+            
+            console.log(self.otherPlayers[info.id].username._text, info.damage);
+            
+            self.otherPlayers[info.id].takeDamage(info.damage);
+            self.otherPlayers[info.id].updateHealth();
+        });
+        
         /*
          // update projectiles from other players
         this.client.socket.on('updateProjectileClient', function(server){
@@ -411,7 +419,13 @@ class gameScene extends Phaser.Scene {
     }
     
     bulletHitPlayer(bullet, player){
-        this.player.takeDamage(this.colliderHandler.projectileHit(bullet, this.player, this.player));
+        
+        var damageAmount = this.colliderHandler.projectileHit(bullet, this.player, this.player);
+        
+        this.player.takeDamage(damageAmount);
+        
+        this.client.socket.emit("doDamage", damageAmount);
+        
         bullet.destroy();
     }
     

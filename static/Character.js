@@ -34,6 +34,7 @@ class Character {
         this.username;
         this.healthBar = new HealthBar();
        
+        this.client = new Client();
         this.left = false;
         this.right = false;
         this.up = false;
@@ -271,6 +272,7 @@ class Character {
     
     takeDamage(damageAmount) 
     {
+        
       //  alert("health before hit: " + this.health);
         this.health = this.health - damageAmount;
        // alert("health after hit: " + this.health);
@@ -280,6 +282,7 @@ class Character {
             this.myContainer.destroy();
             //this.sprite.disableBody(true, true);
         }
+        
     }
     
     

@@ -209,6 +209,13 @@ io.on('connection', function(socket) {
     });
     */
     
+    socket.on("doDamage", function (damage){
+        serverPlayers[socket.id].health -= damage;
+        
+        var info = {id: socket.id, damage: damage};
+        
+        socket.broadcast.emit("updateDamage", info);
+    })
     
     
     socket.on('disconnect', function() {
