@@ -89,6 +89,10 @@ class Character {
     
     update(context)
     {
+        if(this.health <= 0){
+            return;
+        }
+        
         this.updateRotation(context);
         this.updateMovement(context);
         this.updateHealth();
@@ -118,6 +122,10 @@ class Character {
     
     fire()
     {
+        if(this.health <= 0){
+            return;
+        }
+        
         if (this.gun == "bottle") {
             this.sprite.anims.play('bottle_squeeze');
         }    

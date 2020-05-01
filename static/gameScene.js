@@ -33,6 +33,8 @@ class gameScene extends Phaser.Scene {
         this.client = new Client(); // contains socket
         this.otherPlayers = {}; // holds the characters for all other players
         this.otherProjectiles = {}; // Holds all the other player projectiles
+        this.playerGroup;
+        this.otherPlayersGroup;
 
         // variables using to test (e.g. damage system, collision, etc.)
         this.dummies;
@@ -117,7 +119,7 @@ class gameScene extends Phaser.Scene {
         this.colliderHandler.initPlayerColliders();
         
         
-        this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHit, null, this);
+        this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
 
         
         //camera
@@ -145,6 +147,11 @@ class gameScene extends Phaser.Scene {
         //Multiplayer
         
         var self = this;
+        
+        this.playerGroup = this.physics.add.group();
+        this.playerGroup.add(this.player.myContainer);
+        
+        this.otherPlayersGroup = this.physics.add.group();
         
         /*
         var info = {
@@ -200,11 +207,13 @@ class gameScene extends Phaser.Scene {
                             'kitchenScene', 'mouse_walk/mouse_walk-2.png');
                         self.otherPlayers[id].initSprite(self);
                         
+                        self.otherPlayersGroup.add(self.otherPlayers[id].myContainer);
+                        
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
                         
-                        self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].sprite, self.meleeHit, null, self);
+                        //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].sprite, self.meleeHit, null, self);
                         
-                        self.physics.add.collider(self.projectiles, self.otherPlayers[id].sprite, self.bulletHitPlayer, null, self);
+                        self.physics.add.collider(self.projectiles, self.otherPlayersGroup, self.bulletHitOther, null, self);
                     }      
 
                     /*
@@ -262,8 +271,8 @@ class gameScene extends Phaser.Scene {
             if(!(projs.id in self.otherProjectiles)){
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHit, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.player.sprite, self.bulletHitPlayer, null, self);
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
             }
             
             
@@ -377,7 +386,7 @@ class gameScene extends Phaser.Scene {
         }
     }
     
-    bulletHit(bullet, container)
+    bulletHitDummy(bullet, container)
     {
         if (container === this.salt.myContainer)
         {
@@ -403,6 +412,11 @@ class gameScene extends Phaser.Scene {
     
     bulletHitPlayer(bullet, player){
         this.player.takeDamage(this.colliderHandler.projectileHit(bullet, this.player, this.player));
+        bullet.destroy();
+    }
+    
+     bulletHitOther(bullet, player){
+        //this.player.takeDamage(this.colliderHandler.projectileHit(bullet, this.player, this.player));
         bullet.destroy();
     }
     
