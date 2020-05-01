@@ -217,6 +217,7 @@ class gameScene extends Phaser.Scene {
                         self.otherPlayersGroup.add(self.otherPlayers[id].myContainer);
                         
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
+                        self.physics.add.overlap(self.otherPlayers[id].myContainer, self.hidableLayer);
                         
                         self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
                         
@@ -308,6 +309,16 @@ class gameScene extends Phaser.Scene {
             
             self.otherPlayers[player.id].sprite.anims.play(player.info.anims);
            
+        });
+        
+        this.client.socket.on('deleteTime', function(myId){
+            for(var id in self.otherPlayers){
+                if(id === myId){
+                    console.log("deletion");
+                    self.otherPlayers[id].myContainer.destroy();
+                    delete self.otherPlayers[id];
+                }
+            } 
         });
           
     } 

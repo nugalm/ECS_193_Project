@@ -227,7 +227,7 @@ io.on('connection', function(socket) {
         // remove this player from our players object
         delete serverPlayers[socket.id];
         // emit a message to all players to remove this player
-        io.emit('disconnect', socket.id);
+        socket.broadcast.emit('deleteTime', socket.id);
         //console.log('removed player ' + socket.id);
     });
 });
