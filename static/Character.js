@@ -244,9 +244,10 @@ class Character {
             this.up = context.cursors.up.isDown;
             this.oldRotation = this.sprite.rotation;
                         
-            var myPosition = {x: this.sprite.x , y: this.sprite.y};
+            var myPosition = {x: this.myContainer.x , y: this.myContainer.y};
             var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
             var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
+            console.log("myPosition ", myPosition);
             socket.emit('movement', info);
         }
     }

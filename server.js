@@ -88,7 +88,7 @@ io.on('connection', function(socket) {
         serverPlayers[socket.id] = 
         {
             name: 'player',
-            position: {x: 100, y: 450},
+            position: {x: 200, y: 450},
             health: 50,
             power: 50,
             mana: 50,
@@ -97,7 +97,7 @@ io.on('connection', function(socket) {
             element: "none",
             gun: "none",
             weapon: "none",
-            oldPosition: {x: 100, y: 450},
+            oldPosition: {x: 200, y: 450},
             velocity: {x: 0, y: 0},
             render: false,
             object: 'mouse_walk/mouse_walk-2.png',

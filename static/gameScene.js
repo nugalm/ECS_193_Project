@@ -198,9 +198,9 @@ class gameScene extends Phaser.Scene {
                     
                     if(!(typeof self.otherPlayers[id] == 'undefined')) {
                         //Add in other player characte
-                        //console.log("x: " server[id].position.x + " y: " + server[id].position.y);
-                        //self.otherPlayers[id].startPositionY = server[id].position.y;
-                        //self.otherPlayers[id].startPositionX = server[id].position.x;
+                        console.log("x: " + server[id].position.x + " y: " + server[id].position.y);
+                        self.otherPlayers[id].startPositionY = server[id].position.y;
+                        self.otherPlayers[id].startPositionX = server[id].position.x;
                         self.otherPlayers[id].username = self.add.text(-20, -70, (server[id].element + ' ' + server[id].name), { fontSize: '24px', fill: 'white' });
                         self.otherPlayers[id].sprite = self.physics.add.sprite(0,
                             0,
