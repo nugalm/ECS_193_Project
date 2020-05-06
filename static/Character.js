@@ -225,6 +225,7 @@ class Character {
                     this.sprite.anims.play('left', true);
                     
                     var info = {anims: 'left', melee: false, hitCount: 0};
+                    var info = {anims: 'left', melee: false, hitCount: 0};
             
                     this.client.socket.emit('doAnim', info);
                 }
@@ -282,6 +283,7 @@ class Character {
         
         // Multiplayer
         // Send player movement to server when state changes
+        /*
         if ((context.cursors.up.isDown != this.up)
             || (context.cursors.down.isDown != this.down)
             || (context.cursors.left.isDown != this.left)
@@ -300,6 +302,12 @@ class Character {
             var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
             socket.emit('movement', info);
         }
+        */
+        
+        var myPosition = {x: this.myContainer.x , y: this.myContainer.y};
+        var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
+        var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
+        socket.emit('movement', info);
     }
 
     

@@ -114,6 +114,9 @@ class gameScene extends Phaser.Scene {
         this.keyboardHandler.initEvents(this);
 
         this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
+        
+        this.hidableLayer.depth = 1000;
+        
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
         this.collidableLayer.setCollisionByProperty( {collides:true} );
 
@@ -208,16 +211,19 @@ class gameScene extends Phaser.Scene {
                         console.log("x: " + server[id].position.x + " y: " + server[id].position.y);
                         self.otherPlayers[id].startPositionY = server[id].position.y;
                         self.otherPlayers[id].startPositionX = server[id].position.x;
-                        self.otherPlayers[id].username = self.add.text(-20, -70, (server[id].element + ' ' + server[id].name), { fontSize: '24px', fill: 'white' });
+                        
+                        self.otherPlayers[id].username = self.add.text(-20, -70, (server[id].name), { fontSize: '24px', fill: 'white' });
                         self.otherPlayers[id].sprite = self.physics.add.sprite(0,
                             0,
                             'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+                        
                         self.otherPlayers[id].initSprite(self);
                         
+                        
+                                            
                         self.otherPlayersGroup.add(self.otherPlayers[id].myContainer);
                         
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
-                        self.physics.add.overlap(self.otherPlayers[id].myContainer, self.hidableLayer);
                         
                         self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
                         
@@ -225,28 +231,6 @@ class gameScene extends Phaser.Scene {
                         
                         //self.physics.add.collider(self.projectiles, self.otherPlayersGroup, self.bulletHitOther, null, self);
                     }      
-
-                    /*
-                    self.otherPlayers[id].sprite = self.physics.add.sprite(350, 600, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
-                    self.otherPlayers[id].displayWidth = self.DISPLAY;
-                    self.otherPlayers[id].displayHeight = self.DISPLAY; 
-                    self.otherPlayers[id].setSize(self.HITBOX, self.HITBOX);
-                    self.otherPlayers[id].setOffset(125, 50);
-                    //self.otherPlayers[id].setCollideWorldBounds(true);
-                    self.otherPlayers[id].body.setAllowGravity(false);
-                    
-                    //self.physics.add.collider(self.otherPlayers, platforms);
-                    //self.physics.add.collider(self.otherPlayers, stars);
-                    self.otherPlayers[id].x = server[id].position.x;
-                    self.otherPlayers[id].y = server[id].position.y;
-                    self.otherPlayers[id].rotation = server[id].rotation;
-                    
-                    self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id], self.meleeHit, null, self);
-                    self.physics.add.collider(self.projectiles, self.otherPlayers[id], self.bulletHit, null, self);
-                    
-                    self.physics.add.collider(self.otherPlayers[id], self.collidableLayer);
-                    self.physics.add.collider(self.otherPlayers[id], self.player.sprite);
-                    */
                 }
             }
         });
@@ -255,27 +239,66 @@ class gameScene extends Phaser.Scene {
         // To update add .sprite to the end of otherPlayers[object.id]
         this.client.socket.on('moveUpdates', function(object){ 
             
-            /*
-            if((object.player.position.x != object.player.oldPosition.x)
-               || (object.player.position.y != object.player.oldPosition.y))
-            {
-                self.otherPlayers[object.id].sprite.anims.play('left', true);
-            }
-            */
-            
-            /*
-            self.otherPlayers[object.id].sprite.setVelocityX(object.player.velocity.x);
-            self.otherPlayers[object.id].sprite.setVelocityY(object.player.velocity.y);
-            self.otherPlayers[object.id].sprite.rotation = object.player.rotation;
-            //self.otherPlayers[object.id].anims.play('left', true);
-            */
-            
-            //console.log("x: " + object.player.velocity.x +  " y: " + object.player.velocity.y);
-            
             self.otherPlayers[object.id].myContainer.body.setVelocityX(object.player.velocity.x);
             self.otherPlayers[object.id].myContainer.body.setVelocityY(object.player.velocity.y);
             self.otherPlayers[object.id].sprite.setRotation(object.player.rotation);
-            //self.otherPlayers[object.id].anims.play('left', true);
+            
+            var id = object.id;
+            var pos = object.player.position;
+            
+            function truncate(value)
+            {
+                if (value < 0) {
+                   return Math.ceil(value);
+                }
+
+                return Math.floor(value);
+            }
+            
+            if(object.player.oldPosition.x === pos.x && object.player.oldPosition.y === pos.y){
+                return;
+            }
+            
+            // If player still moving don't correct using abosolute position
+            if(self.otherPlayers[id].myContainer.body.velocity.x !== 0 && self.otherPlayers[id].myContainer.body.velocity.y !== 0){
+                return;
+            }
+            
+            // pos is absolute position of the other players
+            if(truncate(self.otherPlayers[id].myContainer.x) !== truncate(pos.x)){                
+                if(truncate(self.otherPlayers[id].myContainer.x) === truncate(pos.x)){
+                    self.otherPlayers[id].myContainer.body.setVelocityX(0);
+                }
+                
+                else if(truncate(self.otherPlayers[id].myContainer.x) > truncate(pos.x)) { 
+                    self.otherPlayers[id].myContainer.body.setVelocityX(-160);
+                }
+                
+                else if(truncate(self.otherPlayers[id].myContainer.x) < truncate(pos.x)) { 
+                    self.otherPlayers[id].myContainer.body.setVelocityX(160);
+                }
+                        
+            }
+            
+            if(truncate(self.otherPlayers[id].myContainer.y) !== truncate(pos.y)){
+                if(truncate(self.otherPlayers[id].myContainer.y) ===  truncate(pos.y)){
+                    self.otherPlayers[id].myContainer.body.setVelocityY(0);
+                }
+                
+                else if(truncate(self.otherPlayers[id].myContainer.y) >  truncate(pos.y)) { 
+                    self.otherPlayers[id].myContainer.body.setVelocityY(-160);
+                }
+                
+                 else if(truncate(self.otherPlayers[id].myContainer.y) <  truncate(pos.y)) { 
+                    self.otherPlayers[id].myContainer.body.setVelocityY(160);
+                }      
+            }
+            
+            
+            //self.physics.arcade.moveToXY(self.otherPlayers[id].myContainer.body,pos.x, pos.y, 160 , );
+            
+           
+            
             
         });
         
@@ -307,7 +330,12 @@ class gameScene extends Phaser.Scene {
             self.otherPlayers[player.id].isMeleeing = player.info.melee;
             self.otherPlayers[player.id].hitCount = player.info.hitCount;
             
-            self.otherPlayers[player.id].sprite.anims.play(player.info.anims);
+            if(player.info.anims === 'left'){
+                self.otherPlayers[player.id].sprite.anims.play(player.info.anims, true);
+            }
+            else {
+                self.otherPlayers[player.id].sprite.anims.play(player.info.anims);
+            }
            
         });
         
