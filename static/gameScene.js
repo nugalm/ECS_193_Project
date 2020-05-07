@@ -47,6 +47,21 @@ class gameScene extends Phaser.Scene {
         //drops
         this.knife;
         this.hi;
+        
+        this.dropsGroup;
+        
+        this.fork;
+        this.salt_shaker;
+        this.squirter;
+        this.whisk;
+        this.frosting_bag;
+        
+        this.randomDropsHandler = new RandomDropsHandler(this);
+        this.timedEvent;
+        
+        this.cooldownEvent;
+        this.weaponRespawnEvent;
+        this.meleeCooldownEvent;
     }
     
     // If we ever need to load specific data from previous scene.
@@ -54,7 +69,7 @@ class gameScene extends Phaser.Scene {
     {
         // From user selection in menu scene
         this.player = data.player;
-       // this.player.printStat();
+        this.player.printStat();
 
         this.username = data.username;
        
@@ -93,7 +108,6 @@ class gameScene extends Phaser.Scene {
 
     
         this.drawer.drawCharacter();
-     //   this.dummies = this.physics.add.group({allowGravity: false});
         
        // dummies for testing
         this.dummies = new Dummies(this);
@@ -121,9 +135,13 @@ class gameScene extends Phaser.Scene {
         this.collidableLayer.setCollisionByProperty( {collides:true} );
 
         this.colliderHandler.initPlayerColliders();
+        //this.physics.world.enable(this.projectiles);
         
-        
+
         this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
+
+       // this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHit, null, this);
+        
 
         
         //camera
@@ -131,12 +149,67 @@ class gameScene extends Phaser.Scene {
         this.cameras.main.zoom = 1.5;
         
         //trying drops
-        this.knife = new Knife({scene: this, x:200, y:200, key:"knife_drop_image"});
-      //  this.knife.anims.play('knife_idle');
-       
+       // this.knife = new Knife({scene: this, x:200, y:1000, key:"knife_drop_image"});
+       // this.fork = new Weapon({scene: this, x:400, y:1000, key:"fork_drop_image"});
+       // this.whisk = new Weapon({scene: this, x:600, y:1000, key:"whisk_drop_image"});
+
+     
+        
+       // this.dropsGroup = this.physics.add.group();
         
         
-        this.hi = this.physics.add.overlap(this.knife, this.player.myContainer, this.pickUpWeapon, null, this);
+      //  this.dropsGroup.add(this.knife);
+     //   this.dropsGroup.add(this.fork);
+       // this.dropsGroup.add(this.whisk);
+        
+        // Fruit Respawn
+        this.timedEvent = this.time.addEvent
+        ({
+            delay: 3000,
+            callback: this.callbackFunction,
+            callbackScope: this,
+            loop: true
+        });
+    
+        // Weapon Respawn
+        this.weaponRespawnEvent = this.time.addEvent
+        ({
+            delay: 3000,
+            callback: this.weaponCallbackFunction,
+            callbackScope: this,
+            loop: true
+        });
+        
+        // Handles player's gun cooldown
+        this.cooldownEvent = this.time.addEvent 
+        ({
+            delay: this.player.cooldown,  
+            callback: this.cooldownFunc,
+            callbackScope: this,
+            loop: true
+        });
+        
+        // Handles player's melee cooldown
+        this.meleeCooldownEvent = this.time.addEvent 
+        ({
+            delay: this.player.meleeCooldown,  
+            callback: this.meleeCooldownFunc,
+            callbackScope: this,
+            loop: true
+        });
+        
+        
+        
+        
+        
+      //  this.hi = this.physics.add.overlap(this.dropsGroup, this.player.myContainer, this.pickUpWeapon, null, this);
+        
+        this.randomDropsHandler.init();
+        
+        this.physics.add.overlap(this.randomDropsHandler.weapon_group,
+                                this.player.myContainer, this.pickUpWeapon, null, this)
+        
+        this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpFood, null, this);
         
         // highlight collides tiles for debugging
         /*
@@ -354,13 +427,15 @@ class gameScene extends Phaser.Scene {
     update()
       {
         var self = this;
-          
+       // console.log("time event loop value: ",this.timedEvent.loop);
         if (this.gameOver)
         {
             return;   
         }
- 
         this.dummies.updateHealth();
+        //console.log("gun cooldown in milliseconds:",this.cooldownEvent.delay);
+        //console.log("weapon cooldown:",this.meleeCooldownEvent.delay);
+          
 
         this.player.update(this);
         this.projectileHandler.moveProjectiles();
@@ -369,12 +444,55 @@ class gameScene extends Phaser.Scene {
 
     }  
     
-    pickUpWeapon(weapon, player_container)
+    pickUpWeapon(player_container, weapon)
     {
+      
         if (weapon instanceof Knife)
         {
             this.player.weapon = "knife";
-            weapon.destroy();
+            weapon.disableBody(true, true);
+        }
+        else if (weapon == this.randomDropsHandler.fork){
+            this.player.weapon = "fork";
+            weapon.disableBody(true, true);
+        }
+        else if (weapon == this.randomDropsHandler.whisk) {
+            this.player.weapon = "whisk";
+            weapon.disableBody(true, true);
+        }
+        else if (weapon == this.randomDropsHandler.salt_shaker){
+            this.player.gun = "salt_shaker";
+            weapon.disableBody(true, true);
+        }
+        else if (weapon == this.randomDropsHandler.bottle){    
+            this.player.gun = "bottle";
+            weapon.disableBody(true, true);
+        }
+        else if (weapon == this.randomDropsHandler.frosting_bag){
+            this.player.gun = "frosting_bag";
+            weapon.disableBody(true, true);
+        }
+        this.player.initCooldown();
+        this.cooldownEvent.delay = this.player.cooldown;
+        this.meleeCooldownEvent.delay = this.player.meleeCooldown;
+    }
+    
+    pickUpFood(player_container, food)
+    {
+        if (food == this.randomDropsHandler.avocado) 
+        {
+            this.player.health = this.player.health + 100;
+            food.disableBody(true, true);
+        } 
+        else if (food == this.randomDropsHandler.pepper)
+        {
+            this.player.power = this.player.power + 50;
+            food.disableBody(true, true);
+        }
+        else if (food == this.randomDropsHandler.blueberry)
+        {
+            this.player.speed = this.player.speed + 50;
+            food.disableBody(true, true);
         }
     }
     
@@ -405,6 +523,7 @@ class gameScene extends Phaser.Scene {
         }
     }
     
+
     otherMeleeHitDummy(otherPlayerContainer, container)
     {
         for(var id in this.otherPlayers){
@@ -466,6 +585,7 @@ class gameScene extends Phaser.Scene {
     
     bulletHitDummy(bullet, container)
     {
+        //alert("colliding with laher");
         if (container === this.salt.myContainer)
         {
             this.salt.takeDamage(this.colliderHandler.projectileHit(bullet, this.salt, this.player));
@@ -517,4 +637,44 @@ class gameScene extends Phaser.Scene {
         }
     }
 
+    callbackFunction() 
+    {
+        var context = this;
+        this.randomDropsHandler.group.children.iterate(function (child) 
+        {
+            if (!child.active)
+            {  
+                context.randomDropsHandler.respawn(child);
+            }
+        })
+    }
+    
+    cooldownFunc()
+    {
+        if (this.player.canFire == false) 
+        {
+            this.player.canFire = true;
+        }
+    }
+    
+    meleeCooldownFunc()
+    {
+        if (this.player.canMelee == false)
+        {
+            this.player.canMelee = true;
+        }
+    }
+    
+    weaponCallbackFunction()
+    {
+        var context = this;
+        this.randomDropsHandler.weapon_group.children.iterate(function(child)
+        {
+            if (!child.active) 
+            {
+                context.randomDropsHandler.respawnWeapon(child);
+            }
+        })
+    }
+    
 }

@@ -129,9 +129,9 @@ class armoryScene extends Phaser.Scene
 		}, this);
         
 		// text
-		this.text1 = this.add.text(width-350*ratio, 15, 'Health: '+this.player.health, { fontSize: '16px', fill: 'white' });
-		this.text2 = this.add.text(width-350*ratio, 45, 'Speed: '+this.player.speed, { fontSize: '16px', fill: 'white' });
-		this.text3 = this.add.text(width-350*ratio, 75, 'Power: '+this.player.power, { fontSize: '16px', fill: 'white' });
+		this.text1 = this.add.text(width-350*ratio, 15, 'Health: '+this.player.health, { fontSize: '30px', fill: 'white' });
+		this.text2 = this.add.text(width-350*ratio, 45, 'Speed: '+this.player.speed, { fontSize: '30px', fill: 'white' });
+		this.text3 = this.add.text(width-350*ratio, 75, 'Power: '+this.player.power, { fontSize: '30px', fill: 'white' });
 
 	}
 

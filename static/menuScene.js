@@ -14,9 +14,9 @@ class menuScene extends Phaser.Scene
         this.IMAGE_SCALE = 0.07;
         this.buttonTextOffsetY = 140;
         
-        this.saltyButtonTint = 0x738F9E;
+        this.saltyButtonTint = 0xffffff;
         this.sourButtonTint = 0x05DE49;
-        this.sweetButtonTint = 0xFC00C4;
+        this.sweetButtonTint = 0xffffff;
         
         this.promptPositionX = (config.width / 4);
         this.promptPositionY = (config.height / 2);
@@ -54,20 +54,20 @@ class menuScene extends Phaser.Scene
     
     addButtonSprites()
     {
-        this.saltyButton = this.add.sprite(this.buttonPositionX, this.buttonPositionY, 'loadingSpicy');
+        
+        
+        this.saltyButton = this.add.sprite(this.buttonPositionX, this.buttonPositionY, 'loadingSalty');
      
         this.spicyButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset, this.buttonPositionY, 'loadingSpicy');
 
         this.sourButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 2, this.buttonPositionY, 'loadingSpicy');
         
-        this.sweetButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 3, this.buttonPositionY, 'loadingSpicy');
+        this.sweetButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 3, this.buttonPositionY, 'loadingSweet');
     }
     
     tempSetTintforButtons()
     {
-        this.saltyButton.setTint(this.saltyButtonTint);
         this.sourButton.setTint(this.sourButtonTint);
-        this.sweetButton.setTint(this.sweetButtonTint);
     }
     
     

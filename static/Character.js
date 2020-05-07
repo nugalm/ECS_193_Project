@@ -34,12 +34,20 @@ class Character {
         this.username;
         this.healthBar = new HealthBar();
        
+
         this.client = new Client();
         this.left = false;
         this.right = false;
         this.up = false;
         this.down = false;
         this.oldRotation = 0;
+
+        this.canFire = true;
+        this.canMelee = true;
+        
+        this.cooldown;
+        this.meleeCooldown;
+
 
 	}
 
@@ -69,6 +77,7 @@ class Character {
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
         this.initContainer(context);
+        this.initCooldown();
     }
     
     initContainer(context)
@@ -81,6 +90,35 @@ class Character {
         context.physics.world.enable(this.myContainer);
         this.myContainer.body.setAllowGravity(false);
         
+    }
+    
+    initCooldown()
+    {
+        if (this.gun == "bottle") 
+        {
+            this.cooldown = 500;    
+        }
+        else if (this.gun == "salt_shaker") 
+        {
+            this.cooldown = 1500;
+        }
+        else if (this.gun == "frosting_bag")
+        {
+            this.cooldown = 2000;
+        }
+        
+        if (this.weapon == "fork") 
+        {
+            this.meleeCooldown = 500;
+        }
+        else if (this.weapon == "knife")
+        {
+            this.meleeCooldown = 1000;   
+        }
+        else if (this.weapon == "whisk")
+        {
+            this.meleeCooldown = 1500;
+        }
     }
     
     initWeapon()
@@ -133,12 +171,12 @@ class Character {
         
     } 
     
-    fire()
-    {
+    fire() {
         if(this.health <= 0){
             return;
         }
         
+
         if (this.gun == "bottle") {
             this.sprite.anims.play('bottle_squeeze');
             
@@ -161,8 +199,7 @@ class Character {
             var info = {anims: 'salt_shaker_shake', melee: false, hitCount: 0};
             
             this.client.socket.emit('doAnim', info);
-        }
-        
+        }    
     }
     
    // updateWhileDashing()
