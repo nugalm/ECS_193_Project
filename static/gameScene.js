@@ -110,16 +110,16 @@ class gameScene extends Phaser.Scene {
         this.drawer.drawCharacter();
         
        // dummies for testing
-       /*
+       
         this.dummies = new Dummies(this);
         this.dummies.initAllDummies();
         this.dummies.initGroup();
-        */
+        
         
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
 
-        //this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
+        this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
                 
         this.keyboardHandler.initEvents(this);
 
@@ -134,7 +134,7 @@ class gameScene extends Phaser.Scene {
         //this.physics.world.enable(this.projectiles);
         
 
-        //this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
+        this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
 
        // this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHit, null, this);
         
@@ -223,7 +223,7 @@ class gameScene extends Phaser.Scene {
         
         this.physics.add.collider(this.projectiles, this.otherPlayersGroup, this.bulletHitOther, null, this);
         
-        //this.physics.add.overlap(this.dummiesGroup, this.otherPlayersGroup, this.otherMeleeHitDummy, null, this);
+        this.physics.add.overlap(this.dummiesGroup, this.otherPlayersGroup, this.otherMeleeHitDummy, null, this);
         
         this.physics.add.overlap(this.otherPlayersGroup, this.playerGroup, this.meleeHitPlayer, null, this);
         
@@ -283,7 +283,7 @@ class gameScene extends Phaser.Scene {
         {
             return;   
         }
-        //this.dummies.updateHealth();
+        this.dummies.updateHealth();
         //console.log("gun cooldown in milliseconds:",this.cooldownEvent.delay);
         //console.log("weapon cooldown:",this.meleeCooldownEvent.delay);
           
