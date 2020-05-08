@@ -274,7 +274,7 @@ class gameScene extends Phaser.Scene {
         } 
         else if (food == this.randomDropsHandler.pepper)
         {
-            this.player.power = this.player.power + 50;
+            this.player.power = this.player.power + 100;
             food.disableBody(true, true);
         }
         else if (food == this.randomDropsHandler.blueberry)
