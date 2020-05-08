@@ -332,20 +332,23 @@ class gameScene extends Phaser.Scene {
     
     pickUpFood(player_container, food)
     {
-        if (food == this.randomDropsHandler.avocado) 
+        if(this.player.isEquipping)
         {
-            this.player.health = this.player.health + 100;
-            food.disableBody(true, true);
-        } 
-        else if (food == this.randomDropsHandler.pepper)
-        {
-            this.player.power = this.player.power + 50;
-            food.disableBody(true, true);
-        }
-        else if (food == this.randomDropsHandler.blueberry)
-        {
-            this.player.speed = this.player.speed + 50;
-            food.disableBody(true, true);
+            if (food == this.randomDropsHandler.avocado) 
+            {
+                this.player.health = this.player.health + 100;
+                food.disableBody(true, true);
+            } 
+            else if (food == this.randomDropsHandler.pepper)
+            {
+                this.player.power = this.player.power + 50;
+                food.disableBody(true, true);
+            }
+            else if (food == this.randomDropsHandler.blueberry)
+            {
+                this.player.speed = this.player.speed + 50;
+                food.disableBody(true, true);
+            }
         }
     }
     
