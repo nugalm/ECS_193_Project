@@ -191,8 +191,13 @@ class ColliderHandler
             alert("attacker.element not found")    
         }
         
+        
         var damage = 0.25 * player.power * multiplier;
         
+        if (attacker.salt == true) 
+        {
+            damage = damage * 0.33;
+        }
        alert("player power: " + player.power + "\n multiplier: " + multiplier + "\n total damage taken: " + damage);
         return damage; 
         
