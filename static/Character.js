@@ -172,6 +172,7 @@ class Character {
             this.client.socket.emit('doAnim', info);
         }
         
+        this.canMelee = false;
     } 
     
     fire() {
