@@ -42,7 +42,6 @@ class menuScene extends Phaser.Scene
         
         // Create the four different character selections
         this.addButtonSprites();
-
         this.scaleCharImages();
         this.tempSetTintforButtons();
         this.addButtonTexts();

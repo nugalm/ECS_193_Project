@@ -28,6 +28,7 @@ class Character {
         
         this.isMeleeing = false;
         this.isDashing = false;
+        this.isEquipping = false;
         this.hitCount = 1;
         
         
@@ -40,6 +41,7 @@ class Character {
         this.right = false;
         this.up = false;
         this.down = false;
+        this.equip = false;
         this.oldRotation = 0;
 
         this.canFire = true;
@@ -134,6 +136,7 @@ class Character {
         
         this.updateRotation(context);
         this.updateMovement(context);
+        this.updateEquip(context);
         this.updateHealth();
     }
     
@@ -315,8 +318,7 @@ class Character {
                     this.client.socket.emit('doAnim', info);
                 }
             }
-            
-    } //end else
+        } //end else
         
         // Multiplayer
         // Send player movement to server when state changes
@@ -347,6 +349,18 @@ class Character {
         socket.emit('movement', info);
     }
 
+    updateEquip(context)
+    {
+        if(context.cursors.equip.isDown)
+        {
+            console.log("Equipping in Character");
+            this.isEquipping = true;
+        }
+        else 
+        {
+            this.isEquipping = false;
+        }
+    }
     
     /** 
         Checks if the sprite is animating something other than the movement
