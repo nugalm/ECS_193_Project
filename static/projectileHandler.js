@@ -13,26 +13,16 @@ class ProjectileHandler
     
     createProjectile()
     {
-        this.initProjectile();
-       // var projectile = this.context.projectiles.create(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
-     //   projectile.setCollideWorldBounds(false);
-     //   projectile.body.setAllowGravity(false); 
-     //   projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);
-     //   projectile.element = this.context.player.element;
-       
-        var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation};
-        socket.emit('addProjectileServer', info);
-    }
-    
-    initProjectile()
-    {
         
         var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
         projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);
         projectile.element = this.context.player.element;
         this.context.projectiles.add(projectile);
         
+        var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation};
+        socket.emit('addProjectileServer', info);
     }
+    
     moveProjectiles()
     {
         this.context.projectiles.children.iterate(function(child) {
