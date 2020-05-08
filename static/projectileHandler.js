@@ -47,10 +47,12 @@ class ProjectileHandler
         var i;
         for (i = 0; i < 5; i++) 
         {
-            var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
+            //var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
+            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "projectile"}, "salt")
             projectile.rotation = this.context.player.sprite.rotation - ( (Math.PI / 3) + (i*(Math.PI / 12)) );
             projectile.element = this.context.player.element;
-            projectile.salt = true;
+            //projectile.salt = true;
+            //projectile.lifespan = 250;
             projectile.setDisplaySize(this.saltBulletSize, this.saltBulletSize);
             this.context.projectiles.add(projectile);
             
@@ -58,7 +60,29 @@ class ProjectileHandler
         
     }
     
-    setDeletionTimer()
+    setDeletionTimer(projectile)
+    {
+        if (projectile.salt == true)
+        {
+            this.context.time.addEvent 
+            ({
+                delay: this.saltTime,
+                callback: this.callbackFunction,
+                callbackScope: this.context,
+                loop: false
+            });
+        }
+        else if (projectile.bottle == true)
+        {
+            
+        }
+        else if(projectile.frosting == true)
+        {
+            
+        }
+    }
+    
+    callbackFunction()
     {
         
     }

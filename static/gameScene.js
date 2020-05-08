@@ -267,8 +267,6 @@ class gameScene extends Phaser.Scene {
     
     destroyBullet(bullet, container) 
     {
-        console.log("inside destroyBullet");
-     //   bullet.destroy();
         var count;
         this.projectiles.children.iterate(function(child){
             count = count + 1;
@@ -278,7 +276,6 @@ class gameScene extends Phaser.Scene {
     
     bulletHit(bullet, container)
     {
-        //alert("colliding with laher");
         if (container === this.salt.myContainer)
         {
             this.salt.takeDamage(this.colliderHandler.projectileHit(bullet, this.salt, this.player));
