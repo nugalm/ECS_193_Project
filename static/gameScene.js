@@ -101,7 +101,6 @@ class gameScene extends Phaser.Scene {
 
     
         this.drawer.drawCharacter();
-     //   this.dummies = this.physics.add.group({allowGravity: false});
         
        // dummies for testing
         this.dummies = new Dummies(this);
@@ -111,9 +110,6 @@ class gameScene extends Phaser.Scene {
         
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
-        
-
-        
         
         this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.meleeHit, null, this);
         
@@ -134,20 +130,6 @@ class gameScene extends Phaser.Scene {
         //camera
         this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
-        
-        //trying drops
-       // this.knife = new Knife({scene: this, x:200, y:1000, key:"knife_drop_image"});
-       // this.fork = new Weapon({scene: this, x:400, y:1000, key:"fork_drop_image"});
-       // this.whisk = new Weapon({scene: this, x:600, y:1000, key:"whisk_drop_image"});
-
-     
-        
-       // this.dropsGroup = this.physics.add.group();
-        
-        
-      //  this.dropsGroup.add(this.knife);
-     //   this.dropsGroup.add(this.fork);
-       // this.dropsGroup.add(this.whisk);
         
         // Fruit Respawn
         this.timedEvent = this.time.addEvent
@@ -185,11 +167,6 @@ class gameScene extends Phaser.Scene {
             loop: true
         });
         
-        
-        
-        
-        
-      //  this.hi = this.physics.add.overlap(this.dropsGroup, this.player.myContainer, this.pickUpWeapon, null, this);
         
         this.randomDropsHandler.init();
         
@@ -234,32 +211,9 @@ class gameScene extends Phaser.Scene {
     
     pickUpWeapon(player_container, weapon)
     {
-      
-        if (weapon instanceof Knife)
-        {
-            this.player.weapon = "knife";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.fork){
-            this.player.weapon = "fork";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.whisk) {
-            this.player.weapon = "whisk";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.salt_shaker){
-            this.player.gun = "salt_shaker";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.bottle){    
-            this.player.gun = "bottle";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.frosting_bag){
-            this.player.gun = "frosting_bag";
-            weapon.disableBody(true, true);
-        }
+     
+        this.player.pickUpWeapon(weapon, this);
+        weapon.disableBody(true, true);
         this.player.initCooldown();
         this.cooldownEvent.delay = this.player.cooldown;
         this.meleeCooldownEvent.delay = this.player.meleeCooldown;

@@ -288,5 +288,38 @@ class Character {
         }
     }
     
+    /*
+    *  function to set a person's weapon when picking up
+        called by collider object in gameScene as callbackfunction
+    */
+    pickUpWeapon(weapon, context) 
+    {
+        if (weapon instanceof Knife)
+        {
+            this.weapon = "knife";
+        }
+        else if (weapon == context.randomDropsHandler.fork)
+        {
+            this.weapon = "fork";
+        }
+        else if (weapon == context.randomDropsHandler.whisk) 
+        {
+            this.weapon = "whisk";
+        }
+        else if (weapon == context.randomDropsHandler.salt_shaker)
+        {
+            this.gun = "salt_shaker";
+        }
+        else if (weapon == context.randomDropsHandler.bottle)
+        {    
+            this.gun = "bottle";
+        }
+        else if (weapon == context.randomDropsHandler.frosting_bag)
+        {
+            this.gun = "frosting_bag";
+        }
+        
+    }
+    
     
 }
