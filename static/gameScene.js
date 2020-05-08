@@ -514,7 +514,6 @@ class gameScene extends Phaser.Scene {
     {
         if (this.player.canMelee == false)
         {
-            console.log("Melee cooldown: " + this.player.meleeCooldown);
             this.player.canMelee = true;
         }
     }

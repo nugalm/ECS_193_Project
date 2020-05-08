@@ -354,7 +354,6 @@ class Character {
     {
         if(context.cursors.equip.isDown)
         {
-            console.log("Equipping in Character");
             this.isEquipping = true;
         }
         else 
