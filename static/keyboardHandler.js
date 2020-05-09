@@ -33,17 +33,15 @@ class KeyboardHandler
         context.input.on('pointerdown', function(p)
         {    
             
-            if (p.leftButtonDown() && context.player.canFire == true)
+            if (p.leftButtonDown())
             {
                 context.player.fire();
                 context.projectileHandler.createProjectile();
-                context.player.canFire = false;
             }
             
-            else if (p.rightButtonDown() && context.player.canMelee == true)
+            else if (p.rightButtonDown())
             {
                 context.player.updateMelee();
-                context.player.canMelee = false;
             }
             
         }, context);

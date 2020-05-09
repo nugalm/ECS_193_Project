@@ -23,9 +23,7 @@ class loadScene extends Phaser.Scene
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
         //menu scene chars
-        this.load.image('loadingSpicy', 'static/images/spicyMouse.png');
-        this.load.image('loadingSweet', 'static/images/sweetMouse.png');
-        this.load.image('loadingSalty', 'static/images/saltyMouse.png');
+        this.load.image('loadingSpicy', 'static/images/spicyMouse.png')
         
         // trying tile map
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
@@ -50,27 +48,9 @@ class loadScene extends Phaser.Scene
         this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
                              {frameWidth: 220, frameHeight: 330 } );
         
-        //knife swipe
-        this.load.spritesheet('knife', 'static/images/temp/mouse_knife_swipe.png',
-                             {frameWidth: 242, frameHeight: 332 });
-        
-        //frosting bag squeeze 
-        this.load.spritesheet('frosting_bag', 'static/images/temp/mouse_frosting_bag_squeeze.png',
-                              {frameWidth: 256.3, frameHeight: 383});
         
         
-        //salt shaker shake
-        this.load.spritesheet('salt_shaker', 'static/images/temp/mouse_salt_shaker_shake.png',
-                              {frameWidth: 222, frameHeight: 332});
         
-        
-        //frosting bag drop
-        
-        
-        //knife drop
-        this.load.spritesheet('knife_drop', 'static/images/temp/knife_drop.png', 
-                              {frameWidth: 222, frameHeight: 332});
-        this.load.image('knife_drop_image', 'static/images/temp/knife_drop_still.png');
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
@@ -80,30 +60,6 @@ class loadScene extends Phaser.Scene
         this.load.image('red_bar', 'static/images/temp/RedBar.png');
         this.load.image('green_bar', 'static/images/temp/GreenBar.png');
         
-        //drops
-        this.load.image('fork_drop_image', 'static/images/temp/fork_drop_still.png');
-        
-        this.load.image('blueberry_drop_image', 'static/images/temp/blueberry_drop_still.png');
-        
-        this.load.image('avocado_drop_image', 'static/images/temp/avocado_drop_still.png');
-        
-        this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
-        
-        this.load.image('salt_shaker_drop_image', 'static/images/temp/salt_shaker_drop_still.png');
-        
-        this.load.image('squirter_drop_image', 'static/images/temp/squirter_drop_still.png');
-        
-        this.load.image('whisk_drop_image', 'static/images/temp/whisk_drop_still.png');
-        
-        this.load.image('frosting_bag_drop_image', 'static/images/temp/frosting_bag_still.png');
-        
-        // food
-        this.load.image('blueberry_drop_image', 'static/images/temp/blueberry_drop_still.png');
-        
-        this.load.image('avocado_drop_image', 'static/images/temp/avocado_drop_still.png');
-        
-        this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
- 
     }
     
     // Creating animations to be used in gameScene
@@ -181,35 +137,7 @@ class loadScene extends Phaser.Scene
                 
             });
         
-            this.anims.create({
-               key: 'knife_swipe',
-                frames: this.anims.generateFrameNames('knife', {start: 0, end: 10}),
-                frameRate: 20,
-                repeat: 0
-            });
-        
-            this.anims.create({
-               key: 'frosting_bag_squeeze',
-                frames: this.anims.generateFrameNames('frosting_bag', {start: 0, end: 8}),
-                frameRate: 10,
-                repeat: 0
-            });
-        
-            this.anims.create({
-               key: 'salt_shaker_shake',
-                frames: this.anims.generateFrameNames('salt_shaker', {start: 0, end: 5}),
-                frameRate: 10,
-                repeat: 0
-            });
-        
-            // drops
-            this.anims.create({
-               key: 'knife_idle',
-                frames: this.anims.generateFrameNames('knife_drop', {start: 0, end: 3}),
-                frameRate: 6,
-                repeat: -1
-            });
-        
+            
         
         
         this.input.on('pointerdown', function(p)

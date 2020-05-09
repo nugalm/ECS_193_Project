@@ -21,7 +21,9 @@
     <script src="static/gameScene.js"></script>
     <script src="static/weapon.js"></script>
     <script src="static/fork.js"></script>
+    <script src="static/healthBar.js"></script>
     <script src="static/client.js"></script>
+    <script src="static/keyboardHandler.js"></script>
 <body oncontextmenu="return false;">
   <script type="text/javascript">
       
@@ -40,23 +42,26 @@
                     debug: false
                 }
             },
+
+            parent: "user-input",
+            dom: {
+                createContainer: true
+            },
             scene: [loadScene, menuScene, armoryScene, gameScene],
             audio: {
                 disableWebAudio: true
             }
       };
       
-      
-      
-      var origin = window.location.origin;
-    /*  var socket = io.connect(origin);
+     /* var origin = window.location.origin;
+      var socket = io.connect(origin);
       var socket_id;
       socket.on('connect', function() {
           socket_id = socket.id;
           socket.emit('newPlayer');
-      });*/
+      });
       
-     // var client = new Client(socket);
+      var client = new Client(socket);*/
       
       var game = new Phaser.Game(config);
       

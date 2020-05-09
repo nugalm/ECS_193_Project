@@ -39,14 +39,6 @@ var playerSchema = new mongoose.Schema({
     render: Boolean,
     object: String,
     rotation: Number,
-    health: Number,
-    power: Number,
-    mana: Number,
-    speed: Number,
-    stamina: Number,
-    element: String,
-    gun: String,
-    weapon: String
 });
 
 // User model associated with the schema
@@ -54,7 +46,7 @@ var Player = mongoose.model("Player", playerSchema);
 
 // Routing
 app.get('/', function(request, response) {
-    response.sendFile(path.join(__dirname, 'index.html'));
+    response.sendFile(path.join(__dirname, 'kitchenScene.html')); // was index.html
 });
 
 server.listen(port, function() {
@@ -80,92 +72,48 @@ app.post("/", (request,response) => {
 var serverPlayers = {};
 // Java script object to hold an array of player related objects/sprites
 // Like projectiles and such
-var serverProj = {};
+var miscObjs = {};
 
 io.on('connection', function(socket) {
-    // Client tells server to intialize a spot for it
     socket.on('newPlayer', function() {
         serverPlayers[socket.id] = 
         {
             name: 'player',
-            position: {x: 200, y: 450},
-            health: 50,
-            power: 50,
-            mana: 50,
-            speed: 50,
-            stamina: 50,
-            element: "none",
-            gun: "none",
-            weapon: "none",
-            oldPosition: {x: 200, y: 450},
+            position: {x: 100, y: 450},
+            oldPosition: {x: 100, y: 450},
             velocity: {x: 0, y: 0},
             render: false,
             object: 'mouse_walk/mouse_walk-2.png',
             rotation: 0
         };
-        serverProj[socket.id] = [];
+        miscObjs[socket.id] = [];
     });
     
-    // Client sends character.js info onto server to store 
-    socket.on('startPlayer', function(player){
-        serverPlayers[socket.id].element = player.element;
-        //serverPlayers[socket.id].position.x = player.position.x;
-        //serverPlayers[socket.id].position.y = player.position.y;
-        serverPlayers[socket.id].name = player.name;
-        serverPlayers[socket.id].render = true;
-        
-        
-        if(player.element === "salty"){
-            serverPlayers[socket.id].health = 500;
-            serverPlayers[socket.id].power = 300;
-            serverPlayers[socket.id].mana = 70;
-            serverPlayers[socket.id].speed = 200;
-            //this.weapon = new Fork(this.element);
-            serverPlayers[socket.id].weapon = "fork";
-            serverPlayers[socket.id].gun = "salt_shaker";
-        }
-        
-       
-        else if(player.element === "sour"){
-            serverPlayers[socket.id].health = 300;
-            serverPlayers[socket.id].power = 200;
-            serverPlayers[socket.id].mana = 60;
-            serverPlayers[socket.id].speed = 500;
-            //this.weapon = new Fork(this.element);
-            serverPlayers[socket.id].weapon = "knife";
-            serverPlayers[socket.id].gun = "frosting_bag";
-        }
-        
-        else if(player.element === "spciy"){
-            serverPlayers[socket.id].health = 200;
-            serverPlayers[socket.id].power = 500;
-            serverPlayers[socket.id].mana = 60;
-            serverPlayers[socket.id].speed = 300;
-            //this.weapon = new Fork(this.element);
-            serverPlayers[socket.id].weapon = "whisk";
-            serverPlayers[socket.id].gun = "none";
-        }
-        
-        // Sweet element
-        else{
-            serverPlayers[socket.id].health = 300;
-            serverPlayers[socket.id].power = 300;
-            serverPlayers[socket.id].mana = 100;
-            serverPlayers[socket.id].speed = 300;
-            //this.weapon = new Fork(this.element);
-            serverPlayers[socket.id].weapon = "none";
-            serverPlayers[socket.id].gun = "none";
-        }
-        
-        serverPlayers[socket.id].position = player.position;
-        
-        //Give update to everyone
-        // New player adds all old players
-        // Old players add new player
-        //socket.emit('updatePlayersClient', serverPlayers);
-        //socket.broadcast.emit("updatePlayersClient", serverPlayers);
+    socket.on('startPlayer', function(){
+        serverPlayers[socket.id].render = true; 
     });
     
+    
+    socket.on('addProjectile', function(obj){
+        var added = {name: 'projectile' + obj.num, x: obj.x, y: obj.y, render: true, object: obj.obj};
+        objs[obj.id].push(added);
+    });
+    
+    /*
+   socket.on('updateProjectile', function(obj){
+       function firstProjectile(arr){
+           return (arr.name === 'projectile' + obj.num);
+       }
+        var added = {name: 'projectile' + obj.num, x: obj.x, y: obj.y, render: true, object: obj.obj};
+       if(!(typeof objs[obj.id] === 'undefined')){
+            var index = objs[obj.id].findIndex(firstProjectile);
+            objs[obj.id][index] = added;
+       }
+       else{
+           objs[obj.id] = []
+       }
+    }); 
+    */
 
     socket.on('movement', function(data) {
         
@@ -180,63 +128,18 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('moveUpdates', object);
     });
     
-    socket.on('addProjectileServer', function(obj){
-        var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
-        serverProj[socket.id].push(added);
-        
-        var info = {id: socket.id, obj: added};
-        
-        socket.broadcast.emit('addProjectileClient', info);
-    });
-    
-    /*
-    socket.on('updateProjectileServer', function(id){
-        
-            //console.log("server proj update");
-            if(!(id in serverProj)){
-                serverProj[id] = [];
-            }
-            
-            var len = serverProj[id].length;
-            for(var i = 0; i < len; i++){
-                serverProj[id][i].x += Math.cos(serverProj[id][i].rotation) * 10;
-                serverProj[id][i].y += Math.sin(serverProj[id][i].rotation) * 10;  
-            }
-        
-       
-       var info = {id: id, objs: serverProj[id]};
-       socket.broadcast.emit('updateProjectileClient', info);
-    });
-    */
-    
-    socket.on("doDamage", function (damage){
-        serverPlayers[socket.id].health -= damage;
-        
-        var info = {id: socket.id, damage: damage};
-        
-        socket.broadcast.emit("updateDamage", info);
-    })
-    
-    socket.on('doAnim', function(info){
-        socket.broadcast.emit('updateAnim', {id: socket.id, info: info});
-    });
-    
-    
     socket.on('disconnect', function() {
         //console.log('user disconnected');
         // remove this player from our players object
         delete serverPlayers[socket.id];
         // emit a message to all players to remove this player
-        socket.broadcast.emit('deleteTime', socket.id);
+        io.emit('disconnect', socket.id);
         //console.log('removed player ' + socket.id);
     });
 });
 
-
 // Send out the update state function 60 times a second
 setInterval(function() {
-    io.sockets.emit('updatePlayersClient', serverPlayers);
+  io.sockets.emit('updatePlayers', serverPlayers);
     //console.log('Server emitting to client');
 }, 1000 / 60);
-
-
