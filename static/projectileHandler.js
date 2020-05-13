@@ -55,6 +55,7 @@ class ProjectileHandler
             //projectile.lifespan = 250;
             projectile.setDisplaySize(this.saltBulletSize, this.saltBulletSize);
             this.context.projectiles.add(projectile);
+            this.context.physics.world.enable(projectile);
             
         }
         

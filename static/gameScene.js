@@ -59,6 +59,8 @@ class gameScene extends Phaser.Scene {
         this.cooldownEvent;
         this.weaponRespawnEvent;
         this.meleeCooldownEvent;
+        
+        
     }
     
     // If we ever need to load specific data from previous scene.
@@ -89,8 +91,12 @@ class gameScene extends Phaser.Scene {
         this.projectileHandler.initProjectiles();
 
         // TiledMap
-        this.map = this.add.tilemap("Real_Map");
-        this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
+       // this.map = this.add.tilemap("Real_Map");
+        //this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
+        //this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
+        
+        this.map = this.add.tilemap("new_map");
+        this.tileset = this.map.addTilesetImage("kitchen_tileset","kitchen_tileset")
         this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
         
         this.player.username = this.add.text(-20,
@@ -125,7 +131,8 @@ class gameScene extends Phaser.Scene {
         
         this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHit, null, this);
         
-        this.physics.add.collider(this.collidableLayer, this.projectiles, this.destroyBullet, null, this);
+        //this.physics.add.collider(this.collidableLayer, this.projectiles, this.destroyBullet, null, this);
+        this.physics.add.collider(this.projectiles, this.collidableLayer);
         
         //camera
         this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
@@ -192,16 +199,11 @@ class gameScene extends Phaser.Scene {
     update()
       {
         var self = this;
-       // console.log("time event loop value: ",this.timedEvent.loop);
         if (this.gameOver)
         {
             return;   
         }
         this.dummies.updateHealth();
-        //console.log("gun cooldown in milliseconds:",this.cooldownEvent.delay);
-        //console.log("weapon cooldown:",this.meleeCooldownEvent.delay);
-          
-
         this.player.update(this);
         this.projectileHandler.moveProjectiles();
 
