@@ -84,11 +84,13 @@ class Character {
     
     initContainer(context)
     {
+        /*
         var x = Phaser.Math.Between(0, 2560);
         var y = Phaser.Math.Between(0, 2560);
         
         this.myContainer = context.add.container(x,y, [this.username, this.sprite, this.healthBar.healthBar]);
-        //this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar]);
+        */
+        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar]);
         
         this.myContainer.setSize(this.HITBOX, this.HITBOX);
         

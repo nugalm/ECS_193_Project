@@ -200,14 +200,14 @@ io.on('connection', function(socket) {
         var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
         var info = {id: socket.id, obj: added};
         
-        socket.broadcast.emit('addSaltProjectileClient', info);
+        socket.broadcast.emit('addBottleProjectileClient', info);
     });
     
     socket.on('addFrostingProjectileServer', function(obj){
         var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
         var info = {id: socket.id, obj: added};
         
-        socket.broadcast.emit('addSaltProjectileClient', info);
+        socket.broadcast.emit('addFrostingProjectileClient', info);
     });
     
     /*

@@ -130,6 +130,7 @@ class SocketFunc {
             //self.physics.arcade.moveToXY(self.otherPlayers[id].myContainer.body,pos.x, pos.y, 160 , );
     }
     
+    /*
     addProjectile(self, projs) {
     
         if(!(projs.id in self.otherProjectiles)){
@@ -147,6 +148,7 @@ class SocketFunc {
         projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
         projectile.element = self.otherPlayers[projs.id].element;
     }
+    */
     
     addSaltProjectile(self, projs){
         if(!(projs.id in self.otherProjectiles)){
@@ -166,7 +168,7 @@ class SocketFunc {
         //projectile.lifespan = 250;
         projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
         self.otherProjectiles[projs.id].add(projectile);
-        this.context.physics.world.enable(projectile);
+        self.physics.world.enable(projectile);
      
     }
     
@@ -179,14 +181,11 @@ class SocketFunc {
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
         
-        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "projectile"}, "bottle");
-        //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
+        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "bottle_projectile"}, "bottle");
+        console.log("bottle proj");
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
         projectile.bottle = true;
-        //projectile.salt = true;
-        //projectile.lifespan = 250;
-        projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
         self.otherProjectiles[projs.id].add(projectile);
         this.context.physics.world.enable(projectile);
      
@@ -201,14 +200,11 @@ class SocketFunc {
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
         }
         
-        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "projectile"}, "frosting");
+        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "frosting_bag_projectile"}, "frosting");
         //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
         projectile.frosting = true;
-        //projectile.salt = true;
-        //projectile.lifespan = 250;
-        projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
         self.otherProjectiles[projs.id].add(projectile);
         this.context.physics.world.enable(projectile);
     }

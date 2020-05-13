@@ -19,13 +19,19 @@ class loadScene extends Phaser.Scene
         this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
         this.load.image('projectile', 'static/images/whiteball.png');
         this.load.image('hitbox', 'static/assets/hitbox_square.png');
-         
+        
+        this.load.image('bottle_projectile', 'static/images/projectiles/squirter_bullet.png');
+        this.load.image('frosting_bag_projectile',
+        'static/images/projectiles/frosting_bag_bullet.png');
+        
+        
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
         //menu scene chars
         this.load.image('loadingSpicy', 'static/images/spicyMouse.png');
         this.load.image('loadingSweet', 'static/images/sweetMouse.png');
         this.load.image('loadingSalty', 'static/images/saltyMouse.png');
+        this.load.image('loadingSour', 'static/images/sourMouse.png');
         
         // trying tile map
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
