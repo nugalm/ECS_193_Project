@@ -21,32 +21,32 @@ class RandomDropsHandler
         
         this.respawn_timer;
         
-        this.pepperPositionX = 400;
-        this.pepperPositionY = 1200;
+        this.pepperPositionX = 1344;
+        this.pepperPositionY = 1504;
         
-        this.blueberryPositionX = 600;
-        this.blueberryPositionY = 1200;
+        this.blueberryPositionX = 2336;
+        this.blueberryPositionY = 2048;
         
-        this.avocadoPositionX = 200; 
-        this.avocadoPositionY = 1200;
+        this.avocadoPositionX = 2176; 
+        this.avocadoPositionY = 672;
         
-        this.salt_shakerX = 200;
-        this.salt_shakerY = 1400;
+        this.salt_shakerX = 416;
+        this.salt_shakerY = 1536;
         
-        this.frosting_bagX = 600; 
-        this.frosting_bagY = 1400;
+        this.frosting_bagX = 1088; 
+        this.frosting_bagY = 2208;
         
-        this.bottleX = 400;
-        this.bottleY = 1400;
+        this.bottleX = 384;
+        this.bottleY = 2240;
         
-        this.forkX = 400;
-        this.forkY = 1000;
+        this.forkX = 2272;
+        this.forkY = 1600;
         
-        this.whiskX = 600;
-        this.whiskY = 1000;
+        this.whiskX = 1312;
+        this.whiskY = 640;
         
-        this.knifeX = 200;
-        this.knifeY = 1000;
+        this.knifeX = 1824;
+        this.knifeY = 2336;
         
         
     }
