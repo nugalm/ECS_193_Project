@@ -19,7 +19,12 @@ class loadScene extends Phaser.Scene
         this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
         this.load.image('projectile', 'static/images/whiteball.png');
         this.load.image('hitbox', 'static/assets/hitbox_square.png');
-         
+        
+        this.load.image('bottle_projectile', 'static/images/projectiles/squirter_bullet.png');
+        this.load.image('frosting_bag_projectile',
+        'static/images/projectiles/frosting_bag_bullet.png');
+        
+        
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
         //menu scene chars

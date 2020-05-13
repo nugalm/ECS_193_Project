@@ -73,7 +73,7 @@ class ProjectileHandler
         
         
             //var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
-            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "projectile"}, "bottle")
+            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "bottle_projectile"}, "bottle")
             projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);
             projectile.element = this.context.player.element;
             this.context.projectiles.add(projectile);
@@ -89,7 +89,7 @@ class ProjectileHandler
         
         
             //var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
-            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "projectile"}, "frosting")
+            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "frosting_bag_projectile"}, "frosting")
             projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);
             projectile.element = this.context.player.element;
             this.context.projectiles.add(projectile);
