@@ -38,6 +38,7 @@ class KeyboardHandler
                 context.player.fire();
                 context.projectileHandler.createProjectile();
                 context.player.canFire = false;
+                //console.log("num projectiles: ",context.projectiles.getLength());
             }
             
             else if (p.rightButtonDown() && context.player.canMelee == true)

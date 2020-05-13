@@ -46,7 +46,8 @@ class SocketFunc {
                             'kitchenScene', 'mouse_walk/mouse_walk-2.png');
                         
                         self.otherPlayers[id].initSprite(self);
-                        
+                        self.otherPlayers[id].updateHealth();
+                        self.otherPlayers[id].myContainer.data = {my_id: id};
                         
                                             
                         self.otherPlayersGroup.add(self.otherPlayers[id].myContainer);
@@ -54,6 +55,7 @@ class SocketFunc {
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
                         
                         self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
+                        
                         
                         //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].sprite, self.meleeHit, null, self);
                         
@@ -64,9 +66,10 @@ class SocketFunc {
     }
     
     moveUpdates(self, object) {
-         self.otherPlayers[object.id].myContainer.body.setVelocityX(object.player.velocity.x);
-            self.otherPlayers[object.id].myContainer.body.setVelocityY(object.player.velocity.y);
-            self.otherPlayers[object.id].sprite.setRotation(object.player.rotation);
+        /*
+        self.otherPlayers[object.id].myContainer.body.setVelocityX(object.player.velocity.x);
+        self.otherPlayers[object.id].myContainer.body.setVelocityY(object.player.velocity.y);
+        self.otherPlayers[object.id].sprite.setRotation(object.player.rotation);
             
             var id = object.id;
             var pos = object.player.position;
@@ -118,7 +121,11 @@ class SocketFunc {
                     self.otherPlayers[id].myContainer.body.setVelocityY(160);
                 }      
             }
-            
+            */
+        
+            self.otherPlayers[object.id].myContainer.x = object.player.position.x;
+            self.otherPlayers[object.id].myContainer.y = object.player.position.y;
+            self.otherPlayers[object.id].sprite.setRotation(object.player.rotation);
             
             //self.physics.arcade.moveToXY(self.otherPlayers[id].myContainer.body,pos.x, pos.y, 160 , );
     }
@@ -130,6 +137,7 @@ class SocketFunc {
                 
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
             
             /*
@@ -145,6 +153,42 @@ class SocketFunc {
         projectile.body.setAllowGravity(false); 
         projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
         projectile.element = self.otherPlayers[projs.id].element;
+    }
+    
+    addSaltProjectile(self, projs){
+        if(!(projs.id in self.otherProjectiles)){
+                self.otherProjectiles[projs.id] = self.physics.add.group();
+                
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.physics.world.enable(self.otherProjectiles[projs.id]);
+            }
+            
+            /*
+            var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
+            projectile.setCollideWorldBounds(false);
+            projectile.body.setAllowGravity(false); 
+            projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
+            projectile.element = self.otherPlayers[projs.id].element;
+            */
+        
+        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "projectile"}, "salt");
+        //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
+        projectile.rotation = projs.obj.rotation;
+        projectile.element = self.otherPlayers[projs.id].element;
+        //projectile.salt = true;
+        //projectile.lifespan = 250;
+        projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
+        self.otherProjectiles[projs.id].add(projectile);
+        this.context.physics.world.enable(projectile);
+        
+        /*
+        var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
+        projectile.setCollideWorldBounds(false);
+        projectile.body.setAllowGravity(false); 
+        projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
+        projectile.element = self.otherPlayers[projs.id].element;
+        */
     }
     
     updateAnim(self, player) {

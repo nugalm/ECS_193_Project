@@ -30,6 +30,12 @@ class loadScene extends Phaser.Scene
         // trying tile map
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
         this.load.tilemapTiledJSON('Real_Map', 'static/images/TileMap/Real_Map.json');
+        
+        // new tile map
+        this.load.image('kitchen_tileset', 'static/images/TileMap/kitchen_tileset.png');
+        this.load.tilemapTiledJSON('new_map', 'static/images/TileMap/new_map.json')
+        
+        
         this.load.image('logo', 'static/images/IntroThemeV2.png');   
 
         //fork stab

@@ -14,6 +14,7 @@
     <script src="static/SaltyCharacter.js"></script>
     <script src="static/SourCharacter.js"></script>
     <script src="static/projectileHandler.js"></script>
+    <script src="static/projectile.js"></script>
     <script src="static/drawer.js"></script>
     <script src="static/colliderHandler.js"></script>
     <script src="static/loadScene.js"></script>
@@ -30,16 +31,18 @@
     <script src="static/SocketFunc.js"></script>
     <script src="static/dummies.js"></script>
     <script src="static/randomDropsHandler.js"></script>
-<body oncontextmenu="return false;">
+<body oncontextmenu="return false;" id="screen">
   <script type="text/javascript">
       
       var config = {
           // .AUTO tells phaser to default to WEBGL, else default to canvas
             type: Phaser.AUTO,
-         // scale: {
+          //scale: {
             width: window.innerWidth,
             height: window.innerHeight,
-          //}
+          //},
+          scale: {
+          },
           // tells Phaser that our game requires the Arcade Physics system
             physics: {
                 default: 'arcade',
@@ -58,6 +61,15 @@
                 disableWebAudio: true
             }
       };
+      
+      
+      window.addEventListener("resize", () => {
+            //game.resize(window.innerWidth, window.innerHeight);
+            game.scale.resize(window.innerWidth, window.innerHeight);
+            console.log("resizing");
+        },false
+      );
+      
       
       var origin = window.location.origin;
       var socket = io.connect(origin);

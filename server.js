@@ -80,7 +80,7 @@ app.post("/", (request,response) => {
 var serverPlayers = {};
 // Java script object to hold an array of player related objects/sprites
 // Like projectiles and such
-var serverProj = {};
+//var serverProj = {};
 
 io.on('connection', function(socket) {
     // Client tells server to intialize a spot for it
@@ -103,7 +103,7 @@ io.on('connection', function(socket) {
             object: 'mouse_walk/mouse_walk-2.png',
             rotation: 0
         };
-        serverProj[socket.id] = [];
+        //serverProj[socket.id] = [];
     });
     
     // Client sends character.js info onto server to store 
@@ -182,12 +182,20 @@ io.on('connection', function(socket) {
     
     socket.on('addProjectileServer', function(obj){
         var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
-        serverProj[socket.id].push(added);
+        //serverProj[socket.id].push(added);
         
         var info = {id: socket.id, obj: added};
         
         socket.broadcast.emit('addProjectileClient', info);
     });
+    
+    socket.on('addSaltProjectileServer', function(obj){
+        var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
+        var info = {id: socket.id, obj: added};
+        
+        socket.broadcast.emit('addSaltProjectileClient', info);
+    });
+    
     
     /*
     socket.on('updateProjectileServer', function(id){

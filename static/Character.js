@@ -89,7 +89,6 @@ class Character {
         
         context.physics.world.enable(this.myContainer);
         this.myContainer.body.setAllowGravity(false);
-        
     }
     
     initCooldown()
@@ -378,6 +377,35 @@ class Character {
             this.health = 0;
             this.myContainer.destroy();
             //this.sprite.disableBody(true, true);
+        }
+        
+    }
+    
+    pickUpWeapon(weapon, context) 
+    {
+        if (weapon instanceof Knife)
+        {
+            this.weapon = "knife";
+        }
+        else if (weapon == context.randomDropsHandler.fork)
+        {
+            this.weapon = "fork";
+        }
+        else if (weapon == context.randomDropsHandler.whisk) 
+        {
+            this.weapon = "whisk";
+        }
+        else if (weapon == context.randomDropsHandler.salt_shaker)
+        {
+            this.gun = "salt_shaker";
+        }
+        else if (weapon == context.randomDropsHandler.bottle)
+        {    
+            this.gun = "bottle";
+        }
+        else if (weapon == context.randomDropsHandler.frosting_bag)
+        {
+            this.gun = "frosting_bag";
         }
         
     }

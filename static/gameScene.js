@@ -97,8 +97,10 @@ class gameScene extends Phaser.Scene {
         this.projectileHandler.initProjectiles();
 
         // TiledMap
-        this.map = this.add.tilemap("Real_Map");
-        this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
+        //this.map = this.add.tilemap("Real_Map");
+        //this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
+        this.map = this.add.tilemap("new_map");	
+        this.tileset = this.map.addTilesetImage("kitchen_tileset","kitchen_tileset");
         this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
         
         this.player.username = this.add.text(-20,
@@ -136,10 +138,11 @@ class gameScene extends Phaser.Scene {
         this.collidableLayer.setCollisionByProperty( {collides:true} );
 
         this.colliderHandler.initPlayerColliders();
-        //this.physics.world.enable(this.projectiles);
+        this.physics.world.enable(this.projectiles);
         
 
         this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
+        //this.physics.add.collider(this.projectiles, this.collidableLayer);
 
        // this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHit, null, this);
         
@@ -264,6 +267,10 @@ class gameScene extends Phaser.Scene {
             self.socketFunc.addProjectile(self, projs);     
         });
         
+        this.client.socket.on('addSaltProjectileClient', function(projs){
+            self.socketFunc.addSaltProjectile(self, projs);     
+        });
+        
         this.client.socket.on('updateDamage', function(info){
             self.otherPlayers[info.id].takeDamage(info.damage);
             self.otherPlayers[info.id].updateHealth();
@@ -307,32 +314,8 @@ class gameScene extends Phaser.Scene {
     
     pickUpWeapon(player_container, weapon)
     {
-      
-        if (weapon instanceof Knife)
-        {
-            this.player.weapon = "knife";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.fork){
-            this.player.weapon = "fork";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.whisk) {
-            this.player.weapon = "whisk";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.salt_shaker){
-            this.player.gun = "salt_shaker";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.bottle){    
-            this.player.gun = "bottle";
-            weapon.disableBody(true, true);
-        }
-        else if (weapon == this.randomDropsHandler.frosting_bag){
-            this.player.gun = "frosting_bag";
-            weapon.disableBody(true, true);
-        }
+        this.player.pickUpWeapon(weapon, this);	
+        weapon.disableBody(true, true);
         this.player.initCooldown();
         this.cooldownEvent.delay = this.player.cooldown;
         this.meleeCooldownEvent.delay = this.player.meleeCooldown;
@@ -347,7 +330,7 @@ class gameScene extends Phaser.Scene {
         } 
         else if (food == this.randomDropsHandler.pepper)
         {
-            this.player.power = this.player.power + 50;
+            this.player.power = this.player.power + 100;
             food.disableBody(true, true);
         }
         else if (food == this.randomDropsHandler.blueberry)
@@ -387,11 +370,9 @@ class gameScene extends Phaser.Scene {
 
     otherMeleeHitDummy(otherPlayerContainer, container)
     {
-        for(var id in this.otherPlayers){
-            if(this.otherPlayers[id].myContainer === otherPlayerContainer){
-                var player = this.otherPlayers[id];
-            }
-        }
+        var id = otherPlayerContainer.data.my_id;
+        
+        var player = this.otherPlayers[id];
         
         if(player == null){
             console.log("Not found");
@@ -424,12 +405,7 @@ class gameScene extends Phaser.Scene {
     
     meleeHitPlayer(otherPlayerContainer, player)
     {
-        for(var id in this.otherPlayers){
-            if(!(this.otherPlayers[id].myContainer === otherPlayerContainer)){
-                continue;
-            }
-            
-            console.log("found container");
+            var id = otherPlayerContainer.data.my_id;
                 
             if(this.otherPlayers[id].isMeleeing && this.otherPlayers[id].hitCount == 1) {
                 var damageAmount = this.colliderHandler.meleeHit(this.otherPlayers[id], this.player);
@@ -440,7 +416,6 @@ class gameScene extends Phaser.Scene {
                 
                 this.otherPlayers[id].hitCount = 0;
             }
-        }
         
     }
     
