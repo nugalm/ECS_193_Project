@@ -39,6 +39,9 @@ class Character {
         
         this.cooldown;
         this.meleeCooldown;
+        
+        this.pepperEvent;
+        this.pepperTime = 10000;
 
 	}
 
@@ -325,5 +328,22 @@ class Character {
         
     }
     
+    pepper_time(context)
+    {
+        this.pepperEvent = context.time.addEvent 
+        ({
+            delay: this.pepperTime,
+            callback: this.noMorePepper,
+            callbackScope: this,
+            loop: false
+            
+        });
+    }
+         
+    noMorePepper()
+    {
+        this.power = this.power - 100;
+        alert("power after pepper subtraction: "+ this.power)
+    }
     
 }
