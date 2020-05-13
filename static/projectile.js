@@ -31,7 +31,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite
         }
         else if (bullet_type == "frosting")
         {
-            
+
         }
     }
     

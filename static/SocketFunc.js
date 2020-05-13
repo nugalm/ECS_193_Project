@@ -138,15 +138,8 @@ class SocketFunc {
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
-            }
+        }
             
-            /*
-            var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
-            projectile.setCollideWorldBounds(false);
-            projectile.body.setAllowGravity(false); 
-            projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
-            projectile.element = self.otherPlayers[projs.id].element;
-            */
         
         var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
         projectile.setCollideWorldBounds(false);
@@ -163,33 +156,64 @@ class SocketFunc {
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
-            
-            /*
-            var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
-            projectile.setCollideWorldBounds(false);
-            projectile.body.setAllowGravity(false); 
-            projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
-            projectile.element = self.otherPlayers[projs.id].element;
-            */
         
         var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "projectile"}, "salt");
         //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
+        projectile.salt = true;
         //projectile.salt = true;
         //projectile.lifespan = 250;
         projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
         self.otherProjectiles[projs.id].add(projectile);
         this.context.physics.world.enable(projectile);
-        
-        /*
-        var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
-        projectile.setCollideWorldBounds(false);
-        projectile.body.setAllowGravity(false); 
-        projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
-        projectile.element = self.otherPlayers[projs.id].element;
-        */
+     
     }
+    
+    addBottleProjectile(self, projs){
+        if(!(projs.id in self.otherProjectiles)){
+                self.otherProjectiles[projs.id] = self.physics.add.group();
+                
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.physics.world.enable(self.otherProjectiles[projs.id]);
+            }
+        
+        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "projectile"}, "bottle");
+        //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
+        projectile.rotation = projs.obj.rotation;
+        projectile.element = self.otherPlayers[projs.id].element;
+        projectile.bottle = true;
+        //projectile.salt = true;
+        //projectile.lifespan = 250;
+        projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
+        self.otherProjectiles[projs.id].add(projectile);
+        this.context.physics.world.enable(projectile);
+     
+    }
+    
+    addFrostingProjectile(self, projs){
+        if(!(projs.id in self.otherProjectiles)){
+                self.otherProjectiles[projs.id] = self.physics.add.group();
+                
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.physics.world.enable(self.otherProjectiles[projs.id]);
+        }
+        
+        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "projectile"}, "frosting");
+        //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
+        projectile.rotation = projs.obj.rotation;
+        projectile.element = self.otherPlayers[projs.id].element;
+        projectile.frosting = true;
+        //projectile.salt = true;
+        //projectile.lifespan = 250;
+        projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
+        self.otherProjectiles[projs.id].add(projectile);
+        this.context.physics.world.enable(projectile);
+    }
+    
+    
     
     updateAnim(self, player) {
         self.otherPlayers[player.id].isMeleeing = player.info.melee;

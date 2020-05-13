@@ -196,6 +196,19 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('addSaltProjectileClient', info);
     });
     
+    socket.on('addBottleProjectileServer', function(obj){
+        var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
+        var info = {id: socket.id, obj: added};
+        
+        socket.broadcast.emit('addSaltProjectileClient', info);
+    });
+    
+    socket.on('addFrostingProjectileServer', function(obj){
+        var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
+        var info = {id: socket.id, obj: added};
+        
+        socket.broadcast.emit('addSaltProjectileClient', info);
+    });
     
     /*
     socket.on('updateProjectileServer', function(id){

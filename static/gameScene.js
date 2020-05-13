@@ -271,6 +271,16 @@ class gameScene extends Phaser.Scene {
             self.socketFunc.addSaltProjectile(self, projs);     
         });
         
+        
+        this.client.socket.on('addBottleProjectileClient', function(projs){
+            self.socketFunc.addBottleProjectile(self, projs);     
+        });
+        
+        
+        this.client.socket.on('addFrostingProjectileClient', function(projs){
+            self.socketFunc.addFrostingProjectile(self, projs);     
+        });
+        
         this.client.socket.on('updateDamage', function(info){
             self.otherPlayers[info.id].takeDamage(info.damage);
             self.otherPlayers[info.id].updateHealth();
@@ -331,6 +341,8 @@ class gameScene extends Phaser.Scene {
         else if (food == this.randomDropsHandler.pepper)
         {
             this.player.power = this.player.power + 100;
+            alert("power after pickup: "+this.player.power)	
+            this.player.pepper_time(this);
             food.disableBody(true, true);
         }
         else if (food == this.randomDropsHandler.blueberry)
