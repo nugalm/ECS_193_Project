@@ -15,11 +15,12 @@ class menuScene extends Phaser.Scene
         this.buttonTextOffsetY = 140;
         
         this.saltyButtonTint = 0xffffff;
-        this.sourButtonTint = 0x05DE49;
+        this.sourButtonTint = 0xffffff;
         this.sweetButtonTint = 0xffffff;
         
         this.promptPositionX = (config.width / 4);
-        this.promptPositionY = (config.height / 2);
+        this.promptPositionY = (config.height / 2.5);
+        this.promptComplete = false;
     }
     
     init(data)
@@ -43,32 +44,22 @@ class menuScene extends Phaser.Scene
         // Create the four different character selections
         this.addButtonSprites();
         this.scaleCharImages();
-        this.tempSetTintforButtons();
         this.addButtonTexts();
         this.turnButtonsOn();
         this.userPrompt();
         
-
     }
     
     addButtonSprites()
     {
-        
-        
         this.saltyButton = this.add.sprite(this.buttonPositionX, this.buttonPositionY, 'loadingSalty');
-     
+    
         this.spicyButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset, this.buttonPositionY, 'loadingSpicy');
 
-        this.sourButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 2, this.buttonPositionY, 'loadingSpicy');
+        this.sourButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 2, this.buttonPositionY, 'loadingSour');
         
         this.sweetButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 3, this.buttonPositionY, 'loadingSweet');
     }
-    
-    tempSetTintforButtons()
-    {
-        this.sourButton.setTint(this.sourButtonTint);
-    }
-    
     
     scaleCharImages()
     {
@@ -95,7 +86,9 @@ class menuScene extends Phaser.Scene
     }
 
     turnButtonsOn()
-    {
+    {       
+        //this.promptComplete = complete;
+
         //salty
         this.saltyButton.setInteractive();
         this.saltyButton.on('pointerover', function()
@@ -109,8 +102,9 @@ class menuScene extends Phaser.Scene
         }, this);
         this.saltyButton.on('pointerdown', function(p) 
         {
-            if (p.leftButtonDown()){           
-               // alert('everything tastes better with salt');
+            console.log(this.promptComplete);
+            if (p.leftButtonDown()){
+                // alert('everything tastes better with salt');
                 this.scene.start('armoryScene', { player: new SaltyCharacter(), socket: this.socket});
             }
         }, this);
@@ -173,10 +167,20 @@ class menuScene extends Phaser.Scene
         }, this);   
     }
 
+    promptCheck(value)
+    {
+        this.promptComplete = value;
+    }
+
     userPrompt()
     {
-        var text = this.add.text(this.promptPositionX + 125, 
-            this.promptPositionY + 220, 
+        let x = this.promptPositionX;
+        let y = this.promptPositionY;
+        let complete = this.promptComplete;
+
+        //console.log("User Prompt: ", complete);
+
+        var text = this.add.text(x, y + 200, 
             'Please enter your name', 
             { color: 'white', fontSize: '24px '});
 
@@ -201,8 +205,16 @@ class menuScene extends Phaser.Scene
                     //  Hide the login element
                     this.setVisible(false);
     
+                    // Prompt Completion flag
+                    this.promptCheck(true);
+                    console.log("Prompt Complete");
+
                     //  Populate the text with whatever they typed in
+                    text.setX(x + 125); 
+                    text.setY(x + 230);
                     text.setText('Welcome ' + username.value);
+                    
+
                     this.username = username.value;
                     sessionStorage.setItem('username', this.username);
                 }

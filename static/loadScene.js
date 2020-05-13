@@ -26,6 +26,7 @@ class loadScene extends Phaser.Scene
         this.load.image('loadingSpicy', 'static/images/spicyMouse.png');
         this.load.image('loadingSweet', 'static/images/sweetMouse.png');
         this.load.image('loadingSalty', 'static/images/saltyMouse.png');
+        this.load.image('loadingSour', 'static/images/sourMouse.png');
         
         // trying tile map
         this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
