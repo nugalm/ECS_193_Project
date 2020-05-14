@@ -325,11 +325,14 @@ class gameScene extends Phaser.Scene {
     
     pickUpWeapon(player_container, weapon)
     {
-        this.player.pickUpWeapon(weapon, this);	
-        weapon.disableBody(true, true);
-        this.player.initCooldown();
-        this.cooldownEvent.delay = this.player.cooldown;
-        this.meleeCooldownEvent.delay = this.player.meleeCooldown;
+        if(this.player.isEquipping)
+        {
+            this.player.pickUpWeapon(weapon, this);	
+            weapon.disableBody(true, true);
+            this.player.initCooldown();
+            this.cooldownEvent.delay = this.player.cooldown;
+            this.meleeCooldownEvent.delay = this.player.meleeCooldown;
+        }
     }
     
     pickUpFood(player_container, food)

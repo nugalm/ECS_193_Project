@@ -18,6 +18,10 @@ class KeyboardHandler
             
             //dash
             'space': Phaser.Input.Keyboard.KeyCodes.space,
+
+            //equip
+            'equip': Phaser.Input.Keyboard.KeyCodes.F
+
         });
     }
     
