@@ -156,30 +156,30 @@ class armoryScene extends Phaser.Scene {
 				this.blocks[curIndex].setTexture('block_0');
 				this.layer1Container.visible = false;
 				if (blockData[curIndex] == 'block_1_1') {
-					this.player.weapon1 = 'fork';
+					this.player.weapon = 'fork';
 					this.player.power = this.player.power - 100;
 					this.text3.text = 'Power: ' + this.player.power;
 				} else if (blockData[curIndex] == 'block_1_2') {
-					this.player.weapon1 = 'whisk';
+					this.player.weapon = 'whisk';
 					this.player.speed = this.player.speed - 100;
 					this.text2.text = 'Speed: ' + this.player.speed;
 				} else if (blockData[curIndex] == 'block_1_3') {
-					this.player.weapon1 = 'knife';
+					this.player.weapon = 'knife';
 					this.player.health = this.player.health - 100;
 					this.text1.text = 'Health: ' + this.player.health;
 				} else if (blockData[curIndex] == 'block_1_4' || blockData[curIndex] == 'block_1_4_2') {
-					this.player.weapon1 = 'bottlesquirter1';
+					this.player.gun = 'bottle';
 					if ( blockData[curIndex] == 'block_1_4_2' ) {
-						this.player.weapon1 = 'bottlesquirter2';
+						this.player.gun = 'bottle';
 					}
 					this.player.power = this.player.power - 200;
 					this.text3.text = 'Power: ' + this.player.power;
 				} else if (blockData[curIndex] == 'block_1_5') {
-					this.player.weapon1 = 'saltshaker';
+					this.player.gun = 'salt_shaker';
 					this.player.health = this.player.health - 200;
 					this.text1.text = 'Health: ' + this.player.health;
 				} else if (blockData[curIndex] == 'block_1_6') {
-					this.player.weapon1 = 'frostingbag';
+					this.player.gun = 'frosting_bag';
 					this.player.speed = this.player.speed - 200;
 					this.text2.text = 'Speed: ' + this.player.speed;
 				}
@@ -189,30 +189,30 @@ class armoryScene extends Phaser.Scene {
 				this.blocks[curIndex].setTexture('block_0');
 				this.layer1Container.visible = false;
 				if (blockData[curIndex] == 'block_1_1') {
-					this.player.weapon2 = 'fork';
+					this.player.weapon = 'fork';
 					this.player.power = this.player.power - 100;
 					this.text3.text = 'Power: ' + this.player.power;
 				} else if (blockData[curIndex] == 'block_1_2') {
-					this.player.weapon2 = 'whisk';
+					this.player.weapon = 'whisk';
 					this.player.speed = this.player.speed - 100;
 					this.text2.text = 'Speed: ' + this.player.speed;
 				} else if (blockData[curIndex] == 'block_1_3') {
-					this.player.weapon2 = 'knife';
+					this.player.weapon = 'knife';
 					this.player.health = this.player.health - 100;
 					this.text1.text = 'Health: ' + this.player.health;
 				} else if (blockData[curIndex] == 'block_1_4' || blockData[curIndex] == 'block_1_4_2') {
-					this.player.weapon2 = 'bottlesquirter1';
+					this.player.gun = 'bottle';
 					if ( blockData[curIndex] == 'block_1_4_2' ) {
-						this.player.weapon2 = 'bottlesquirter2';
+						this.player.gun = 'bottle';
 					}
 					this.player.power = this.player.power - 200;
 					this.text3.text = 'Power: ' + this.player.power;
 				} else if (blockData[curIndex] == 'block_1_5') {
-					this.player.weapon2 = 'saltshaker';
+					this.player.gun = 'salt_shaker';
 					this.player.health = this.player.health - 200;
 					this.text1.text = 'Health: ' + this.player.health;
 				} else if (blockData[curIndex] == 'block_1_6') {
-					this.player.weapon2 = 'frostingbag';
+					this.player.gun = 'frosting_bag';
 					this.player.speed = this.player.speed - 200;
 					this.text2.text = 'Speed: ' + this.player.speed;
 				}
