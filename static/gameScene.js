@@ -70,7 +70,7 @@ class gameScene extends Phaser.Scene {
     {
         // From user selection in menu scene
         this.player = data.player;
-        this.player.printStat();
+        //this.player.printStat();
 
         this.username = data.username;
        
@@ -86,6 +86,7 @@ class gameScene extends Phaser.Scene {
             position: {x: this.player.startPositionX, y: this.player.startPositionY}
         };
         
+        this.sound.play('game_audio');
         
         this.client.socket.emit('startPlayer', info);   
     }
@@ -341,7 +342,7 @@ class gameScene extends Phaser.Scene {
         else if (food == this.randomDropsHandler.pepper)
         {
             this.player.power = this.player.power + 100;
-            alert("power after pickup: "+this.player.power)	
+            //alert("power after pickup: " + this.player.power)	
             this.player.pepper_time(this);
             food.disableBody(true, true);
         }

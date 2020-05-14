@@ -433,7 +433,7 @@ class Character {
     noMorePepper()	
     {	
         this.power = this.power - 100;	
-        alert("power after pepper subtraction: "+ this.power)	
+        //alert("power after pepper subtraction: "+ this.power)	
     }
     
     

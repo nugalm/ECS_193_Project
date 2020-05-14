@@ -96,7 +96,7 @@ class ColliderHandler
         
         else 
         {
-            alert("attacker.element not found")    
+            //alert("attacker.element not found")    
         }
         
         var damage = 0.25 * attacker.power * multiplier;
@@ -188,7 +188,7 @@ class ColliderHandler
         
         else 
         {
-            alert("attacker.element not found")    
+            //alert("attacker.element not found")    
         }
         
         

@@ -42,7 +42,7 @@ class loadScene extends Phaser.Scene
         this.load.tilemapTiledJSON('new_map', 'static/images/TileMap/new_map.json')
         
         
-        this.load.image('logo', 'static/images/IntroThemeV2.png');   
+        this.load.image('logo', 'static/images/loadingSceneArtwithlogo.png');   
 
         //fork stab
         this.load.spritesheet('fork', 'static/images/temp/mouse_fork_stab.png',
