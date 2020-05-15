@@ -185,12 +185,36 @@ class ProjectileHandler
     }
     
     moveProjectiles()
-    {
+    {   
         this.context.projectiles.children.iterate(function(child) {
-             child.x += Math.cos(child.rotation) * 10;
-            child.y += Math.sin(child.rotation) * 10;  
+            if (child == undefined) 
+            {
+                
+            }
+            else {
+                var x = child.x;
+                var y = child.y;
+                if ( (this.context.drawer.tileCollidesAtPosition(x, y) == true)) 
+                {
+                    child.destroy(); 
+                    
+                }
+                else
+                {
+                    this.moveProjectile(child);
+                }
+            }
            
-        });
+        }, this);
+    }
+    
+    moveProjectile(projectile)
+    {
+        //if (projectile == null) {
+        //    return;
+      //  }
+        projectile.x += Math.cos(projectile.rotation) * 10;
+        projectile.y += Math.sin(projectile.rotation) * 10;
     }
     
     

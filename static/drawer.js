@@ -82,20 +82,43 @@ class Drawer
         
     }
     
+    /**
+        checks if tile at given world coordinates @x, @y has collides property
+    
+    */
+    tileCollidesAtPosition(x, y) 
+    {
+       
+        var tile = this.context.collidableLayer.getTileAtWorldXY(x, y, true);
+        if (tile == null) 
+        {
+            return true;
+        }
+        
+        if (tile.collides == true) 
+        {
+                return true;
+            
+        }
+        else if (tile.collides == false) 
+        {
+                return false;
+        }
+    }
     /** 
         checks if tile is a viable tile by checking if it has a collides property
     **/
     isViableTile(tile)
     {
         if (tile.collides == true) 
-            {
+        {
                 return false;
             
-            }
-            else if (tile.collides == false) 
-            {
+        }
+        else if (tile.collides == false) 
+        {
                 return true;
-            }
+        }
     }
 
     
