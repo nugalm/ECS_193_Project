@@ -57,7 +57,8 @@ class ProjectileHandler
         {
             //var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
             var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "projectile"}, "salt")
-            projectile.rotation = this.context.player.sprite.rotation - ( (Math.PI / 3) + (i*(Math.PI / 12)) );
+            //projectile.rotation = this.context.player.sprite.rotation - ( (Math.PI / 3) + (i*(Math.PI / 12)) );
+            projectile.rotation = this.context.player.sprite.rotation - this.randomSaltProjectileRotation();
             projectile.element = this.context.player.element;
             projectile.setDisplaySize(this.saltBulletSize, this.saltBulletSize);
             this.context.projectiles.add(projectile);
@@ -66,6 +67,12 @@ class ProjectileHandler
             //this.context.physics.world.enable(projectile);
         }
         
+    }
+    
+    randomSaltProjectileRotation()
+    {
+        var rnd = Phaser.Math.RND;
+        return rnd.realInRange(Math.PI/3, (2*Math.PI)/ 3);
     }
     
     initBottleProjectiles()
