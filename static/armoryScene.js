@@ -7,10 +7,9 @@ class armoryScene extends Phaser.Scene {
 	}
 	init(data) {
 		let username = sessionStorage.getItem('username');
-		this.username = username;
+		this.username = username || [];
 		this.player = data.player || [];
 		this.socket = data.socket || [];
-		this.username = data.username || [];
 	}
 	preload() {
 		// loading assets
@@ -59,7 +58,8 @@ class armoryScene extends Phaser.Scene {
 		var mapY = (height - mapWidth * 4) / 2;
 		var block1 = this.block1();
 
-		this.music = this.sound.add('m',{loop:1});
+		this.music = this.sound.add('m', {loop:1});
+		this.music.setVolume(0.1); 
 		this.music.play();
 
 		// creat map array
@@ -116,6 +116,19 @@ class armoryScene extends Phaser.Scene {
 			this.diceFun();
 		});
 
+		// skip button
+		this.skipScene = 
+		this.add.image(200, 200, 'layer2_btn2').setScale(ratio).setInteractive();
+		this.skipScene.on('pointerdown', (pointer) => {
+			//temporary scene start
+			this.music.pause();
+			this.scene.start('gameScene', 
+								{ 
+								player: this.player,
+								socket: this.socket, 
+								username: this.username
+							});
+		}, this);
 
 		// layer
 		this.layer1Container = this.add.container();
@@ -243,6 +256,7 @@ class armoryScene extends Phaser.Scene {
 				username: this.username
 			}); 
 		});
+
 		// text
 		this.text1 = this.add.text(width - 350 * ratio, 15, 'Health: ' + this.player.health, {
 			fontSize: '16px',
@@ -257,11 +271,12 @@ class armoryScene extends Phaser.Scene {
 			fill: 'white'
 		});
 
-		// enter
+		// skip button
 		this.enter = this.add.image(1680 * ratio, height - 20 * ratio - 310 * ratio, 'enter').setOrigin(0).setScale(ratio).setInteractive();
 		this.enter.visible = false;
 		this.enter.on('pointerdown', (pointer) => {
 			this.music.pause();
+			console.log(this.username);
 			this.scene.start('gameScene', {
 				player: this.player, 
 				socket: this.socket,

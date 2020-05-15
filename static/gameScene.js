@@ -73,6 +73,7 @@ class gameScene extends Phaser.Scene {
         //this.player.printStat();
 
         this.username = data.username;
+        console.log("Username in gamescene: ", this.username);
        
     }
     
@@ -86,7 +87,8 @@ class gameScene extends Phaser.Scene {
             position: {x: this.player.startPositionX, y: this.player.startPositionY}
         };
         
-        this.sound.play('game_audio');
+        this.sound.setVolume(0.1);
+        this.sound.play('game_audio', {loop: 1});
         
         this.client.socket.emit('startPlayer', info);   
     }
