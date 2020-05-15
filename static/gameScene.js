@@ -429,8 +429,8 @@ class gameScene extends Phaser.Scene {
                 var method;
                 
                 if(damageAmount >= this.player.health){
-                    killer = this.otherPlayers[bullet.id].username;
-                    method = this.otherPlayers[bullet.id].weapon;
+                    killer = this.otherPlayers[id].username;
+                    method = this.otherPlayers[id].weapon;
                 }
                 
                 this.player.takeDamage(damageAmount, killer, method);
