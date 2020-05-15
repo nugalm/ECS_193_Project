@@ -20,11 +20,18 @@ class loadScene extends Phaser.Scene
         this.load.image('projectile', 'static/images/whiteball.png');
         this.load.image('hitbox', 'static/assets/hitbox_square.png');
         
+        //projectiles
         this.load.image('bottle_projectile', 'static/images/projectiles/squirter_bullet.png');
         this.load.image('frosting_bag_projectile',
         'static/images/projectiles/frosting_bag_bullet.png');
+        this.load.image('salt_projectile_1','static/images/projectiles/salt_shaker_bullet_1.png');
+         this.load.image('salt_projectile_2','static/images/projectiles/salt_shaker_bullet_2.png');
+         this.load.image('salt_projectile_3','static/images/projectiles/salt_shaker_bullet_3.png');
         
+         this.load.image('salt_projectile_4','static/images/projectiles/salt_shaker_bullet_4.png');
+        this.load.image('salt_projectile_5','static/images/projectiles/salt_shaker_bullet_5.png');
         
+        //atlas
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
         //menu scene chars
