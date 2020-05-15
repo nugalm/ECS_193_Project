@@ -98,6 +98,11 @@ class gameScene extends Phaser.Scene {
         this.map = this.add.tilemap("new_map");
         this.tileset = this.map.addTilesetImage("kitchen_tileset","kitchen_tileset")
         this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
+        this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
+        this.hidableLayer.depth = 1000;
+        this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
+        this.collidableLayer.setCollisionByProperty( {collides:true} );
+        
         
         this.player.username = this.add.text(-20,
             -50,
@@ -122,9 +127,9 @@ class gameScene extends Phaser.Scene {
         
         this.keyboardHandler.initEvents(this);
 
-        this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
+       /* this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
-        this.collidableLayer.setCollisionByProperty( {collides:true} );
+        this.collidableLayer.setCollisionByProperty( {collides:true} );*/
 
         this.colliderHandler.initPlayerColliders();
         this.physics.world.enable(this.projectiles);
@@ -191,9 +196,15 @@ class gameScene extends Phaser.Scene {
     faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         });*/
         
-     
+       // var tile = this.collidableLayer.getTileAtWorldXY(200, 450, //true);
+       // if (tile.collides == false) 
+       // {
+        //    console.log("tile belongs to layer: ",tile.layer.name);
+        //    console.log("tile.collides: ", tile.collides);
+      //  }
         
-          
+       // console.log("game width: ",this.width);
+       // console.log("game width: ", this.height);
     } 
     
     update()
