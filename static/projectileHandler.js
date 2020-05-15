@@ -71,6 +71,7 @@ class ProjectileHandler
             this.context.projectiles.add(projectile);
             
             projectile.salt = true;	
+            projectile.id = this.context.client.socket.id;
             this.setDeletionTimer(projectile);	
             
             //this.context.physics.world.enable(projectile);
@@ -127,6 +128,7 @@ class ProjectileHandler
             projectile.element = this.context.player.element;
             this.context.projectiles.add(projectile);
             projectile.bottle = true;
+            projectile.id = this.context.client.socket.id;
             this.setDeletionTimer(projectile);
             //this.context.physics.world.enable(projectile);
         
@@ -144,6 +146,7 @@ class ProjectileHandler
             projectile.element = this.context.player.element;
             this.context.projectiles.add(projectile);
             projectile.frosting = true;
+            projectile.id = this.context.client.socket.id;
             this.setDeletionTimer(projectile);
             //this.context.physics.world.enable(projectile);
         
@@ -223,9 +226,23 @@ class ProjectileHandler
             }
             
             this.context.otherProjectiles[id].children.iterate(function(child) {
-                    child.x += Math.cos(child.rotation) * 10;
-                    child.y += Math.sin(child.rotation) * 10;  
-            });
+                    if(child == undefined){
+                        return;
+                    }
+                    
+                    var x = child.x;
+                    var y = child.y;
+                
+                    if ( (this.context.drawer.tileCollidesAtPosition(x, y) == true)) 
+                    {
+                        child.destroy(); 
+                    
+                    }
+                    else
+                    {
+                        this.moveProjectile(child);
+                    }
+            }, this);
             
         }
     }

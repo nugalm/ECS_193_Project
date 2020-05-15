@@ -35,7 +35,10 @@ class KeyboardHandler
     initProjectileEvent(context)
     {
         context.input.on('pointerdown', function(p)
-        {    
+        {   
+            if(context.player.health <= 0){
+                return;
+            }
             
             if (p.leftButtonDown() && context.player.canFire == true)
             {

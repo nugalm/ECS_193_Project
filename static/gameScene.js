@@ -425,8 +425,15 @@ class gameScene extends Phaser.Scene {
                 
             if(this.otherPlayers[id].isMeleeing && this.otherPlayers[id].hitCount == 1) {
                 var damageAmount = this.colliderHandler.meleeHit(this.otherPlayers[id], this.player);
-        
-                this.player.takeDamage(damageAmount);
+                var killer;
+                var method;
+                
+                if(damageAmount >= this.player.health){
+                    killer = this.otherPlayers[bullet.id].username;
+                    method = this.otherPlayers[bullet.id].weapon;
+                }
+                
+                this.player.takeDamage(damageAmount, killer, method);
 
                 this.client.socket.emit("doDamage", damageAmount);
                 
@@ -464,7 +471,23 @@ class gameScene extends Phaser.Scene {
         
         var damageAmount = this.colliderHandler.projectileHit(bullet, this.player, this.player);
         
-        this.player.takeDamage(damageAmount);
+       
+        if(damageAmount >= this.player.health){
+            var killer = this.otherPlayers[bullet.id].username;
+            var method;
+            
+            if(bullet.salt){
+                method = "salt";
+            }
+            else if(bullet.bottle){
+                method = "bottle";
+            }
+            else if (bullet.frosting){
+                method = "frosting"
+            }
+        }
+        
+        this.player.takeDamage(damageAmount, killer, method);
         
         this.client.socket.emit("doDamage", damageAmount);
         

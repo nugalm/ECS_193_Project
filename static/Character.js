@@ -388,7 +388,7 @@ class Character {
         return animating;
     }
     
-    takeDamage(damageAmount) 
+    takeDamage(damageAmount, killer, method) 
     {
         
       //  alert("health before hit: " + this.health);
@@ -397,6 +397,9 @@ class Character {
         if (this.health <= 0) 
         {
             this.health = 0;
+            if(!(killer == null)){
+                alert(killer._text + " killed you via " + method);
+            }
             this.myContainer.destroy();
             //this.sprite.disableBody(true, true);
         }

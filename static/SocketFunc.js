@@ -16,7 +16,6 @@ class SocketFunc {
                 }
                    
                 if(!(id in self.otherPlayers)){
-                    console.log("Adding new player");
                     
                     if(server[id].element === "salty"){
                         self.otherPlayers[id] = new SaltyCharacter();
@@ -164,6 +163,7 @@ class SocketFunc {
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
         projectile.salt = true;
+        projectile.id = projs.id;
         //projectile.salt = true;
         //projectile.lifespan = 250;
         projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
@@ -182,13 +182,11 @@ class SocketFunc {
             }
         
         var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "bottle_projectile"}, "bottle");
-        console.log("bottle proj");
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
         projectile.bottle = true;
+        projectile.id = projs.id;
         self.otherProjectiles[projs.id].add(projectile);
-        this.context.physics.world.enable(projectile);
-     
     }
     
     addFrostingProjectile(self, projs){
@@ -205,8 +203,9 @@ class SocketFunc {
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
         projectile.frosting = true;
+        projectile.id = projs.id;
         self.otherProjectiles[projs.id].add(projectile);
-        this.context.physics.world.enable(projectile);
+        self.physics.world.enable(projectile);
     }
     
     
