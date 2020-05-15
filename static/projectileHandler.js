@@ -55,16 +55,13 @@ class ProjectileHandler
         var i;
         for (i = 0; i < 5; i++) 
         {
-            //var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
             var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: this.randomSaltProjectileImage()}, "salt")
-            //projectile.rotation = this.context.player.sprite.rotation - ( (Math.PI / 3) + (i*(Math.PI / 12)) );
             projectile.rotation = this.context.player.sprite.rotation - this.randomSaltProjectileRotation();
             projectile.element = this.context.player.element;
             projectile.setDisplaySize(this.saltBulletSize, this.saltBulletSize);
             this.context.projectiles.add(projectile);
             projectile.salt = true;
             this.setDeletionTimer(projectile);
-            //this.context.physics.world.enable(projectile);
         }
         
     }
@@ -180,7 +177,6 @@ class ProjectileHandler
     
     callbackFunction(projectile)
     {
-        //alert("destroying projectile");
         projectile.destroy();
     }
     
@@ -210,9 +206,6 @@ class ProjectileHandler
     
     moveProjectile(projectile)
     {
-        //if (projectile == null) {
-        //    return;
-      //  }
         projectile.x += Math.cos(projectile.rotation) * 10;
         projectile.y += Math.sin(projectile.rotation) * 10;
     }
