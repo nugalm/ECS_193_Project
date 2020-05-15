@@ -62,8 +62,8 @@ class ProjectileHandler
         for (i = 0; i < 5; i++) 
         {
             //var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
-            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "projectile"}, "salt")
-            projectile.rotation = this.context.player.sprite.rotation - ( (Math.PI / 3) + (i*(Math.PI / 12)) );
+            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: this.randomSaltProjectileImage()}, "salt")	
+            projectile.rotation = this.context.player.sprite.rotation - this.randomSaltProjectileRotation();
             projectile.element = this.context.player.element;
             //projectile.salt = true;
             //projectile.lifespan = 250;
@@ -78,6 +78,42 @@ class ProjectileHandler
             var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation, element: this.context.player.element};
             socket.emit('addSaltProjectileServer', info);
         }
+        
+    }
+    
+    randomSaltProjectileRotation()
+    {
+        var rnd = Phaser.Math.RND;
+        return rnd.realInRange(Math.PI/3, (2*Math.PI)/ 3);
+    }
+    
+    randomSaltProjectileImage()
+    {
+        var randomInt = Phaser.Math.RND.between(1, 5);
+        var key;
+        
+        switch (randomInt) 
+        {
+            case 1:
+                key = "salt_projectile_1";
+                break;
+            case 2:
+                key = "salt_projectile_2";
+                break;
+            case 3:
+                key = "salt_projectile_3";
+                break;
+            case 4:
+                key = "salt_projectile_4";
+                break;
+            case 5: 
+                key = "salt_projectile_5";
+                break;
+            default:
+                break;
+        }
+        
+        return key;
         
     }
     
@@ -161,10 +197,25 @@ class ProjectileHandler
     moveProjectiles()
     {
         this.context.projectiles.children.iterate(function(child) {
-             child.x += Math.cos(child.rotation) * 10;
-            child.y += Math.sin(child.rotation) * 10;  
+            if (child == undefined) 
+            {
+                
+            }
+            else {
+                var x = child.x;
+                var y = child.y;
+                if ( (this.context.drawer.tileCollidesAtPosition(x, y) == true)) 
+                {
+                    child.destroy(); 
+                    
+                }
+                else
+                {
+                    this.moveProjectile(child);
+                }
+            }
            
-        });
+        }, this);
         
         for(var id in this.context.otherPlayers){
             if(!(id in this.context.otherProjectiles)){
@@ -177,6 +228,12 @@ class ProjectileHandler
             });
             
         }
+    }
+    
+    moveProjectile(projectile)
+    {
+        projectile.x += Math.cos(projectile.rotation) * 10;
+        projectile.y += Math.sin(projectile.rotation) * 10;
     }
     
     
