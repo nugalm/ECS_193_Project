@@ -102,7 +102,7 @@ class gameScene extends Phaser.Scene {
         this.hidableLayer.depth = 1000;
         this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
         this.collidableLayer.setCollisionByProperty( {collides:true} );
-        
+        this.collidableLayer.depth = 500;
         
         this.player.username = this.add.text(-20,
             -50,
