@@ -319,6 +319,7 @@ class gameScene extends Phaser.Scene {
         if (animation.key === 'fork_stab' )
         {
             this.player.isMeleeing = false;
+            this.player.hitCount = 0;
         }
     
         if (animation.key === 'mouse_dash')
