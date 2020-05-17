@@ -346,4 +346,9 @@ class Character {
         alert("power after pepper subtraction: "+ this.power)
     }
     
+    destroyCharacter()
+    {
+        
+    }
+    
 }
