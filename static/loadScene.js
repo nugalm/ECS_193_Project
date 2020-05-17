@@ -50,16 +50,12 @@ class loadScene extends Phaser.Scene
         
         
         this.load.image('logo', 'static/images/IntroThemeV2.png');   
-
-        //fork stab
-        //this.load.spritesheet('fork', 'static/images/temp/mouse_fork_stab.png',
-          //                   {frameWidth: 220.2, frameHeight: 331 } );
         
         this.load.spritesheet('fork', 'static/images/Attack_Animations/fork_attack_anim.png',
                              {frameWidth: 242, frameHeight: 330 } );
         //whisk twirl
-        this.load.spritesheet('whisk','static/images/temp/mouse_whisk_twirl.png',
-                             {frameWidth:262, frameHeight:332}
+        this.load.spritesheet('whisk','static/images/Attack_Animations/whisk_attack_anim.png',
+                             {frameWidth:280, frameHeight:370}
                              );
                         
         //bottle squeeze
@@ -170,7 +166,6 @@ class loadScene extends Phaser.Scene
                 repeat: -1
             });
         
-        
             this.anims.create({
                key: 'fork_stab',
                 frames: this.anims.generateFrameNames('fork', {start: 0, end: 26}),
@@ -181,8 +176,8 @@ class loadScene extends Phaser.Scene
         
             this.anims.create({
                key: 'whisk_twirl',
-                frames: this.anims.generateFrameNames('whisk', {start: 0, end: 15}),
-                frameRate: 17,
+                frames: this.anims.generateFrameNames('whisk', {start: 0, end: 30}),
+                frameRate: 25,
                 repeat: 0
                 
             });
