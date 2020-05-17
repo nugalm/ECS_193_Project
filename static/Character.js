@@ -170,19 +170,50 @@ class Character {
     
     updateWhileDashing(context)
     {
-        //var x = Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
-        //var y = Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
         var newX = this.myContainer.x + (Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier);
         var newY = this.myContainer.y + (Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier);
-        
         
         if (!context.drawer.isViableSpawnPoint(newX, newY)) 
         {
             return;
         }
+        
         this.myContainer.x = newX;
         this.myContainer.y = newY; 
+        
+      
     }
+        
+    /**
+    checks to see which quadrant of the unit circle the sprite rotation is in.
+    returns @quadrant
+    **/
+                
+    spriteRotationQuadrant()
+    {
+        
+        if ()
+        {
+            
+        }
+            
+        else if
+        (
+            
+        )
+            
+        else if
+        (
+            
+        )
+            
+        else 
+        {
+            
+        }
+        
+    }
+    
     
     dash()
     {
