@@ -192,26 +192,6 @@ class Character {
     spriteRotationQuadrant()
     {
         
-        if ()
-        {
-            
-        }
-            
-        else if
-        (
-            
-        )
-            
-        else if
-        (
-            
-        )
-            
-        else 
-        {
-            
-        }
-        
     }
     
     
