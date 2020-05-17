@@ -54,6 +54,10 @@ class loadScene extends Phaser.Scene
         //fork stab
         this.load.spritesheet('fork', 'static/images/temp/mouse_fork_stab.png',
                              {frameWidth: 220.2, frameHeight: 331 } );
+        
+        this.load.spritesheet('knife',
+        'static/images/Attack_Animations/knife_attack_anim.png',
+                             {frameWidth: 242, frameHeight: 330});
 
         //whisk twirl
         this.load.spritesheet('whisk','static/images/temp/mouse_whisk_twirl.png',
@@ -70,8 +74,8 @@ class loadScene extends Phaser.Scene
                              {frameWidth: 220, frameHeight: 330 } );
         
         //knife swipe
-        this.load.spritesheet('knife', 'static/images/temp/mouse_knife_swipe.png',
-                             {frameWidth: 242, frameHeight: 332 });
+       // this.load.spritesheet('knife', 'static/images/temp/mouse_knife_swipe.png',
+        //                     {frameWidth: 242, frameHeight: 332 });
         
         //frosting bag squeeze 
         this.load.spritesheet('frosting_bag', 'static/images/temp/mouse_frosting_bag_squeeze.png',
@@ -202,7 +206,7 @@ class loadScene extends Phaser.Scene
         
             this.anims.create({
                key: 'knife_swipe',
-                frames: this.anims.generateFrameNames('knife', {start: 0, end: 10}),
+                frames: this.anims.generateFrameNames('knife', {start: 0, end: 20}),
                 frameRate: 20,
                 repeat: 0
             });

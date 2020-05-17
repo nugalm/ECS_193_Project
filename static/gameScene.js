@@ -68,7 +68,7 @@ class gameScene extends Phaser.Scene {
     {
         // From user selection in menu scene
         this.player = data.player;
-        this.player.printStat();
+       // this.player.printStat();
 
         this.username = data.username;
         this.socket = data.socket;
