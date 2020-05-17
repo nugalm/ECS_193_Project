@@ -59,8 +59,8 @@ class loadScene extends Phaser.Scene
                              );
                         
         //bottle squeeze
-        this.load.spritesheet('bottle','static/images/temp/mouse_bottle_squeeze.png',
-                             {frameWidth:255.8, frameHeight:383}
+        this.load.spritesheet('bottle','static/images/Attack_Animations/bottle_attack_anim.png',
+                             {frameWidth:280, frameHeight:370}
                              );
         
         //dash
@@ -78,8 +78,8 @@ class loadScene extends Phaser.Scene
         
         
         //salt shaker shake
-        this.load.spritesheet('salt_shaker', 'static/images/temp/mouse_salt_shaker_shake.png',
-                              {frameWidth: 222, frameHeight: 332});
+        this.load.spritesheet('salt_shaker', 'static/images/Attack_Animations/salt_shaker_attack_anim.png',
+                              {frameWidth: 280, frameHeight: 370});
         
         
         //frosting bag drop
@@ -184,8 +184,8 @@ class loadScene extends Phaser.Scene
         
             this.anims.create({
                key: 'bottle_squeeze',
-                frames: this.anims.generateFrameNames('bottle', {start: 0, end: 5}),
-                frameRate: 10,
+                frames: this.anims.generateFrameNames('bottle', {start: 0, end: 20}),
+                frameRate: 30,
                 repeat: 0
                 
             });
@@ -214,8 +214,8 @@ class loadScene extends Phaser.Scene
         
             this.anims.create({
                key: 'salt_shaker_shake',
-                frames: this.anims.generateFrameNames('salt_shaker', {start: 0, end: 5}),
-                frameRate: 10,
+                frames: this.anims.generateFrameNames('salt_shaker', {start: 0, end: 10}),
+                frameRate: 15,
                 repeat: 0
             });
         
