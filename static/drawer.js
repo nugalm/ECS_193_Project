@@ -22,7 +22,7 @@ class Drawer
     
     drawCharacter()
     {
-        this.context.player.sprite = this.context.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+        this.context.player.sprite = this.context.physics.add.sprite(0, 0, 'walk_no_weapon');
         this.initSpawnPoint(this.context.player);
         this.context.player.initSprite(this.context);
     }

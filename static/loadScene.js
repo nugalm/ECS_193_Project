@@ -15,35 +15,22 @@ class loadScene extends Phaser.Scene
     // Frontload all sprites/images in loading screen
     preload()
     {
-        // TODO: make this nice looking graphics
         this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
         
         this.loadProjectiles();
         this.loadDrops();
         this.loadMenuSelect();
         this.loadAttackSpriteSheets();
-        //atlas
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
-        
-        // new tile map
-        this.load.image('kitchen_tileset', 'static/images/TileMap/kitchen_tileset.png');
-        this.load.tilemapTiledJSON('new_map', 'static/images/TileMap/new_map.json')
-        
+        this.loadTileMap();
+        this.loadMovementAnims();
+        this.loadHealthBar();
         
         this.load.image('logo', 'static/images/IntroThemeV2.png');   
-
-        //dash
-        this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
-                             {frameWidth: 220, frameHeight: 330 } );
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
         this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3')
-     
-        //healthbar
-        this.load.image('red_bar', 'static/images/temp/RedBar.png');
-        this.load.image('green_bar', 'static/images/temp/GreenBar.png');
-        
  
     }
     
@@ -68,20 +55,25 @@ class loadScene extends Phaser.Scene
                 prefix: 'mouse_walk/mouse_walk-', suffix:'.png'
             });
 
+            var walkFrames = this.anims.generateFrameNames('walk_no_weapon', 
+            {
+                start: 0, end: 20                                  
+            })
+            
             this.anims.create({
                 key: 'left',
-                frames: frameNames,
+                frames: walkFrames,
                 frameRate: 25,
                 repeat: -1
             });
                   
           this.anims.create({
                 key: 'turn',
-                frames: frameNames,
-                frameRate: 0,
-                //repeat: -1
+                frames: this.anims.generateFrameNames('idle_no_weapon',{start: 0, end: 19}),
+                frameRate: 20,
+                repeat: -1
             });
-          
+        
           this.anims.create({
                 key: 'right',
                 frames: frameNames,
@@ -238,6 +230,35 @@ class loadScene extends Phaser.Scene
         
     }
     
+    loadTileMap()
+    {
+        this.load.image('kitchen_tileset', 'static/images/TileMap/kitchen_tileset.png');
+        this.load.tilemapTiledJSON('new_map', 'static/images/TileMap/new_map.json')
+    }
     
+    loadMovementAnims()
+    {
+        //dash
+        this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
+                             {frameWidth: 220, frameHeight: 330 });
+        
+        //idle
+        this.load.spritesheet('idle_no_weapon', 'static/images/Mouse_Walk_Animations/mouse_no_weapon_idle.png',
+                              {frameWidth: 280, frameHeight: 370});
+        
+        //walk
+        this.load.spritesheet('walk_no_weapon',
+        'static/images/Mouse_Walk_Animations/mouse_walk_no_weapon.png',
+                              {frameWidth: 242, frameHeight: 332});
+    }
+    
+    loadHealthBar()
+    {
+        //healthbar
+        this.load.image('red_bar', 'static/images/temp/RedBar.png');
+        this.load.image('green_bar', 'static/images/temp/GreenBar.png');
+        
+        
+    }
     
 }

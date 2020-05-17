@@ -69,7 +69,6 @@ class Character {
         this.sprite.displayWidth = this.DISPLAY;
         this.sprite.displayHeight = this.DISPLAY;
         this.sprite.setSize(0, 0);
-        this.sprite.setOffset(125, 50);
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
         this.initContainer(context);
@@ -142,7 +141,7 @@ class Character {
     {
         this.isMeleeing = true;
         this.hitCount = 1;
-        
+     
         if (this.weapon == "whisk") {
             this.sprite.anims.play('whisk_twirl');
         }
@@ -157,6 +156,7 @@ class Character {
     
     fire()
     { 
+       
         if (this.gun == "bottle") {
             this.sprite.anims.play('bottle_squeeze');
         }    
@@ -287,7 +287,8 @@ class Character {
 
                 if (!this.isSpecialAnimating())  
                 {
-                    this.sprite.anims.play('turn');
+                    if (this.sprite.anims.currentAnim != null && this.sprite.anims.currentAnim.key != 'turn')
+                        this.sprite.anims.play('turn');
                 }
             }
             
