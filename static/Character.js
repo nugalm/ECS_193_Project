@@ -168,10 +168,20 @@ class Character {
         }
     }
     
-    updateWhileDashing()
+    updateWhileDashing(context)
     {
-        this.myContainer.x += Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
-        this.myContainer.y += Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier; 
+        //var x = Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
+        //var y = Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
+        var newX = this.myContainer.x + (Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier);
+        var newY = this.myContainer.y + (Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier);
+        
+        
+        if (!context.drawer.isViableSpawnPoint(newX, newY)) 
+        {
+            return;
+        }
+        this.myContainer.x = newX;
+        this.myContainer.y = newY; 
     }
     
     dash()
@@ -204,7 +214,7 @@ class Character {
         if (this.isDashing == true)
         {
             
-            this.updateWhileDashing();  
+            this.updateWhileDashing(context);  
             return;
             
         }
