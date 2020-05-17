@@ -210,7 +210,7 @@ class Character {
         }
         else
         {
-            console.log("this should always be false: ", this.isDashing);
+            
          
             if (context.cursors.left.isDown)
             {
