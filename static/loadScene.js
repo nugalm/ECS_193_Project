@@ -17,19 +17,13 @@ class loadScene extends Phaser.Scene
     {
         // TODO: make this nice looking graphics
         this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
-        this.load.image('projectile', 'static/images/whiteball.png');
-        this.load.image('hitbox', 'static/assets/hitbox_square.png');
         
         this.loadProjectiles();
         this.loadDrops();
+        this.loadMenuSelect();
+        this.loadAttackSpriteSheets();
         //atlas
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
-        
-        //menu scene chars
-        this.load.image('loadingSpicy', 'static/images/spicyMouse.png');
-        this.load.image('loadingSweet', 'static/images/sweetMouse.png');
-        this.load.image('loadingSalty', 'static/images/saltyMouse.png');
-        this.load.image('loadingSour', 'static/images/sourMouse.png');
         
         // new tile map
         this.load.image('kitchen_tileset', 'static/images/TileMap/kitchen_tileset.png');
@@ -37,45 +31,10 @@ class loadScene extends Phaser.Scene
         
         
         this.load.image('logo', 'static/images/IntroThemeV2.png');   
-        
-        this.load.spritesheet('fork', 'static/images/Attack_Animations/fork_attack_anim.png',
-                             {frameWidth: 242, frameHeight: 330 } );
-        //whisk twirl
-        this.load.spritesheet('whisk','static/images/Attack_Animations/whisk_attack_anim.png',
-                             {frameWidth:280, frameHeight:370}
-                             );
-                        
-        //bottle squeeze
-        this.load.spritesheet('bottle','static/images/Attack_Animations/bottle_attack_anim.png',
-                             {frameWidth:280, frameHeight:370}
-                             );
-        
+
         //dash
         this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
                              {frameWidth: 220, frameHeight: 330 } );
-        
-        //knife swipe
-        this.load.spritesheet('knife',
-        'static/images/Attack_Animations/knife_attack_anim.png',
-                             {frameWidth: 242, frameHeight: 330});
-        
-        //frosting bag squeeze 
-        this.load.spritesheet('frosting_bag', 'static/images/Attack_Animations/frosting_bag_attack_anim.png',
-                              {frameWidth: 280, frameHeight: 370});
-        
-        
-        //salt shaker shake
-        this.load.spritesheet('salt_shaker', 'static/images/Attack_Animations/salt_shaker_attack_anim.png',
-                              {frameWidth: 280, frameHeight: 370});
-        
-        
-        //frosting bag drop
-        
-        
-        //knife drop
-        this.load.spritesheet('knife_drop', 'static/images/temp/knife_drop.png', 
-                              {frameWidth: 222, frameHeight: 332});
-        this.load.image('knife_drop_image', 'static/images/temp/knife_drop_still.png');
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
@@ -217,14 +176,10 @@ class loadScene extends Phaser.Scene
     
     loadDrops()
     {
-                //drops
+        //drops
         this.load.image('fork_drop_image', 'static/images/temp/fork_drop_still.png');
         
-        this.load.image('blueberry_drop_image', 'static/images/temp/blueberry_drop_still.png');
-        
-        this.load.image('avocado_drop_image', 'static/images/temp/avocado_drop_still.png');
-        
-        this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
+        this.load.image('knife_drop_image', 'static/images/temp/knife_drop_still.png');
         
         this.load.image('salt_shaker_drop_image', 'static/images/temp/salt_shaker_drop_still.png');
         
@@ -241,5 +196,48 @@ class loadScene extends Phaser.Scene
         
         this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
     }
+    
+    loadMenuSelect()
+    {
+        //menu scene chars
+        this.load.image('loadingSpicy', 'static/images/spicyMouse.png');
+        this.load.image('loadingSweet', 'static/images/sweetMouse.png');
+        this.load.image('loadingSalty', 'static/images/saltyMouse.png');
+        this.load.image('loadingSour', 'static/images/sourMouse.png');
+    }
+    
+    loadAttackSpriteSheets()
+    {
+        //fork stab
+        this.load.spritesheet('fork', 'static/images/Attack_Animations/fork_attack_anim.png',
+                             {frameWidth: 242, frameHeight: 330 } );
+        //whisk twirl
+        this.load.spritesheet('whisk','static/images/Attack_Animations/whisk_attack_anim.png',
+                             {frameWidth:280, frameHeight:370}
+                             );
+        
+        //knife swipe
+        this.load.spritesheet('knife',
+        'static/images/Attack_Animations/knife_attack_anim.png',
+                             {frameWidth: 242, frameHeight: 330});
+                        
+        //bottle squeeze
+        this.load.spritesheet('bottle','static/images/Attack_Animations/bottle_attack_anim.png',
+                             {frameWidth:280, frameHeight:370}
+                             );
+    
+        
+        //frosting bag squeeze 
+        this.load.spritesheet('frosting_bag', 'static/images/Attack_Animations/frosting_bag_attack_anim.png',
+                              {frameWidth: 280, frameHeight: 370});
+        
+        
+        //salt shaker shake
+        this.load.spritesheet('salt_shaker', 'static/images/Attack_Animations/salt_shaker_attack_anim.png',
+                              {frameWidth: 280, frameHeight: 370});
+        
+    }
+    
+    
     
 }
