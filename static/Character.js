@@ -207,7 +207,7 @@ class Character {
             return;
             
         }
-        else if (!this.isDashing);
+        else if (!this.isDashing)
         {
          
             if (context.cursors.left.isDown)
