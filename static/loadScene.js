@@ -211,7 +211,7 @@ class loadScene extends Phaser.Scene
         //knife swipe
         this.load.spritesheet('knife',
         'static/images/Attack_Animations/knife_attack_anim.png',
-                             {frameWidth: 242, frameHeight: 330});
+                             {frameWidth: 242, frameHeight: 332});
                         
         //bottle squeeze
         this.load.spritesheet('bottle','static/images/Attack_Animations/bottle_attack_anim.png',
