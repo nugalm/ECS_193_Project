@@ -171,11 +171,12 @@ class Character {
     updateWhileDashing()
     {
         this.myContainer.x += Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
-        this.myContainer.y += Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
+        this.myContainer.y += Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier; 
     }
     
     dash()
     {
+        this.myContainer.body.setVelocity(0,0);
         this.isDashing = true;
         this.sprite.anims.play('mouse_dash');
     }
@@ -200,15 +201,16 @@ class Character {
     updateMovement(context)
     {
         
-        if (this.isDashing)
+        if (this.isDashing == true)
         {
             
             this.updateWhileDashing();  
             return;
             
         }
-        else if (!this.isDashing)
+        else
         {
+            console.log("this should always be false: ", this.isDashing);
          
             if (context.cursors.left.isDown)
             {
