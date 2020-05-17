@@ -179,6 +179,12 @@ class Character {
     
     updateRotation(context)
     {
+        // lock rotation if player is shooting,meleeing, or dashing
+        if (this.isSpecialAnimating()) 
+        {
+            return;
+        }
+        
         var temp = this.sprite.getWorldTransformMatrix();
         
         var targetAngle =  Phaser.Math.Angle.Between(
