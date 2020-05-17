@@ -20,17 +20,8 @@ class loadScene extends Phaser.Scene
         this.load.image('projectile', 'static/images/whiteball.png');
         this.load.image('hitbox', 'static/assets/hitbox_square.png');
         
-        //projectiles
-        this.load.image('bottle_projectile', 'static/images/projectiles/squirter_bullet.png');
-        this.load.image('frosting_bag_projectile',
-        'static/images/projectiles/frosting_bag_bullet.png');
-        this.load.image('salt_projectile_1','static/images/projectiles/salt_shaker_bullet_1.png');
-         this.load.image('salt_projectile_2','static/images/projectiles/salt_shaker_bullet_2.png');
-         this.load.image('salt_projectile_3','static/images/projectiles/salt_shaker_bullet_3.png');
-        
-         this.load.image('salt_projectile_4','static/images/projectiles/salt_shaker_bullet_4.png');
-        this.load.image('salt_projectile_5','static/images/projectiles/salt_shaker_bullet_5.png');
-        
+        this.loadProjectiles();
+        this.loadDrops();
         //atlas
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         
@@ -39,10 +30,6 @@ class loadScene extends Phaser.Scene
         this.load.image('loadingSweet', 'static/images/sweetMouse.png');
         this.load.image('loadingSalty', 'static/images/saltyMouse.png');
         this.load.image('loadingSour', 'static/images/sourMouse.png');
-        
-        // trying tile map
-        this.load.image('map_sheet', 'static/images/TileMap/map_sheet.png');
-        this.load.tilemapTiledJSON('Real_Map', 'static/images/TileMap/Real_Map.json');
         
         // new tile map
         this.load.image('kitchen_tileset', 'static/images/TileMap/kitchen_tileset.png');
@@ -98,29 +85,6 @@ class loadScene extends Phaser.Scene
         this.load.image('red_bar', 'static/images/temp/RedBar.png');
         this.load.image('green_bar', 'static/images/temp/GreenBar.png');
         
-        //drops
-        this.load.image('fork_drop_image', 'static/images/temp/fork_drop_still.png');
-        
-        this.load.image('blueberry_drop_image', 'static/images/temp/blueberry_drop_still.png');
-        
-        this.load.image('avocado_drop_image', 'static/images/temp/avocado_drop_still.png');
-        
-        this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
-        
-        this.load.image('salt_shaker_drop_image', 'static/images/temp/salt_shaker_drop_still.png');
-        
-        this.load.image('squirter_drop_image', 'static/images/temp/squirter_drop_still.png');
-        
-        this.load.image('whisk_drop_image', 'static/images/temp/whisk_drop_still.png');
-        
-        this.load.image('frosting_bag_drop_image', 'static/images/temp/frosting_bag_still.png');
-        
-        // food
-        this.load.image('blueberry_drop_image', 'static/images/temp/blueberry_drop_still.png');
-        
-        this.load.image('avocado_drop_image', 'static/images/temp/avocado_drop_still.png');
-        
-        this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
  
     }
     
@@ -236,4 +200,46 @@ class loadScene extends Phaser.Scene
                 }
         }, this);   
     }
+    
+    loadProjectiles()
+    {
+                //projectiles
+        this.load.image('bottle_projectile', 'static/images/projectiles/squirter_bullet.png');
+        this.load.image('frosting_bag_projectile',
+        'static/images/projectiles/frosting_bag_bullet.png');
+        this.load.image('salt_projectile_1','static/images/projectiles/salt_shaker_bullet_1.png');
+         this.load.image('salt_projectile_2','static/images/projectiles/salt_shaker_bullet_2.png');
+         this.load.image('salt_projectile_3','static/images/projectiles/salt_shaker_bullet_3.png');
+        
+         this.load.image('salt_projectile_4','static/images/projectiles/salt_shaker_bullet_4.png');
+        this.load.image('salt_projectile_5','static/images/projectiles/salt_shaker_bullet_5.png');
+    }
+    
+    loadDrops()
+    {
+                //drops
+        this.load.image('fork_drop_image', 'static/images/temp/fork_drop_still.png');
+        
+        this.load.image('blueberry_drop_image', 'static/images/temp/blueberry_drop_still.png');
+        
+        this.load.image('avocado_drop_image', 'static/images/temp/avocado_drop_still.png');
+        
+        this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
+        
+        this.load.image('salt_shaker_drop_image', 'static/images/temp/salt_shaker_drop_still.png');
+        
+        this.load.image('squirter_drop_image', 'static/images/temp/squirter_drop_still.png');
+        
+        this.load.image('whisk_drop_image', 'static/images/temp/whisk_drop_still.png');
+        
+        this.load.image('frosting_bag_drop_image', 'static/images/temp/frosting_bag_still.png');
+        
+        // food
+        this.load.image('blueberry_drop_image', 'static/images/temp/blueberry_drop_still.png');
+        
+        this.load.image('avocado_drop_image', 'static/images/temp/avocado_drop_still.png');
+        
+        this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
+    }
+    
 }
