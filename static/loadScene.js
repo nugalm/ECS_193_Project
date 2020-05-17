@@ -73,8 +73,8 @@ class loadScene extends Phaser.Scene
                              {frameWidth: 242, frameHeight: 330});
         
         //frosting bag squeeze 
-        this.load.spritesheet('frosting_bag', 'static/images/temp/mouse_frosting_bag_squeeze.png',
-                              {frameWidth: 256.3, frameHeight: 383});
+        this.load.spritesheet('frosting_bag', 'static/images/Attack_Animations/frosting_bag_attack_anim.png',
+                              {frameWidth: 280, frameHeight: 370});
         
         
         //salt shaker shake
@@ -185,7 +185,7 @@ class loadScene extends Phaser.Scene
             this.anims.create({
                key: 'bottle_squeeze',
                 frames: this.anims.generateFrameNames('bottle', {start: 0, end: 20}),
-                frameRate: 30,
+                frameRate: 40,
                 repeat: 0
                 
             });
@@ -207,8 +207,8 @@ class loadScene extends Phaser.Scene
         
             this.anims.create({
                key: 'frosting_bag_squeeze',
-                frames: this.anims.generateFrameNames('frosting_bag', {start: 0, end: 8}),
-                frameRate: 10,
+                frames: this.anims.generateFrameNames('frosting_bag', {start: 0, end: 20}),
+                frameRate: 20,
                 repeat: 0
             });
         
