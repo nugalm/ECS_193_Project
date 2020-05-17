@@ -42,6 +42,8 @@ class Character {
         
         this.pepperEvent;
         this.pepperTime = 10000;
+        
+        this.dashMultiplier = 5;
 
 	}
 
@@ -166,14 +168,15 @@ class Character {
         }
     }
     
-   // updateWhileDashing()
-   // {
-    //    this.sprite.x += Math.cos(this.dashTargetRotation) * 10;
-   //     this.sprite.y += Math.sin(this.dashTargetRotation) * 10;
-   // }
+    updateWhileDashing()
+    {
+        this.myContainer.x += Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
+        this.myContainer.y += Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier;
+    }
     
     dash()
     {
+        this.isDashing = true;
         this.sprite.anims.play('mouse_dash');
     }
     
@@ -199,13 +202,18 @@ class Character {
         
         if (this.isDashing)
         {
-            this.updateWhileDashing();    
+            
+            this.updateWhileDashing();  
+            return;
+            
         }
-        else {
+        else if (!this.isDashing);
+        {
+         
             if (context.cursors.left.isDown)
             {
                
-                //this.sprite.setVelocityX(-160);
+               
                 this.myContainer.body.setVelocityX(-160);
 
                 if (!this.isSpecialAnimating()) 
@@ -217,7 +225,7 @@ class Character {
             //right  
             else if (context.cursors.right.isDown)
             {
-                //this.sprite.setVelocityX(160);
+             
                 this.myContainer.body.setVelocityX(160);
                 if (!this.isSpecialAnimating())  
                 {
@@ -228,7 +236,7 @@ class Character {
             // down  
             if (context.cursors.down.isDown)
             {
-                //this.sprite.setVelocityY(160);
+               
                 this.myContainer.body.setVelocityY(160);
                 if (!this.isSpecialAnimating()) 
                 {
@@ -239,7 +247,7 @@ class Character {
             // up  
             else if (context.cursors.up.isDown)
             {
-                //this.sprite.setVelocityY(-160);
+                
                 this.myContainer.body.setVelocityY(-160);
                 if (!this.isSpecialAnimating()) 
                 {
@@ -250,8 +258,7 @@ class Character {
             // none  
             if (context.cursors.up.isUp && context.cursors.down.isUp && context.cursors.left.isUp && context.cursors.right.isUp) 
             {
-               // this.sprite.setVelocityX(0);
-               // this.sprite.setVelocityY(0);
+              
                 this.myContainer.body.setVelocityX(0);
                 this.myContainer.body.setVelocityY(0);
 
@@ -266,7 +273,7 @@ class Character {
         var myPosition = {x: this.sprite.x , y: this.sprite.y};
         var myVelocity = {x: this.sprite.body.velocity.x , y: this.sprite.body.velocity.y };
         var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
-       // socket.emit('movement', info);
+       
     }
 
     
@@ -349,7 +356,7 @@ class Character {
     noMorePepper()
     {
         this.power = this.power - 100;
-        alert("power after pepper subtraction: "+ this.power)
+        //alert("power after pepper subtraction: "+ this.power)
     }
     
     destroyCharacter()

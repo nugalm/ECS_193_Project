@@ -228,7 +228,7 @@ class gameScene extends Phaser.Scene {
         else if (food == this.randomDropsHandler.pepper)
         {
             this.player.power = this.player.power + 100;
-            alert("power after pickup: "+this.player.power)
+           // alert("power after pickup: "+this.player.power)
             this.player.pepper_time(this);
             //console.log(this.player.power);
             food.disableBody(true, true);
@@ -302,7 +302,7 @@ class gameScene extends Phaser.Scene {
     
     animationComplete(animation, frame)
     {
-        if (animation.key === 'fork_stab' )
+        if (animation.key === 'fork_stab')
         {
             this.player.isMeleeing = false;
             this.player.hitCount = 0;
@@ -311,6 +311,7 @@ class gameScene extends Phaser.Scene {
         if (animation.key === 'mouse_dash')
         {
             this.player.isDashing = false;
+           
         }
     }
 
