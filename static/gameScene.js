@@ -122,16 +122,11 @@ class gameScene extends Phaser.Scene {
         
         this.keyboardHandler.initEvents(this);
 
-       /* this.hidableLayer = this.map.createStaticLayer('Hidable', this.tileset, 0, 0);
-        this.collidableLayer = this.map.createStaticLayer('Collidable', this.tileset, 0, 0);
-        this.collidableLayer.setCollisionByProperty( {collides:true} );*/
-
         this.colliderHandler.initPlayerColliders();
         this.physics.world.enable(this.projectiles);
         
         this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHit, null, this);
         
-        //this.physics.add.collider(this.collidableLayer, this.projectiles, this.destroyBullet, null, this);
         this.physics.add.collider(this.projectiles, this.collidableLayer);
         
         //camera
@@ -267,20 +262,12 @@ class gameScene extends Phaser.Scene {
         }
     }
     
-    destroyBullet(bullet, container) 
-    {
-        var count;
-        this.projectiles.children.iterate(function(child){
-            count = count + 1;
-        })
-        console.log("num projectiles: ", count);
-    }
     
     bulletHit(bullet, container)
     {
         if (container === this.salt.myContainer)
         {
-            this.salt.takeDamage(this.colliderHandler.projectileHit(bullet, this.salt, this.player));
+            this.salt.takeDamage( this.colliderHandler.projectileHit(bullet, this.salt, this.player));
          
         }
         else if (container === this.sour.myContainer)

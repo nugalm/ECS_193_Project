@@ -321,13 +321,13 @@ class Character {
     
     takeDamage(damageAmount) 
     {
-      //  alert("health before hit: " + this.health);
+      
         this.health = this.health - damageAmount;
-       // alert("health after hit: " + this.health);
         if (this.health <= 0) 
         {
             this.health = 0;
             this.myContainer.destroy();
+            
             //this.sprite.disableBody(true, true);
         }
     }

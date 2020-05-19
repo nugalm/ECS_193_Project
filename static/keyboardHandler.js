@@ -35,6 +35,7 @@ class KeyboardHandler
             
             if (p.leftButtonDown() && context.player.canFire == true)
             {
+                //context.cameras.main.shake(1000, 0.001);
                 context.player.fire();
                 context.projectileHandler.createProjectile();
                 context.player.canFire = false;
