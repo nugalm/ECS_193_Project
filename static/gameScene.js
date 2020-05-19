@@ -289,7 +289,10 @@ class gameScene extends Phaser.Scene {
     
     animationComplete(animation, frame)
     {
-        if (animation.key === 'fork_stab')
+    
+        if (animation.key === 'fork_stab' || 
+           animation.key === 'knife_swipe' ||
+           animation.key === 'whisk_twirl')
         {
             this.player.isMeleeing = false;
             this.player.hitCount = 0;
