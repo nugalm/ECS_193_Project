@@ -7,12 +7,17 @@ class armoryScene extends Phaser.Scene {
 	}
 	init(data) {
 		let username = sessionStorage.getItem('username');
-		this.username = username;
+		this.username = username || [];
 		this.player = data.player || [];
 		this.socket = data.socket || [];
-		this.username = data.username || [];
 	}
 	preload() {
+		var element = document.createElement('style');
+			document.head.appendChild(element);
+		var sheet = element.sheet;
+		var styles = '@font-face { font-family: "font"; src: url("static/images/armoryScene/font.ttf") format("opentype"); }\n';
+			sheet.insertRule(styles, 0);
+
 		// loading assets
 		this.load.atlas('dice', 'static/images/armoryScene/dice.png', 'static/images/armoryScene/dice.json');
 		this.load.image('block_0', 'static/images/armoryScene/block_0.png');
@@ -27,6 +32,9 @@ class armoryScene extends Phaser.Scene {
 		this.load.image('block_2_2', 'static/images/armoryScene/powerbooster_pepper.jpg');
 		this.load.image('block_2_3', 'static/images/armoryScene/speedbooster_blueberry.jpg');
 		this.load.image('block_18', 'static/images/armoryScene/block_18.png');
+		this.load.image('question_mark1', 'static/images/armoryScene/question_mark1.jpg');
+		this.load.image('question_mark2', 'static/images/armoryScene/question_mark2.jpg');
+		this.load.image('question_mark3', 'static/images/armoryScene/question_mark3.jpg');
 		this.load.image('start', 'static/images/armoryScene/start.png');
 		this.load.image('role', 'static/images/armoryScene/role.png');
 		this.load.image('w', 'static/images/armoryScene/w.png');
@@ -47,9 +55,9 @@ class armoryScene extends Phaser.Scene {
 		this.load.image('layer2_btn2', 'static/images/armoryScene/layer2_btn2.png');
 		this.load.image('close', 'static/images/armoryScene/close.png');
 		this.load.image('enter', 'static/images/armoryScene/enter.png');
-
 		this.load.audio('m', 'static/images/armoryScene/m.mp3');
 	}
+
 	create() {
 		var width = game.config.width;
 		var height = game.config.height;
@@ -59,7 +67,8 @@ class armoryScene extends Phaser.Scene {
 		var mapY = (height - mapWidth * 4) / 2;
 		var block1 = this.block1();
 
-		this.music = this.sound.add('m',{loop:1});
+		this.music = this.sound.add('m', {loop:1});
+		this.music.setVolume(0.1); 
 		this.music.play();
 
 		// creat map array
@@ -81,8 +90,12 @@ class armoryScene extends Phaser.Scene {
 		mapData.forEach((el, i) => {
 			if (i < 17) {
 				var block = block1[i];
-			} else if (i > 16) {
-				var block = 'block_18';
+			} else if (i == 17) {
+				var block = 'question_mark1';
+			} else if (i == 18) {
+				var block = 'question_mark2';
+			} else if (i == 19) {
+				var block = 'question_mark3';
 			}
 			this.blocks = this.blocks || [];
 			this.blocks.push(this.add.image(el[0], el[1], block).setScale(ratio));
@@ -113,9 +126,26 @@ class armoryScene extends Phaser.Scene {
 				return;
 			};
 			playNum--;
+			this.text4.text = 'Times remaining：x'+playNum;
+			if ( playNum <= 1 ) {
+				this.text4.setStyle({color:'#FF0000'});
+			}
 			this.diceFun();
 		});
 
+		// skip button
+		this.skipScene = 
+		this.add.image(200, 200, 'layer2_btn2').setScale(ratio).setInteractive();
+		this.skipScene.on('pointerdown', (pointer) => {
+			//temporary scene start
+			this.music.pause();
+			this.scene.start('gameScene', 
+								{ 
+								player: this.player,
+								socket: this.socket, 
+								username: this.username
+							});
+		}, this);
 
 		// layer
 		this.layer1Container = this.add.container();
@@ -129,10 +159,9 @@ class armoryScene extends Phaser.Scene {
 		this.layer1_btn1_h = this.layer1.y + this.layer1.displayHeight * 0.3;
 		this.layer1_btn1 = this.add.image(width / 2 - 180 * ratio, this.layer1_btn1_h, 'layer1_btn1').setScale(ratio).setInteractive();
 		this.layer1_btn1.on('pointerdown', (pointer) => {
-			console.log(blockData[curIndex]);
 
 			if ( this.overState ) {
-				console.log('最后一次');
+				// console.log('最后一次');
 				this.player.health = this.player.health - 100;
 				this.text1.text = 'Health: ' + this.player.health;
 				this.layer1Container.visible = false;
@@ -144,7 +173,7 @@ class armoryScene extends Phaser.Scene {
 					if (runIndex > 1000 / 30) {
 						runIndex = 0;
 						clearInterval(runTimeID);
-						this.runRole2(rad);
+						this.runRole2(rad+1);
 					}
 				}, 20);
 				return;
@@ -156,30 +185,30 @@ class armoryScene extends Phaser.Scene {
 				this.blocks[curIndex].setTexture('block_0');
 				this.layer1Container.visible = false;
 				if (blockData[curIndex] == 'block_1_1') {
-					this.player.weapon1 = 'fork';
+					this.player.weapon = 'fork';
 					this.player.power = this.player.power - 100;
 					this.text3.text = 'Power: ' + this.player.power;
 				} else if (blockData[curIndex] == 'block_1_2') {
-					this.player.weapon1 = 'whisk';
+					this.player.weapon = 'whisk';
 					this.player.speed = this.player.speed - 100;
 					this.text2.text = 'Speed: ' + this.player.speed;
 				} else if (blockData[curIndex] == 'block_1_3') {
-					this.player.weapon1 = 'knife';
+					this.player.weapon = 'knife';
 					this.player.health = this.player.health - 100;
 					this.text1.text = 'Health: ' + this.player.health;
 				} else if (blockData[curIndex] == 'block_1_4' || blockData[curIndex] == 'block_1_4_2') {
-					this.player.weapon1 = 'bottlesquirter1';
+					this.player.gun = 'bottle';
 					if ( blockData[curIndex] == 'block_1_4_2' ) {
-						this.player.weapon1 = 'bottlesquirter2';
+						this.player.gun = 'bottle';
 					}
 					this.player.power = this.player.power - 200;
 					this.text3.text = 'Power: ' + this.player.power;
 				} else if (blockData[curIndex] == 'block_1_5') {
-					this.player.weapon1 = 'saltshaker';
+					this.player.gun = 'salt_shaker';
 					this.player.health = this.player.health - 200;
 					this.text1.text = 'Health: ' + this.player.health;
 				} else if (blockData[curIndex] == 'block_1_6') {
-					this.player.weapon1 = 'frostingbag';
+					this.player.gun = 'frosting_bag';
 					this.player.speed = this.player.speed - 200;
 					this.text2.text = 'Speed: ' + this.player.speed;
 				}
@@ -189,30 +218,30 @@ class armoryScene extends Phaser.Scene {
 				this.blocks[curIndex].setTexture('block_0');
 				this.layer1Container.visible = false;
 				if (blockData[curIndex] == 'block_1_1') {
-					this.player.weapon2 = 'fork';
+					this.player.weapon = 'fork';
 					this.player.power = this.player.power - 100;
 					this.text3.text = 'Power: ' + this.player.power;
 				} else if (blockData[curIndex] == 'block_1_2') {
-					this.player.weapon2 = 'whisk';
+					this.player.weapon = 'whisk';
 					this.player.speed = this.player.speed - 100;
 					this.text2.text = 'Speed: ' + this.player.speed;
 				} else if (blockData[curIndex] == 'block_1_3') {
-					this.player.weapon2 = 'knife';
+					this.player.weapon = 'knife';
 					this.player.health = this.player.health - 100;
 					this.text1.text = 'Health: ' + this.player.health;
 				} else if (blockData[curIndex] == 'block_1_4' || blockData[curIndex] == 'block_1_4_2') {
-					this.player.weapon2 = 'bottlesquirter1';
+					this.player.gun = 'bottle';
 					if ( blockData[curIndex] == 'block_1_4_2' ) {
-						this.player.weapon2 = 'bottlesquirter2';
+						this.player.gun = 'bottle';
 					}
 					this.player.power = this.player.power - 200;
 					this.text3.text = 'Power: ' + this.player.power;
 				} else if (blockData[curIndex] == 'block_1_5') {
-					this.player.weapon2 = 'saltshaker';
+					this.player.gun = 'salt_shaker';
 					this.player.health = this.player.health - 200;
 					this.text1.text = 'Health: ' + this.player.health;
 				} else if (blockData[curIndex] == 'block_1_6') {
-					this.player.weapon2 = 'frostingbag';
+					this.player.gun = 'frosting_bag';
 					this.player.speed = this.player.speed - 200;
 					this.text2.text = 'Speed: ' + this.player.speed;
 				}
@@ -243,25 +272,36 @@ class armoryScene extends Phaser.Scene {
 				username: this.username
 			}); 
 		});
+
 		// text
 		this.text1 = this.add.text(width - 350 * ratio, 15, 'Health: ' + this.player.health, {
 			fontSize: '16px',
+			fontFamily: 'font',
 			fill: 'white'
 		});
 		this.text2 = this.add.text(width - 350 * ratio, 45, 'Speed: ' + this.player.speed, {
 			fontSize: '16px',
+			fontFamily: 'font',
 			fill: 'white'
 		});
 		this.text3 = this.add.text(width - 350 * ratio, 75, 'Power: ' + this.player.power, {
 			fontSize: '16px',
+			fontFamily: 'font',
 			fill: 'white'
 		});
 
-		// enter
+		this.text4 = this.add.text(1680 * ratio - 65, height - 20 * ratio - 180 * ratio, 'Times remaining：x3', {
+			fontSize: '16px',
+			fontFamily: 'font',
+			fill: 'white'
+		});
+
+		// skip button
 		this.enter = this.add.image(1680 * ratio, height - 20 * ratio - 310 * ratio, 'enter').setOrigin(0).setScale(ratio).setInteractive();
 		this.enter.visible = false;
 		this.enter.on('pointerdown', (pointer) => {
 			this.music.pause();
+			// console.log(this.username);
 			this.scene.start('gameScene', {
 				player: this.player, 
 				socket: this.socket,
@@ -269,6 +309,14 @@ class armoryScene extends Phaser.Scene {
 			});
 		});
 	}
+
+	update(){
+		this.text1.setStyle({'font-family':'font'});
+		this.text2.setStyle({'font-family':'font'});
+		this.text3.setStyle({'font-family':'font'});
+		this.text4.setStyle({'font-family':'font'});
+	}
+
 	diceFun() {
 		runState = true;
 		runTimeID = setInterval(() => {
@@ -320,21 +368,21 @@ class armoryScene extends Phaser.Scene {
 								  
 						// Health Booster
 						if (blockData[curIndex] == 'block_2_1') {
-							self.player.health += random(50,100);
+							self.player.health += self.addm();
 							self.text1.text = 'Health: ' + self.player.health;
 							self.blocks[curIndex].setTexture('block_0');
 							self.over();
 
 							// Power Booster
 						} else if (blockData[curIndex] == 'block_2_2') {
-							self.player.power += random(50,100);
+							self.player.power += self.addm();
 							self.text3.text = 'Power: ' + self.player.power;
 							self.blocks[curIndex].setTexture('block_0');
 							console.log('power');
 							self.over();
 							// Speed Booster
 						} else if (blockData[curIndex] == 'block_2_3') {
-							self.player.speed += random(50,100);
+							self.player.speed += self.addm();
 							self.text2.text = 'Speed: ' + self.player.speed;
 							self.blocks[curIndex].setTexture('block_0');
 							console.log('speed');
@@ -372,7 +420,6 @@ class armoryScene extends Phaser.Scene {
 			if ( fh ) {
 				index2 = index2 + 2;
 				tempValue = tempValue - index2;
-				console.log(tempValue);
 			}
 
 			// angle
@@ -405,20 +452,20 @@ class armoryScene extends Phaser.Scene {
 								  
 						// Health Booster
 						if (blockData[curIndex] == 'block_2_1') {
-							self.player.health += random(50,100);
+							self.player.health += self.addm();
 							self.text1.text = 'Health: ' + self.player.health;
 							self.blocks[curIndex].setTexture('block_0');
 
 							// Power Booster
 						} else if (blockData[curIndex] == 'block_2_2') {
-							self.player.power += random(50,100);
+							self.player.power += self.addm();
 							self.text3.text = 'Power: ' + self.player.power;
 							self.blocks[curIndex].setTexture('block_0');
 							console.log('power');
 
 							// Speed Booster
 						} else if (blockData[curIndex] == 'block_2_3') {
-							self.player.speed += random(50,100);
+							self.player.speed += self.addm();
 							self.text2.text = 'Speed: ' + self.player.speed;
 							self.blocks[curIndex].setTexture('block_0');
 							console.log('speed');
@@ -461,6 +508,13 @@ class armoryScene extends Phaser.Scene {
 			this.layer1Container.visible = true;
 		}
 	}
+
+	addm() {
+		var arr = [50,60,70,80,90,100];
+		var i = random(0, 5);
+		return arr[i];
+	}
+
 }
 
 function random(lower, upper) {
