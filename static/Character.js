@@ -44,6 +44,7 @@ class Character {
         this.pepperTime = 10000;
         
         this.dashMultiplier = 5;
+        
 
 	}
 
@@ -72,6 +73,7 @@ class Character {
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
         this.initContainer(context);
+        this.context = context;
         this.initCooldown();
     }
     
@@ -328,7 +330,7 @@ class Character {
             this.health = 0;
             this.myContainer.destroy();
             
-            //this.sprite.disableBody(true, true);
+            this.context.scene.start('menuScene');
         }
     }
     

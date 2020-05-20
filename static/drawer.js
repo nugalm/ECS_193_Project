@@ -25,6 +25,7 @@ class Drawer
         this.context.player.sprite = this.context.physics.add.sprite(0, 0, 'walk_no_weapon');
         this.initSpawnPoint(this.context.player);
         this.context.player.initSprite(this.context);
+       
     }
     
     initSpawnPoint(player)
