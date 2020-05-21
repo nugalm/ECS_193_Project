@@ -242,6 +242,14 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('updateAnim', {id: socket.id, info: info});
     });
     
+    socket.on('hasDied', function() {
+        //console.log('user disconnected');
+        // remove this player from our players object
+        //delete serverPlayers[socket.id];
+        // emit a message to all players to remove this player
+        socket.broadcast.emit('deleteTime', socket.id);
+        //console.log('removed player ' + socket.id);
+    });
     
     socket.on('disconnect', function() {
         //console.log('user disconnected');

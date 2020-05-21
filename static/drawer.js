@@ -1,6 +1,3 @@
-// Responsible for drawing the objects in the gameScene
-// class should NOT know what the objects its drawing are, only
-// the information needed to draw the objects are passed down and known
 class Drawer 
 {
     constructor(context)
@@ -22,9 +19,10 @@ class Drawer
     
     drawCharacter()
     {
-        this.context.player.sprite = this.context.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+        this.context.player.sprite = this.context.physics.add.sprite(0, 0, 'walk_no_weapon');
         this.initSpawnPoint(this.context.player);
         this.context.player.initSprite(this.context);
+       
     }
     
     initSpawnPoint(player)
@@ -67,10 +65,25 @@ class Drawer
         var tile_3 = this.context.collidableLayer.getTileAtWorldXY(x+ this.tileWidth, y, true);
         // tile to the bottom of original tile
         var tile_4 = this.context.collidableLayer.getTileAtWorldXY(x, y + this.tileHeight, true);
+        //tile to the left of original tile
+        var tile_5 = this.context.collidableLayer.getTileAtWorldXY(x - this.tileWidth, y, true);
+        //tile to the bottom left of original tile
+        var tile_6 = this.context.collidableLayer.getTileAtWorldXY(x - this.tileWidth, y + this.tileHeight, true);
+        //tile above original tile
+        var tile_7 = this.context.collidableLayer.getTileAtWorldXY(x, y - this.tileHeight, true);
+        //tile to the top right of original tile
+        var tile_8 = this.context.collidableLayer.getTileAtWorldXY(x + this.tileWidth, y - this.tileHeight, true);
+        //tile to the top left of original tile
+        var tile_9 = this.context.collidableLayer.getTileAtWorldXY(x - this.tileWidth, y - this.tileHeight, true);
         
         
    
-            if (this.isViableTile(tile_1) && this.isViableTile(tile_2)  && this.isViableTile(tile_3) && this.isViableTile(tile_4)) 
+            if (this.isViableTile(tile_1) && this.isViableTile(tile_2)  
+                && this.isViableTile(tile_3) && this.isViableTile(tile_4)
+               && this.isViableTile(tile_5) && this.isViableTile(tile_6)
+                && this.isViableTile(tile_7) && this.isViableTile(tile_8)
+                && this.isViableTile(tile_9)
+               ) 
             {
                 return true;
             

@@ -45,13 +45,7 @@ class ProjectileHandler
         }
         
         else {
-            var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
-            projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);
-            projectile.element = this.context.player.element;
-            this.context.projectiles.add(projectile);
-            
-            var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation};
-            socket.emit('addProjectileServer', info);
+            return
         }
         
     }
@@ -61,20 +55,15 @@ class ProjectileHandler
         var i;
         for (i = 0; i < 5; i++) 
         {
-            //var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
             var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: this.randomSaltProjectileImage()}, "salt")	
             projectile.rotation = this.context.player.sprite.rotation - this.randomSaltProjectileRotation();
             projectile.element = this.context.player.element;
-            //projectile.salt = true;
-            //projectile.lifespan = 250;
             projectile.setDisplaySize(this.saltBulletSize, this.saltBulletSize);
             this.context.projectiles.add(projectile);
             
             projectile.salt = true;	
             projectile.id = this.context.client.socket.id;
             this.setDeletionTimer(projectile);	
-            
-            //this.context.physics.world.enable(projectile);
             
             var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation, element: this.context.player.element};
             socket.emit('addSaltProjectileServer', info);
@@ -138,9 +127,6 @@ class ProjectileHandler
     
     initFrostingProjectiles()
     {
-        
-        
-            //var projectile = this.context.physics.add.sprite(this.context.player.myContainer.x, this.context.player.myContainer.y, 'projectile');
             var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "frosting_bag_projectile"}, "frosting");
             projectile.rotation = this.context.player.sprite.rotation - (Math.PI / 2);
             projectile.element = this.context.player.element;
@@ -148,7 +134,6 @@ class ProjectileHandler
             projectile.frosting = true;
             projectile.id = this.context.client.socket.id;
             this.setDeletionTimer(projectile);
-            //this.context.physics.world.enable(projectile);
         
             var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation, element: this.context.player.element};
             socket.emit('addFrostingProjectileServer', info);
@@ -193,7 +178,6 @@ class ProjectileHandler
     
     callbackFunction(projectile)
     {
-        //alert("destroying projectile");
         projectile.destroy();
     }
     

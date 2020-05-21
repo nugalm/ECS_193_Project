@@ -42,7 +42,7 @@ class SocketFunc {
                         self.otherPlayers[id].username = self.add.text(-20, -70, (server[id].name), { fontSize: '24px', fill: 'white' });
                         self.otherPlayers[id].sprite = self.physics.add.sprite(0,
                             0,
-                            'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+                            'walk_no_weapon');
                         
                         self.otherPlayers[id].initSprite(self);
                         self.otherPlayers[id].updateHealth();
@@ -121,6 +121,10 @@ class SocketFunc {
                 }      
             }
             */
+            
+            if(self.otherPlayers[object.id].myContainer == null){
+                return
+            }
         
             self.otherPlayers[object.id].myContainer.x = object.player.position.x;
             self.otherPlayers[object.id].myContainer.y = object.player.position.y;
@@ -128,26 +132,6 @@ class SocketFunc {
             
             //self.physics.arcade.moveToXY(self.otherPlayers[id].myContainer.body,pos.x, pos.y, 160 , );
     }
-    
-    /*
-    addProjectile(self, projs) {
-    
-        if(!(projs.id in self.otherProjectiles)){
-                self.otherProjectiles[projs.id] = self.physics.add.group();
-                
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
-                self.physics.world.enable(self.otherProjectiles[projs.id]);
-        }
-            
-        
-        var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
-        projectile.setCollideWorldBounds(false);
-        projectile.body.setAllowGravity(false); 
-        projectile.rotation =  projs.obj.rotation;//this.context.player.sprite.rotation - (Math.PI / 2);
-        projectile.element = self.otherPlayers[projs.id].element;
-    }
-    */
     
     addSaltProjectile(self, projs){
         if(!(projs.id in self.otherProjectiles)){

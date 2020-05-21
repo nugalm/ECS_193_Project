@@ -100,8 +100,6 @@ class gameScene extends Phaser.Scene {
         this.projectileHandler.initProjectiles();
 
         // TiledMap
-        //this.map = this.add.tilemap("Real_Map");
-        //this.tileset = this.map.addTilesetImage("real_tile", "map_sheet");
         this.map = this.add.tilemap("new_map");	
         this.tileset = this.map.addTilesetImage("kitchen_tileset","kitchen_tileset");
         this.floorLayer = this.map.createStaticLayer('Floor', this.tileset, 0, 0);
@@ -129,9 +127,6 @@ class gameScene extends Phaser.Scene {
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
         
-
-        
-        
         this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
         
         
@@ -143,29 +138,10 @@ class gameScene extends Phaser.Scene {
         
 
         this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
-        //this.physics.add.collider(this.projectiles, this.collidableLayer);
-
-       // this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHit, null, this);
-        
-
         
         //camera
         this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
-        
-        //trying drops
-       // this.knife = new Knife({scene: this, x:200, y:1000, key:"knife_drop_image"});
-       // this.fork = new Weapon({scene: this, x:400, y:1000, key:"fork_drop_image"});
-       // this.whisk = new Weapon({scene: this, x:600, y:1000, key:"whisk_drop_image"});
-
-     
-        
-       // this.dropsGroup = this.physics.add.group();
-        
-        
-      //  this.dropsGroup.add(this.knife);
-     //   this.dropsGroup.add(this.fork);
-       // this.dropsGroup.add(this.whisk);
         
         // Fruit Respawn
         this.timedEvent = this.time.addEvent
@@ -204,26 +180,12 @@ class gameScene extends Phaser.Scene {
         });
         
         
-        
-        
-        
-      //  this.hi = this.physics.add.overlap(this.dropsGroup, this.player.myContainer, this.pickUpWeapon, null, this);
-        
         this.randomDropsHandler.init();
         
         this.physics.add.overlap(this.randomDropsHandler.weapon_group,
                                 this.player.myContainer, this.pickUpWeapon, null, this)
         
         this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpFood, null, this);
-        
-        // highlight collides tiles for debugging
-        /*
-        const debugGraphics = this.add.graphics().setAlpha(0.75);
-        this.collidableLayer.renderDebug(debugGraphics, {
-    tileColor: null, // Color of non-colliding tiles
-    collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-    faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        });*/
         
      
         //Multiplayer
@@ -237,21 +199,8 @@ class gameScene extends Phaser.Scene {
         
         this.physics.add.collider(this.projectiles, this.otherPlayersGroup, this.bulletHitOther, null, this);
         
-        //this.physics.add.overlap(this.dummiesGroup, this.otherPlayersGroup, this.otherMeleeHitDummy, null, this);
-        
         this.physics.add.overlap(this.otherPlayersGroup, this.playerGroup, this.meleeHitPlayer, null, this);
-        
-        /*
-        var info = {
-            name: this.username,
-            element:  this.player.element,
-            position: {x: this.player.sprite.x, y: this.player.sprite.y}
-        };
-        
-        
-        
-        this.client.socket.emit('startPlayer', info);
-        */
+    
         
         //Update client of all other players
         this.client.socket.on('updatePlayersClient', function(server){
@@ -262,10 +211,6 @@ class gameScene extends Phaser.Scene {
         // To update add .sprite to the end of otherPlayers[object.id]
         this.client.socket.on('moveUpdates', function(object){ 
             self.socketFunc.moveUpdates(self, object);
-        });
-        
-        this.client.socket.on('addProjectileClient', function(projs){
-            self.socketFunc.addProjectile(self, projs);     
         });
         
         this.client.socket.on('addSaltProjectileClient', function(projs){
@@ -291,11 +236,12 @@ class gameScene extends Phaser.Scene {
            self.socketFunc.updateAnim(self, player);
         });
         
+        // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
             for(var id in self.otherPlayers){
                 if(id === myId){
                     console.log("deletion");
-                    self.otherPlayers[id].myContainer.destroy();
+                    //self.otherPlayers[id].myContainer.destroy();
                     delete self.otherPlayers[id];
                 }
             } 
@@ -501,14 +447,18 @@ class gameScene extends Phaser.Scene {
     
     animationComplete(animation, frame)
     {
-        if (animation.key === 'fork_stab' )
+        if (animation.key === 'fork_stab' || 
+           animation.key === 'knife_swipe' ||
+           animation.key === 'whisk_twirl')
         {
             this.player.isMeleeing = false;
+            this.player.hitCount = 0;
         }
     
         if (animation.key === 'mouse_dash')
         {
             this.player.isDashing = false;
+           
         }
     }
 

@@ -7,7 +7,8 @@ class SweetCharacter extends Character {
         this.mana = 100;
         this.speed = 300;
         this.element = "sweet";
-        
+        this.gun = "frosting_bag";
+        this.weapon = "whisk";
     }
     
     

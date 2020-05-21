@@ -7,7 +7,7 @@
 class Character {
 
     constructor(_context) {
-    
+        this.context = _context;
         
         //stats
         this.health = 50;
@@ -52,6 +52,8 @@ class Character {
         
         this.pepperEvent;	
         this.pepperTime = 10000;
+        
+        this.dashMultiplier = 5;
 
 	}
 
@@ -77,11 +79,11 @@ class Character {
         this.sprite.displayWidth = this.DISPLAY;
         this.sprite.displayHeight = this.DISPLAY;
         this.sprite.setSize(0, 0);
-        this.sprite.setOffset(125, 50);
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
         this.initContainer(context);
         this.initCooldown();
+        this.context = context;
     }
     
     initContainer(context)
@@ -213,14 +215,37 @@ class Character {
         }    
     }
     
-   // updateWhileDashing()
-   // {
-    //    this.sprite.x += Math.cos(this.dashTargetRotation) * 10;
-   //     this.sprite.y += Math.sin(this.dashTargetRotation) * 10;
-   // }
+    updateWhileDashing(context)
+    {
+        var newX = this.myContainer.x + (Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier);
+        var newY = this.myContainer.y + (Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier);
+        
+        if (!context.drawer.isViableSpawnPoint(newX, newY)) 
+        {
+            return;
+        }
+        
+        this.myContainer.x = newX;
+        this.myContainer.y = newY; 
+        
+      
+    }
+    
+    /**	
+    checks to see which quadrant of the unit circle the sprite rotation is in.	
+    returns @quadrant	
+    **/	
+                	
+    spriteRotationQuadrant()	
+    {	
+        	
+    }
     
     dash()
     {
+        this.myContainer.body.setVelocity(0,0);	
+        this.isDashing = true;
+        
         this.sprite.anims.play('mouse_dash');
         
         var info = {anims: 'mouse_dash', melee: false, hitCount: 0};
@@ -230,6 +255,12 @@ class Character {
     
     updateRotation(context)
     {
+        // lock rotation if player is shooting,meleeing, or dashing	
+        if (this.isSpecialAnimating()) 	
+        {	
+            return;	
+        }
+        
         var temp = this.sprite.getWorldTransformMatrix();
         
         var targetAngle =  Phaser.Math.Angle.Between(
@@ -242,15 +273,14 @@ class Character {
     updateMovement(context)
     {
         
-        if (this.isDashing)
+        if (this.isDashing == true)
         {
-            this.updateWhileDashing();    
+            this.updateWhileDashing(context);  	
+            return;
         }
         else {
             if (context.cursors.left.isDown)
             {
-               
-                //this.sprite.setVelocityX(-160);
                 this.myContainer.body.setVelocityX(-160);
 
                 if (!this.isSpecialAnimating()) 
@@ -266,7 +296,6 @@ class Character {
             //right  
             else if (context.cursors.right.isDown)
             {
-                //this.sprite.setVelocityX(160);
                 this.myContainer.body.setVelocityX(160);
                 if (!this.isSpecialAnimating())  
                 {
@@ -282,7 +311,6 @@ class Character {
             // down  
             if (context.cursors.down.isDown)
             {
-                //this.sprite.setVelocityY(160);
                 this.myContainer.body.setVelocityY(160);
                 if (!this.isSpecialAnimating()) 
                 {
@@ -297,7 +325,6 @@ class Character {
             // up  
             else if (context.cursors.up.isDown)
             {
-                //this.sprite.setVelocityY(-160);
                 this.myContainer.body.setVelocityY(-160);
                 if (!this.isSpecialAnimating()) 
                 {
@@ -312,18 +339,19 @@ class Character {
             // none  
             if (context.cursors.up.isUp && context.cursors.down.isUp && context.cursors.left.isUp && context.cursors.right.isUp) 
             {
-               // this.sprite.setVelocityX(0);
-               // this.sprite.setVelocityY(0);
                 this.myContainer.body.setVelocityX(0);
                 this.myContainer.body.setVelocityY(0);
 
                 if (!this.isSpecialAnimating())  
                 {
-                    this.sprite.anims.play('turn');
-                    
-                    var info = {anims: 'turn', melee: false, hitCount: 0};
-            
-                    this.client.socket.emit('doAnim', info);
+                    if (this.sprite.anims.currentAnim != null && this.sprite.anims.currentAnim.key != 'turn')
+                    {
+                        this.sprite.anims.play('turn');
+
+                        var info = {anims: 'turn', melee: false, hitCount: 0};
+
+                        this.client.socket.emit('doAnim', info);
+                    }
                 }
             }
             
@@ -398,10 +426,11 @@ class Character {
         {
             this.health = 0;
             if(!(killer == null)){
-                alert(killer._text + " killed you via " + method);
+                //alert(killer._text + " killed you via " + method);
             }
             this.myContainer.destroy();
-            //this.sprite.disableBody(true, true);
+            this.client.socket.emit("hadDied");
+            this.context.scene.start('menuScene');
         }
         
     }

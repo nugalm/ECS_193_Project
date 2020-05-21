@@ -61,7 +61,9 @@ class KeyboardHandler
     {
         context.input.keyboard.on('keydown-SPACE', function(p) 
         {
-            context.player.dash();
+            if (context.player.isDashing == false) { 
+                context.player.dash();
+            }
         }, context);
     }
     
