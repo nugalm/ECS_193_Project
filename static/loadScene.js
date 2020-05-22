@@ -26,7 +26,7 @@ class loadScene extends Phaser.Scene
         this.loadMovementAnims();
         this.loadHealthBar();
         
-        this.load.image('logo', 'static/images/IntroThemeV2.png');   
+        this.load.image('logo', 'static/images/loadingSceneArtwithlogo.png');   
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
