@@ -142,7 +142,7 @@ class SocketFunc {
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
         
-        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "projectile"}, "salt");
+        var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: self.projectileHandler.randomSaltProjectileImage()}, "salt");
         //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
