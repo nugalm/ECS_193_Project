@@ -430,7 +430,6 @@ class Character {
             }
             this.myContainer.destroy();
             this.client.socket.emit("hadDied");
-            this.context.scene.start('menuScene');
         }
         
     }

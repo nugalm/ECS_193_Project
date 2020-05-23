@@ -46,9 +46,10 @@ class SocketFunc {
                         
                         self.otherPlayers[id].initSprite(self);
                         self.otherPlayers[id].updateHealth();
-                        self.otherPlayers[id].myContainer.data = {my_id: id};
                         
-                                            
+                        self.otherPlayers[id].myContainer.setDataEnabled();
+                        self.otherPlayers[id].myContainer.data.set("my_id", id);
+                        
                         self.otherPlayersGroup.add(self.otherPlayers[id].myContainer);
                         
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
