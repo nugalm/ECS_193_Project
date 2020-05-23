@@ -209,7 +209,7 @@ class gameScene extends Phaser.Scene {
         
         // Update the movement of all the other players
         // To update add .sprite to the end of otherPlayers[object.id]
-        this.client.socket.on('moveUpdates', function(object){ 
+        this.client.socket.on('moveUpdates', function(object){
             self.socketFunc.moveUpdates(self, object);
         });
         
@@ -265,7 +265,9 @@ class gameScene extends Phaser.Scene {
         this.player.update(this);
         this.projectileHandler.moveProjectiles();
 
-    
+        if(this.player.health <= 0){
+            this.scene.start("menuScene", {});
+        }
 
     }  
     
