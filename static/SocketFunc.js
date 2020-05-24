@@ -122,6 +122,10 @@ class SocketFunc {
                 }      
             }
             */
+        
+            if(self.otherPlayers[object.id] == null){
+                return
+            }
             
             if(self.otherPlayers[object.id].myContainer == null){
                 return

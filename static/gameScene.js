@@ -369,7 +369,7 @@ class gameScene extends Phaser.Scene {
     
     meleeHitPlayer(otherPlayerContainer, player)
     {
-            var id = otherPlayerContainer.data.my_id;
+            var id = otherPlayerContainer.getData("my_id");
                 
             if(this.otherPlayers[id].isMeleeing && this.otherPlayers[id].hitCount == 1) {
                 var damageAmount = this.colliderHandler.meleeHit(this.otherPlayers[id], this.player);
