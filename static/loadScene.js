@@ -107,8 +107,8 @@ class loadScene extends Phaser.Scene
         
             this.anims.create({
                 key: 'mouse_dash',
-                frames: this.anims.generateFrameNames('dash', {start: 0, end: 4} ),
-                frameRate: 9,
+                frames: this.anims.generateFrameNames('dash', {start: 0, end: 20} ),
+                frameRate: 40,
                 repeat: 0
                 
             });
@@ -247,8 +247,8 @@ class loadScene extends Phaser.Scene
     loadMovementAnims()
     {
         //dash
-        this.load.spritesheet('dash', 'static/images/temp/mouse_dash.png',
-                             {frameWidth: 220, frameHeight: 330 });
+        this.load.spritesheet('dash', 'static/images/dash/dash/dash_spritesheet.png',
+                             {frameWidth: 242, frameHeight: 332 });
         
         //idle
         this.load.spritesheet('idle_no_weapon', 'static/images/Mouse_Walk_Animations/mouse_no_weapon_idle.png',
