@@ -120,7 +120,8 @@ class ProjectileHandler
             projectile.id = this.context.client.socket.id;
             this.setDeletionTimer(projectile);
             //this.context.physics.world.enable(projectile);
-        
+            projectile.anims.play("bottle_projectile_anim");
+            projectile.setSize(50,50);
             var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation, element: this.context.player.element};
             socket.emit('addBottleProjectileServer', info);
     }

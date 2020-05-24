@@ -143,6 +143,12 @@ class loadScene extends Phaser.Scene
             });
         
         
+           this.anims.create({
+               key: 'bottle_projectile_anim',
+                frames: this.anims.generateFrameNames('ketchup', {start: 0, end: 5}),
+                frameRate: 5,
+                repeat: -1
+            }); 
         
         this.input.on('pointerdown', function(p)
         {       if (p.leftButtonDown())
@@ -155,7 +161,7 @@ class loadScene extends Phaser.Scene
     loadProjectiles()
     {
                 //projectiles
-        this.load.image('bottle_projectile', 'static/images/projectiles/squirter_bullet.png');
+        this.load.image('bottle_projectile', 'static/images/projectiles/ketchup/bottle_projectile_anim1.png');
         this.load.image('frosting_bag_projectile',
         'static/images/projectiles/frosting_bag_bullet.png');
         this.load.image('salt_projectile_1','static/images/projectiles/salt_shaker_bullet_1.png');
@@ -164,6 +170,8 @@ class loadScene extends Phaser.Scene
         
          this.load.image('salt_projectile_4','static/images/projectiles/salt_shaker_bullet_4.png');
         this.load.image('salt_projectile_5','static/images/projectiles/salt_shaker_bullet_5.png');
+        
+        this.load.spritesheet('ketchup', "static/images/projectiles/ketchup/spritesheet.png", {frameWidth: 332, frameHeight: 242 } )
     }
     
     loadDrops()
