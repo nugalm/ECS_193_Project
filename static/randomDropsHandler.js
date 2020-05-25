@@ -6,6 +6,7 @@ class RandomDropsHandler
         // Group to add and remove weapon and fruit drops
         this.group;
         
+        // the initial drops to be added to group. afterwards, these should NOT be accessed
         this.avocado;
         this.pepper;
         this.blueberry;
@@ -18,36 +19,7 @@ class RandomDropsHandler
         this.bottle;
         this.salt_shaker;
         
-        this.respawn_timer;
-        
-        this.pepperPositionX = 1344;
-        this.pepperPositionY = 1504;
-        
-        this.blueberryPositionX = 2336;
-        this.blueberryPositionY = 2048;
-        
-        this.avocadoPositionX = 2176; 
-        this.avocadoPositionY = 672;
-        
-        this.salt_shakerX = 416;
-        this.salt_shakerY = 1536;
-        
-        this.frosting_bagX = 1088; 
-        this.frosting_bagY = 2208;
-        
-        this.bottleX = 384;
-        this.bottleY = 2240;
-        
-        this.forkX = 2272;
-        this.forkY = 1600;
-        
-        this.whiskX = 1312;
-        this.whiskY = 640;
-        
-        this.knifeX = 1824;
-        this.knifeY = 2336;
-        
-        //
+        //hard-coded spawn locations
         this.positionX1 = 1344;
         this.positionY1 = 1504;
         this.isAvailable1 = false;
