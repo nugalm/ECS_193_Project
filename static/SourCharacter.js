@@ -2,6 +2,7 @@ class SourCharacter extends Character {
     
     constructor() {        
         super();
+        this.maxHealth = 300;
         this.health = 300;
         this.power = 200;
         this.mana = 60;

@@ -36,6 +36,8 @@ class gameScene extends Phaser.Scene {
         this.playerGroup;
         this.otherPlayersGroup;
         this.socketFunc = new SocketFunc();
+        this.meleeCollider;
+        this.projectileColliders = {};
 
         // variables using to test (e.g. damage system, collision, etc.)
         this.dummies;
@@ -70,6 +72,7 @@ class gameScene extends Phaser.Scene {
     {
         // From user selection in menu scene
         this.player = data.player;
+        console.log("data player: ", data.player);
         //this.player.printStat();
 
         this.username = data.username;
@@ -84,8 +87,17 @@ class gameScene extends Phaser.Scene {
         var info = {
             name: this.username,
             element:  this.player.element,
-            position: {x: this.player.startPositionX, y: this.player.startPositionY}
+            position: {x: this.player.startPositionX, y: this.player.startPositionY},
+            health: this.player.health,
+            power: this.player.power,
+            mana: this.player.mana,
+            speed: this.player.speed,
+            stamina: this.player.stamina,
+            weapon: this.player.weapon,
+            gun: this.player.gun
         };
+        console.log(this.player);
+        console.log("Player id: " + this.client.socket.id);
         
         this.sound.setVolume(0.1);
         this.sound.play('game_audio', {loop: 1});
@@ -199,7 +211,7 @@ class gameScene extends Phaser.Scene {
         
         this.physics.add.collider(this.projectiles, this.otherPlayersGroup, this.bulletHitOther, null, this);
         
-        this.physics.add.overlap(this.otherPlayersGroup, this.playerGroup, this.meleeHitPlayer, null, this);
+        this.meleeCollider = this.physics.add.overlap(this.otherPlayersGroup, this.playerGroup, this.meleeHitPlayer, null, this);
     
         
         //Update client of all other players
@@ -238,12 +250,12 @@ class gameScene extends Phaser.Scene {
         
         // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
-            for(var id in self.otherPlayers){
-                if(id === myId){
-                    console.log("deletion");
-                    //self.otherPlayers[id].myContainer.destroy();
-                    delete self.otherPlayers[id];
-                }
+            this.physics.world.removeCollider(this.projectileColliders[myId]);
+            
+            if(!(self.otherPlayers[id] == null)){
+                console.log("deletion");
+                self.otherPlayers[id].myContainer.destroy();
+                delete self.otherPlayers[id];
             } 
         });
           
@@ -253,8 +265,9 @@ class gameScene extends Phaser.Scene {
       {
         var self = this;
        // console.log("time event loop value: ",this.timedEvent.loop);
-        if (this.gameOver)
+        if (this.player.health <= 0)
         {
+            this.addRespawnButton();
             return;   
         }
         this.dummies.updateHealth();
@@ -265,9 +278,11 @@ class gameScene extends Phaser.Scene {
         this.player.update(this);
         this.projectileHandler.moveProjectiles();
 
+        /*
         if(this.player.health <= 0){
-            this.scene.start("menuScene", {});
+            this.clearAndSwitchScene();
         }
+        */
 
     }  
     
@@ -416,6 +431,7 @@ class gameScene extends Phaser.Scene {
     }
     
     bulletHitPlayer(bullet, player){
+        console.log("bullet hit player");
         
         var damageAmount = this.colliderHandler.projectileHit(bullet, this.player, this.player);
         
@@ -503,6 +519,59 @@ class gameScene extends Phaser.Scene {
                 context.randomDropsHandler.respawnWeapon(child);
             }
         })
+    }
+    
+    addRespawnButton(){
+        
+    }
+    
+    respawn(){
+        this.player.health = this.player.maxHealth;
+    }
+    
+    clearAndSwitchScene(){
+        this.client.socket.emit("died");
+        for(var id in this.otherPlayers){
+            delete this.otherPlayers[id];
+        }
+        
+        /*
+        for(var id in this.otherProjectiles){
+            this.otherProjectiles[id].children.iterate(function(child) {
+                if(child == undefined){
+                    return;
+                }
+                child.destroy();
+            });
+            delete this.otherProjectiles[id];
+        }
+        
+        this.playerGroup.children.iterate(function(child){
+            if(child == undefined){
+                    return;
+                }
+                child.destroy();
+        });
+        
+        
+        this.otherPlayersGroup.children.iterate(function(child){
+            if(child == undefined){
+                    return;
+                }
+                child.destroy();
+        });
+        
+        this.physics.world.removeCollider(this.meleeCollider);
+        
+        for(var id in this.projectileColliders){
+            this.physics.world.removeCollider(this.projectileColliders[id]);
+        }
+        */
+        
+        this.player.health = this.player.maxHealth;
+        //this.scene.start("menuScene", {socket: this.client.socket});
+        //this.scene.switch("gameScene", "menuScene");
+        //this.scene.restart({player: this.player, socket: this.client.socket});
     }
     
 }

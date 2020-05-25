@@ -2,6 +2,7 @@ class SweetCharacter extends Character {
     
     constructor() {        
         super();
+        this.maxHealth = 300;
         this.health = 300;
         this.power = 300;
         this.mana = 100;

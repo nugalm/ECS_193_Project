@@ -114,7 +114,15 @@ io.on('connection', function(socket) {
         serverPlayers[socket.id].name = player.name;
         serverPlayers[socket.id].render = true;
         
+        serverPlayers[socket.id].health = player.health;
+        serverPlayers[socket.id].power = player.power;
+        serverPlayers[socket.id].mana = player.mana;
+        serverPlayers[socket.id].speed = player.speed;
+        //this.weapon = new Fork(this.element);
+        serverPlayers[socket.id].weapon = player.weapon;
+        serverPlayers[socket.id].gun = player.gun;
         
+        /*
         if(player.element === "salty"){
             serverPlayers[socket.id].health = 500;
             serverPlayers[socket.id].power = 300;
@@ -156,6 +164,7 @@ io.on('connection', function(socket) {
             serverPlayers[socket.id].weapon = "none";
             serverPlayers[socket.id].gun = "none";
         }
+        */
         
         serverPlayers[socket.id].position = player.position;
         
@@ -242,11 +251,12 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('updateAnim', {id: socket.id, info: info});
     });
     
-    socket.on('hasDied', function() {
+    socket.on('died', function() {
         //console.log('user disconnected');
         // remove this player from our players object
         //delete serverPlayers[socket.id];
         // emit a message to all players to remove this player
+        delete serverPlayers[socket.id];
         socket.broadcast.emit('deleteTime', socket.id);
         //console.log('removed player ' + socket.id);
     });

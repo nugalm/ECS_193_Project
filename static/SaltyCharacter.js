@@ -2,6 +2,7 @@ class SaltyCharacter extends Character {
     
     constructor() {        
         super();
+        this.maxHealth = 500;
         this.health = 500;
         this.power = 300;
         this.mana = 70;

@@ -10,6 +10,7 @@ class Character {
         this.context = _context;
         
         //stats
+        this.maxHealth = 50;
         this.health = 50;
         this.power = 50;
         this.mana = 50;
@@ -429,7 +430,7 @@ class Character {
                 //alert(killer._text + " killed you via " + method);
             }
             this.myContainer.destroy();
-            this.client.socket.emit("hadDied");
+            //this.client.socket.emit("hadDied");
         }
         
     }

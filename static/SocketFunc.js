@@ -34,8 +34,8 @@ class SocketFunc {
                     }
                     
                     if(!(typeof self.otherPlayers[id] == 'undefined')) {
-                        //Add in other player characte
-                        console.log("x: " + server[id].position.x + " y: " + server[id].position.y);
+                        console.log("Adding player id: " + id);
+                        //Add in other player character
                         self.otherPlayers[id].startPositionY = server[id].position.y;
                         self.otherPlayers[id].startPositionX = server[id].position.x;
                         
@@ -54,7 +54,7 @@ class SocketFunc {
                         
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
                         
-                        self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
+                        //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
                         
                         
                         //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].sprite, self.meleeHit, null, self);
@@ -143,7 +143,7 @@ class SocketFunc {
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.projectileColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
         
@@ -162,6 +162,10 @@ class SocketFunc {
     }
     
     addBottleProjectile(self, projs){
+        if(self.otherPlayers[projs.id] == null){
+            return;
+        }
+        
         if(!(projs.id in self.otherProjectiles)){
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
@@ -200,6 +204,10 @@ class SocketFunc {
     
     
     updateAnim(self, player) {
+        if(self.otherPlayers[player.id] == null){
+            return;
+        }
+        
         self.otherPlayers[player.id].isMeleeing = player.info.melee;
         self.otherPlayers[player.id].hitCount = player.info.hitCount;
             
