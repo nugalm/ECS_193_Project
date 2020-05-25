@@ -157,6 +157,14 @@ class loadScene extends Phaser.Scene
                 repeat: -1
             }); 
         
+            this.anims.create({
+               key: 'salt_shaker_projectile_anim',
+                frames: this.anims.generateFrameNames('salt', {start: 0, end: 4}),
+                frameRate: 10,
+                repeat: -1
+            }); 
+        
+        
         this.input.on('pointerdown', function(p)
         {       if (p.leftButtonDown())
                 {  
@@ -171,7 +179,7 @@ class loadScene extends Phaser.Scene
         this.load.image('bottle_projectile', 'static/images/projectiles/ketchup/bottle_projectile_anim1.png');
         this.load.image('frosting_bag_projectile',
         'static/images/projectiles/frost/frosting_bag_projectile_anim1.png');
-        this.load.image('salt_projectile_1','static/images/projectiles/salt_shaker_bullet_1.png');
+        this.load.image('salt_projectile_1','static/images/projectiles/salt/salt_shaker_projectile_anim1.png');
          this.load.image('salt_projectile_2','static/images/projectiles/salt_shaker_bullet_2.png');
          this.load.image('salt_projectile_3','static/images/projectiles/salt_shaker_bullet_3.png');
         
@@ -181,6 +189,8 @@ class loadScene extends Phaser.Scene
         this.load.spritesheet('ketchup', "static/images/projectiles/ketchup/spritesheet.png", {frameWidth: 332, frameHeight: 242 } );
         
         this.load.spritesheet('frosting', "static/images/projectiles/frost/frosting_bag_projectile_spritesheet.png", {frameWidth: 332, frameHeight: 242 } );
+        
+        this.load.spritesheet('salt', "static/images/projectiles/salt/salt_shaker_projectile_spritesheet.png", {frameWidth: 332, frameHeight: 242 } );
     }
     
     loadDrops()

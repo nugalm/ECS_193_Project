@@ -6,7 +6,7 @@ class ProjectileHandler
         this.context = context;
         
         this.numSaltBullets = 5;
-        this.saltBulletSize = 15;
+        this.saltBulletSize = 75;
         
         // time it takes for projectile to disappear (in milliseconds)
         this.saltTime = 500;
@@ -55,7 +55,7 @@ class ProjectileHandler
         var i;
         for (i = 0; i < 5; i++) 
         {
-            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: this.randomSaltProjectileImage()}, "salt")	
+            var projectile = new Projectile({scene: this.context, x: this.context.player.myContainer.x, y: this.context.player.myContainer.y, key: "salt_projectile_1"}, "salt")	
             projectile.rotation = this.context.player.sprite.rotation - this.randomSaltProjectileRotation();
             projectile.element = this.context.player.element;
             projectile.setDisplaySize(this.saltBulletSize, this.saltBulletSize);
@@ -64,7 +64,9 @@ class ProjectileHandler
             projectile.salt = true;	
             projectile.id = this.context.client.socket.id;
             this.setDeletionTimer(projectile);	
-            
+            projectile.anims.play("salt_shaker_projectile_anim");
+            projectile.setSize(50,50);
+            projectile.setOffset(160, 100);
             var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation, element: this.context.player.element};
             socket.emit('addSaltProjectileServer', info);
         }
