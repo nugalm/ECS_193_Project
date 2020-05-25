@@ -45,18 +45,6 @@ class gameScene extends Phaser.Scene {
         this.spicy;
         this.salt;
         
-        //drops
-        this.knife;
-        this.hi;
-        
-        this.dropsGroup;
-        
-        this.fork;
-        this.salt_shaker;
-        this.squirter;
-        this.whisk;
-        this.frosting_bag;
-        
         this.randomDropsHandler = new RandomDropsHandler(this);
         this.timedEvent;
         
@@ -182,10 +170,7 @@ class gameScene extends Phaser.Scene {
         
         this.randomDropsHandler.init();
         
-        this.physics.add.overlap(this.randomDropsHandler.weapon_group,
-                                this.player.myContainer, this.pickUpWeapon, null, this)
-        
-        this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpFood, null, this);
+        this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpDrop, null, this);
         
      
         //Multiplayer
@@ -276,31 +261,34 @@ class gameScene extends Phaser.Scene {
         if(this.player.isEquipping)
         {
             this.player.pickUpWeapon(weapon, this);	
-            weapon.disableBody(true, true);
+            this.randomDropsHandler.updateAvailablePositions(weapon.x, weapon.y);
+            weapon.destroy();
             this.player.initCooldown();
             this.cooldownEvent.delay = this.player.cooldown;
             this.meleeCooldownEvent.delay = this.player.meleeCooldown;
         }
     }
     
-    pickUpFood(player_container, food)
+    pickUpDrop(player_container, drop)
     {
-        if (food == this.randomDropsHandler.avocado) 
-        {
-            this.player.health = this.player.health + 100;
-            food.disableBody(true, true);
-        } 
-        else if (food == this.randomDropsHandler.pepper)
-        {
-            this.player.power = this.player.power + 100;
-            //alert("power after pickup: " + this.player.power)	
-            this.player.pepper_time(this);
-            food.disableBody(true, true);
+        console.log("inside pickUpDrop");
+        if (drop instanceof Weapon) {
+            if(this.player.isEquipping)
+            {
+                this.player.pickUpWeapon(drop, this);	
+                this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
+                drop.destroy();
+                this.player.initCooldown();
+                this.cooldownEvent.delay = this.player.cooldown;
+                this.meleeCooldownEvent.delay = this.player.meleeCooldown;
+            }
         }
-        else if (food == this.randomDropsHandler.blueberry)
+        
+        else 
         {
-            this.player.speed = this.player.speed + 50;
-            food.disableBody(true, true);
+            this.player.pickUpFood(drop, this);
+            this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
+            drop.destroy();
         }
     }
     
@@ -466,14 +454,10 @@ class gameScene extends Phaser.Scene {
 
     callbackFunction() 
     {
-        var context = this;
-        this.randomDropsHandler.group.children.iterate(function (child) 
-        {
-            if (!child.active)
-            {  
-                context.randomDropsHandler.respawn(child);
-            }
-        })
+        if (this.randomDropsHandler.group.getLength() < 9)
+        { 
+            this.randomDropsHandler.respawn();
+        }
     }
     
     cooldownFunc()
@@ -491,18 +475,6 @@ class gameScene extends Phaser.Scene {
             console.log("Melee cooldown: " + this.player.meleeCooldown);
             this.player.canMelee = true;
         }
-    }
-    
-    weaponCallbackFunction()
-    {
-        var context = this;
-        this.randomDropsHandler.weapon_group.children.iterate(function(child)
-        {
-            if (!child.active) 
-            {
-                context.randomDropsHandler.respawnWeapon(child);
-            }
-        })
     }
     
 }

@@ -9,6 +9,7 @@ class Drop extends Phaser.Physics.Arcade.Sprite
         config.scene.add.existing(this);
         this.respawnTime;
         this.cooldownTime;
+        this.type = config.key;
     }
     
     initRespawnEvent()

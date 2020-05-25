@@ -436,30 +436,49 @@ class Character {
     
     pickUpWeapon(weapon, context) 
     {
-        if (weapon instanceof Knife)
+        if (weapon.type == "knife_drop_image")
         {
             this.weapon = "knife";
         }
-        else if (weapon == context.randomDropsHandler.fork)
+        else if (weapon.type == "fork_drop_image")
         {
             this.weapon = "fork";
         }
-        else if (weapon == context.randomDropsHandler.whisk) 
+        else if (weapon.type == "whisk_drop_image") 
         {
             this.weapon = "whisk";
         }
-        else if (weapon == context.randomDropsHandler.salt_shaker)
+        else if (weapon.type == "salt_shaker_drop_image")
         {
             this.gun = "salt_shaker";
         }
-        else if (weapon == context.randomDropsHandler.bottle)
+        else if (weapon.type == "squirter_drop_image")
         {    
             this.gun = "bottle";
         }
-        else if (weapon == context.randomDropsHandler.frosting_bag)
+        else if (weapon.type == "frosting_bag_drop_image")
         {
             this.gun = "frosting_bag";
         }
+        
+    }
+    
+    pickUpFood(drop, context) 
+    {
+        if (drop.type == "avocado_drop_image")
+        {
+            this.health += 100;
+        }
+        else if (drop.type == "blueberry_drop_image") 
+        {
+            this.speed += 50;
+        }
+        else if (drop.type == "pepper_drop_image") 
+        {
+            this.power += 100;
+            this.pepper_time(context);
+        }
+        
         
     }
     
@@ -478,7 +497,7 @@ class Character {
     noMorePepper()	
     {	
         this.power = this.power - 100;	
-        //alert("power after pepper subtraction: "+ this.power)	
+      //  alert("power after pepper subtraction: "+ this.power)	
     }
     
     
