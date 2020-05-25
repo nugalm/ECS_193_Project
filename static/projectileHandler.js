@@ -135,7 +135,8 @@ class ProjectileHandler
             projectile.frosting = true;
             projectile.id = this.context.client.socket.id;
             this.setDeletionTimer(projectile);
-        
+            projectile.anims.play("frosting_bag_projectile_anim");
+            projectile.setSize(50,50);
             var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation, element: this.context.player.element};
             socket.emit('addFrostingProjectileServer', info);
     }

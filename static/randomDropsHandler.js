@@ -104,47 +104,47 @@ class RandomDropsHandler
     
     initPepper()
     {
-        this.pepper = new Drop({scene: this.context, x:this.pepperPositionX, y:this.pepperPositionY, key: "pepper_drop_image"})
+        this.pepper = new Drop({scene: this.context, x:this.positionX1, y:this.positionY1, key: "pepper_drop_image"})
     }
     
     initBlueberry()
     {
-        this.blueberry = new Drop({scene: this.context, x:this.blueberryPositionX, y:this.blueberryPositionY, key: "blueberry_drop_image"})
+        this.blueberry = new Drop({scene: this.context, x:this.positionX2, y:this.positionY2, key: "blueberry_drop_image"})
     }
     
     initAvocado()
     {
-        this.avocado = new Drop({scene: this.context, x:this.avocadoPositionX, y:this.avocadoPositionY, key: "avocado_drop_image"})
+        this.avocado = new Drop({scene: this.context, x:this.positionX3, y:this.positionY3, key: "avocado_drop_image"})
         
     }
     
     initSaltShaker()
     {
-        this.salt_shaker = new Weapon({scene: this.context, x:this.salt_shakerX, y:this.salt_shakerY, key: "salt_shaker_drop_image"})
+        this.salt_shaker = new Weapon({scene: this.context, x:this.positionX4, y:this.positionY4, key: "salt_shaker_drop_image"})
     }
     
     initFrostingBag()
     {
-        this.frosting_bag = new Weapon({scene: this.context, x:this.frosting_bagX, y:this.frosting_bagY, key: "frosting_bag_drop_image"})
+        this.frosting_bag = new Weapon({scene: this.context, x:this.positionX5, y:this.positionY5, key: "frosting_bag_drop_image"})
     }
     
     initBottle()
     {
-        this.bottle = new Weapon({scene: this.context, x:this.bottleX, y:this.bottleY, key: "squirter_drop_image"})
+        this.bottle = new Weapon({scene: this.context, x:this.positionX6, y:this.positionY6, key: "squirter_drop_image"})
         
     }
  
     initFork()
     {
-        this.fork = new Weapon({scene: this.context, x:this.forkX, y:this.forkY, key:"fork_drop_image"}); 
+        this.fork = new Weapon({scene: this.context, x:this.positionX7, y:this.positionY7, key:"fork_drop_image"}); 
     }
     initWhisk()
     {
-        this.whisk = new Weapon({scene: this.context, x:this.whiskX, y:this.whiskY, key:"whisk_drop_image"});
+        this.whisk = new Weapon({scene: this.context, x:this.positionX8, y:this.positionY8, key:"whisk_drop_image"});
     }
     initKnife()
     {
-        this.knife = new Weapon({scene: this.context, x:this.knifeX, y:this.knifeY, key:"knife_drop_image"});
+        this.knife = new Weapon({scene: this.context, x:this.positionX9, y:this.positionY9, key:"knife_drop_image"});
     }
 
     respawn() 
