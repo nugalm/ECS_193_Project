@@ -142,6 +142,62 @@ class loadScene extends Phaser.Scene
                 repeat: -1
             });
         
+            this.anims.create({
+               key: 'fork_idle',
+                frames: this.anims.generateFrameNames('fork_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
+            this.anims.create({
+               key: 'whisk_idle',
+                frames: this.anims.generateFrameNames('whisk_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
+             this.anims.create({
+               key: 'salt_shaker_idle',
+                frames: this.anims.generateFrameNames('salt_shaker_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
+            this.anims.create({
+               key: 'squirter_idle',
+                frames: this.anims.generateFrameNames('squirter_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
+            this.anims.create({
+               key: 'frosting_bag_idle',
+                frames: this.anims.generateFrameNames('frosting_bag_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
+            this.anims.create({
+               key: 'avocado_idle',
+                frames: this.anims.generateFrameNames('avocado_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
+            this.anims.create({
+               key: 'blueberry_idle',
+                frames: this.anims.generateFrameNames('blueberry_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
+            this.anims.create({
+               key: 'pepper_idle',
+                frames: this.anims.generateFrameNames('pepper_drop', {start: 0, end: 3}),
+                frameRate: 6,
+                repeat: -1
+            });
+        
         
            this.anims.create({
                key: 'bottle_projectile_anim',
@@ -164,6 +220,8 @@ class loadScene extends Phaser.Scene
                 repeat: -1
             }); 
         
+            
+        
         
         this.input.on('pointerdown', function(p)
         {       if (p.leftButtonDown())
@@ -175,7 +233,7 @@ class loadScene extends Phaser.Scene
     
     loadProjectiles()
     {
-                //projectiles
+        //projectiles
         this.load.image('bottle_projectile', 'static/images/projectiles/ketchup/bottle_projectile_anim1.png');
         this.load.image('frosting_bag_projectile',
         'static/images/projectiles/frost/frosting_bag_projectile_anim1.png');
@@ -195,25 +253,52 @@ class loadScene extends Phaser.Scene
     
     loadDrops()
     {
-        //drops
-        this.load.image('fork_drop_image', 'static/images/temp/fork_drop_still.png');
+        //melee 
+        this.load.image('fork_drop_image', 'static/images/drops/fork/fork-drop.0000.png');
         
-        this.load.image('knife_drop_image', 'static/images/temp/knife_drop_still.png');
+        this.load.spritesheet('fork_drop', 
+        'static/images/drops/fork/fork_drop.png',{frameWidth:252, frameHeight: 332 });
         
-        this.load.image('salt_shaker_drop_image', 'static/images/temp/salt_shaker_drop_still.png');
+        this.load.image('knife_drop_image', 'static/images/drops/knife_drop_still_2.png');
         
-        this.load.image('squirter_drop_image', 'static/images/temp/squirter_drop_still.png');
+        this.load.spritesheet('knife_drop', 
+        'static/images/drops/knife_drop.png', {frameWidth: 222 , frameHeight: 332});
         
-        this.load.image('whisk_drop_image', 'static/images/temp/whisk_drop_still.png');
+        this.load.image('whisk_drop_image', 'static/images/drops/whisk/whisk-drop.0000.png');
         
-        this.load.image('frosting_bag_drop_image', 'static/images/temp/frosting_bag_still.png');
+        this.load.spritesheet('whisk_drop', 
+        'static/images/drops/whisk/whisk_drop.png', {frameWidth: 222 , frameHeight: 332});
+        
+        
+        //ranged
+        this.load.image('salt_shaker_drop_image', 'static/images/drops/salt-shaker/salt-shaker-drop.0000.png');
+        this.load.spritesheet('salt_shaker_drop', 
+        'static/images/drops/salt-shaker/salt_shaker_drop.png', {frameWidth: 222 , frameHeight: 332});
+        
+        
+        this.load.image('squirter_drop_image', 'static/images/drops/squirter/squirter-drop.0000.png');
+        this.load.spritesheet('squirter_drop', 
+        'static/images/drops/squirter/squirter_drop.png', {frameWidth: 222 , frameHeight: 332});
+        
+        
+        
+        this.load.image('frosting_bag_drop_image', 'static/images/drops/frosting-bag/frostbag-drop.0000.png');
+        this.load.spritesheet('frosting_bag_drop', 
+        'static/images/drops/frosting-bag/frosting_bag_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         // food
-        this.load.image('blueberry_drop_image', 'static/images/temp/blueberry_drop_still.png');
+        this.load.image('blueberry_drop_image', 'static/images/drops/blueberry/blueberry.0000.png');
+        this.load.spritesheet('blueberry_drop', 
+        'static/images/drops/blueberry/blueberry_drop.png', {frameWidth: 222 , frameHeight: 332});
         
-        this.load.image('avocado_drop_image', 'static/images/temp/avocado_drop_still.png');
         
-        this.load.image('pepper_drop_image', 'static/images/temp/pepper_drop_still.png');
+        this.load.image('avocado_drop_image', 'static/images/drops/avocado/avocado.0000.png');
+        this.load.spritesheet('avocado_drop', 
+        'static/images/drops/avocado/avocado_drop.png', {frameWidth: 222 , frameHeight: 332});
+        
+        this.load.image('pepper_drop_image', 'static/images/drops/pepper/pepper.0000.png');
+        this.load.spritesheet('pepper_drop', 
+        'static/images/drops/pepper/pepper_drop.png', {frameWidth: 222 , frameHeight: 332});
     }
     
     loadMenuSelect()
@@ -282,8 +367,8 @@ class loadScene extends Phaser.Scene
     loadHealthBar()
     {
         //healthbar
-        this.load.image('red_bar', 'static/images/temp/RedBar.png');
-        this.load.image('green_bar', 'static/images/temp/GreenBar.png');
+        this.load.image('red_bar', 'static/images/drops/RedBar.png');
+        this.load.image('green_bar', 'static/images/drops/GreenBar.png');
         
         
     }
