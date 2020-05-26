@@ -15,7 +15,46 @@ class loadScene extends Phaser.Scene
     // Frontload all sprites/images in loading screen
     preload()
     {
-        this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect((this.game.config.width / 2) - 150, this.game.config.height / 2, 320, 50);
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        var loadingText = this.make.text({
+            x: width / 2,
+            y: height / 2 - 50,
+            text: 'The Mice are getting ready...',
+            style: {
+                font: '20px monospace',
+                fill: '#ffffff'
+            }
+        });
+        loadingText.setOrigin(0.5, 0.5);
+        
+        
+        this.load.image('logo', 'static/images/loadingSceneArtwithlogo.png');
+        
+        //preloaders
+        this.load.on('progress', function (value) {
+            console.log(value);
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect((this.game.config.width / 2) - 140, (this.game.config.height / 2) + 10, 300 * value, 30);
+        }, this);
+
+        this.load.on('fileprogress', function (file) {
+            console.log(file.src);
+        });
+
+        this.load.on('complete', function () {
+            console.log('complete');
+            progressBar.destroy();
+            progressBox.destroy();
+            loadingText.destroy();
+        });
+        
+       // this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
         
         this.loadProjectiles();
         this.loadDrops();
@@ -26,7 +65,7 @@ class loadScene extends Phaser.Scene
         this.loadMovementAnims();
         this.loadHealthBar();
         
-        this.load.image('logo', 'static/images/loadingSceneArtwithlogo.png');   
+        
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
@@ -42,7 +81,7 @@ class loadScene extends Phaser.Scene
         this.sound.add('selection_audio');
         
         
-        this.loadText.setVisible(false);
+       // this.loadText.setVisible(false);
         this.add.text(100, 150, 'Click to enter the Marfare!', { fontSize: '32px', fill: 'white' });
         
         

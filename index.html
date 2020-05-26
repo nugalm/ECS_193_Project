@@ -42,7 +42,17 @@
     }
   </style>
   <script type="text/javascript">
-      
+       /* loadScene.config = 
+        {
+            init: loadScene.init,
+            preload: loadScene.preload,
+            create: loadScene.create,
+            pack: {
+                    files: [
+                        {type: 'image', key: 'logo', url: 'static/images/loadingSceneArtwithlogo.png'}
+                    ]
+            }
+        };*/
       var config = {
           // .AUTO tells phaser to default to WEBGL, else default to canvas
             type: Phaser.AUTO,
@@ -57,7 +67,7 @@
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 0 },
-                    debug: true
+                    debug: false
                 }
             },
 
@@ -87,15 +97,14 @@
           socket.emit('newPlayer');
       });
       
+      
       var client = new Client(socket);
-      
       var game = new Phaser.Game(config);
-      
       //this.scene.start('loadScene', {socket: this.socket}); 
       
       //var dumPhysics = this.physics;
 
- 
+      
       
   </script>
 </body>
