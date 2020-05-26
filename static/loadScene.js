@@ -1,10 +1,21 @@
 class loadScene extends Phaser.Scene 
 {
+    
+    
     constructor()
     {
-        super( {key: 'loadScene'} );
-        this.loadText;
+        super( 
+            { key: 'loadScene',
+              pack: {
+                        files: [ 
+                            {type: 'image', key: 'logo', url: 'static/images/loadingSceneArtwithlogo.png'}
+                        ]
+                    }  
+            });
+        this.loadingText;
         this.bg;
+        
+       
     }
     
     init(data)
@@ -15,47 +26,12 @@ class loadScene extends Phaser.Scene
     // Frontload all sprites/images in loading screen
     preload()
     {
-        var progressBar = this.add.graphics();
-        var progressBox = this.add.graphics();
-        progressBox.fillStyle(0x222222, 0.8);
-        progressBox.fillRect((this.game.config.width / 2) - 150, this.game.config.height / 2, 320, 50);
-        var width = this.cameras.main.width;
-        var height = this.cameras.main.height;
-        var loadingText = this.make.text({
-            x: width / 2,
-            y: height / 2 - 50,
-            text: 'The Mice are getting ready...',
-            style: {
-                font: '20px monospace',
-                fill: '#ffffff'
-            }
-        });
-        loadingText.setOrigin(0.5, 0.5);
+        // background image
+        this.bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'logo');
+        this.bg.setDisplaySize(this.game.config.width, this.game.config.height);
         
-        
-        this.load.image('logo', 'static/images/loadingSceneArtwithlogo.png');
-        
-        //preloaders
-        this.load.on('progress', function (value) {
-            console.log(value);
-            progressBar.clear();
-            progressBar.fillStyle(0xffffff, 1);
-            progressBar.fillRect((this.game.config.width / 2) - 140, (this.game.config.height / 2) + 10, 300 * value, 30);
-        }, this);
-
-        this.load.on('fileprogress', function (file) {
-            console.log(file.src);
-        });
-
-        this.load.on('complete', function () {
-            console.log('complete');
-            progressBar.destroy();
-            progressBox.destroy();
-            loadingText.destroy();
-        });
-        
-       // this.loadText = this.add.text(100, 100, 'The Mice are getting ready...', { fontSize: '24px', fill: 'white' });
-        
+        this.preloaders();
+       
         this.loadProjectiles();
         this.loadDrops();
         this.loadMenuSelect();
@@ -73,21 +49,68 @@ class loadScene extends Phaser.Scene
  
     }
     
+    preloaders()
+    {
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect((this.game.config.width / 2) - 150, this.game.config.height - (this.game.config.height / 9), 320, 50);
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        
+        //text
+        this.loadingText = this.make.text({
+            x: width / 2,
+            y: height - (height / 7),
+            text: 'The Mice are getting ready...',
+            style: {
+                font: 'bold 30px monospace',
+                fill: '#ffffff'
+            }
+        });
+        this.loadingText.setOrigin(0.5, 0.5);
+        
+        //percent 
+        var percentText = this.make.text({
+            x: width / 2,
+            y: (height - (height / 14)),
+            text: '0%',
+            style: {
+            font: '18px monospace',
+            fill: '#ffffff'
+            }
+        });
+        percentText.setOrigin(0.5, 0.5);
+        
+        
+        //preloaders
+        this.load.on('progress', function (value) {
+            console.log(value);
+            percentText.setText(parseInt(value * 100) + '%');
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect((this.game.config.width / 2) - 140, (this.game.config.height - (this.game.config.height / 9)) + 10, 300 * value, 30);
+        }, this);
+
+        this.load.on('fileprogress', function (file) {
+            console.log(file.src);
+        });
+
+        this.load.on('complete', function () {
+            console.log('complete');
+            progressBar.destroy();
+            progressBox.destroy();
+            percentText.destroy();
+            this.loadingText.text = 'The Mice Are Ready! Click to Enter the Marfare!';
+        }, this);
+    }
+    
     // Creating animations to be used in gameScene
     // prompt user to click to enter gameScene
     create()
     {
         this.sound.add('game_audio');
         this.sound.add('selection_audio');
-        
-        
-       // this.loadText.setVisible(false);
-        this.add.text(100, 150, 'Click to enter the Marfare!', { fontSize: '32px', fill: 'white' });
-        
-        
-        this.bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'logo');
-        
-        this.bg.setDisplaySize(this.game.config.width, this.game.config.height);
         
             var frameNames = this.anims.generateFrameNames('kitchenScene', {
                 start: 0, end: 19, zeroPad: 0, 
