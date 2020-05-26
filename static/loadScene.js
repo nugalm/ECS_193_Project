@@ -73,13 +73,13 @@ class loadScene extends Phaser.Scene
         //percent 
         var percentText = this.make.text({
             x: width / 2,
-            y: (height - (height / 14)),
+            y: this.game.config.height - (this.game.config.height / 9) + 25,
             text: '0%',
             style: {
             font: '18px monospace',
             fill: '#ffffff'
             }
-        });
+        }, this);
         percentText.setOrigin(0.5, 0.5);
         
         
