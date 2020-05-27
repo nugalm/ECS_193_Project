@@ -228,7 +228,10 @@ class Character {
         this.myContainer.x = newX;
         this.myContainer.y = newY; 
         
-      
+        var myPosition = {x: this.myContainer.x , y: this.myContainer.y};
+        var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
+        var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
+        socket.emit('movement', info);
     }
     
     /**	
