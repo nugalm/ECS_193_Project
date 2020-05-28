@@ -206,6 +206,66 @@ class SocketFunc {
         self.physics.world.enable(projectile);
     }
     
+    updateDrops(self, info){
+        var drops = self.randomDropsHandler.group;
+        
+        drops.children.each(function(drop){
+            if(drop == null){
+                return;
+            }
+            
+            if((drop.x == info.x) && (drop.y == info.y)){
+                this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
+                drop.destroy();
+            }
+        }, self);
+    }
+    
+    syncDrops(self, info){
+        var drops = self.randomDropsHandler.group;
+        console.log("In sync");
+        
+        drops.children.each(function(drop){
+            if(drop == null){
+                return;
+            }
+            
+            if((drop.x == info.x) && (drop.y == info.y)){
+                drop.destroy;
+            }
+        }, self);
+        
+        if(info.isWeapon){
+            drops.add(new Weapon({scene: self, x: info.x,
+                                  y: info.y, key: info.type}));
+            this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
+        }
+                
+        else{
+            drops.add(new Drop({scene: self, x: info.x,
+                                y: info.y, key: info.type}));
+            this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
+        }
+        
+        
+        /*
+        if(same){
+            return;
+        }
+        
+        
+        if(info.isWeapon){
+            drops.add(new Weapon({scene: self, x: info.x,
+                                  y: info.y, key: info.type}));
+        }
+                
+        else{
+            drops.add(new Drop({scene: self, x: info.x,
+                                y: info.y, key: info.type}));
+        }
+        */
+    }
+    
     
     
     updateAnim(self, player) {

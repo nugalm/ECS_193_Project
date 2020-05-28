@@ -242,6 +242,14 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('updateAnim', {id: socket.id, info: info});
     });
     
+    socket.on('updateDropsClient', function(info){
+        socket.broadcast.emit('updateDropsServer', info);
+    });
+    
+    socket.on('syncDropsClient', function(info){
+        socket.broadcast.emit('syncDropsServer', info); 
+    });
+    
     socket.on('hasDied', function() {
         //console.log('user disconnected');
         // remove this player from our players object

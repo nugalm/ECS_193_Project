@@ -325,7 +325,17 @@ class RandomDropsHandler
                 default: 
                     break;
                 
-        }// end switch    
+        }// end switch
+        
+        if(drop instanceof Weapon){
+            var info = {x: drop.x, y: drop.y, type: drop.type, isWeapon: true};
+        }
+        else {
+            var info = {x: drop.x, y: drop.y, type: drop.type, isWeapon: false};
+        }
+        
+        this.context.client.socket.emit('syncDropsClient', info);
+        
     }
     
     /**

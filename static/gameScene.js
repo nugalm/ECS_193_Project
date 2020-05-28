@@ -221,6 +221,14 @@ class gameScene extends Phaser.Scene {
            self.socketFunc.updateAnim(self, player);
         });
         
+        this.client.socket.on("updateDropsServer", function(info){
+            self.socketFunc.updateDrops(self, info);
+        });
+        
+        this.client.socket.on('syncDropsServer', function(info){
+            self.socketFunc.syncDrops(self, info);  
+        });
+        
         // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
             for(var id in self.otherPlayers){
@@ -271,6 +279,7 @@ class gameScene extends Phaser.Scene {
     
     pickUpDrop(player_container, drop)
     {
+        var info = {x: drop.x, y: drop.y};
         console.log("inside pickUpDrop");
         if (drop instanceof Weapon) {
             if(this.player.isEquipping)
@@ -281,6 +290,7 @@ class gameScene extends Phaser.Scene {
                 this.player.initCooldown();
                 this.cooldownEvent.delay = this.player.cooldown;
                 this.meleeCooldownEvent.delay = this.player.meleeCooldown;
+                this.client.socket.emit("updateDropsClient", info);
             }
         }
         
@@ -289,6 +299,7 @@ class gameScene extends Phaser.Scene {
             this.player.pickUpFood(drop, this);
             this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
             drop.destroy();
+            this.client.socket.emit("updateDropsClient", info);
         }
     }
     
