@@ -2,13 +2,11 @@ class SourCharacter extends Character {
     
     constructor() {        
         super();
-        this.health = 300;
-        this.power = 200;
+        this.health = 60;
+        this.power = 80;
         this.mana = 60;
-        this.speed = 500;
+        this.speed = 85;
         this.element = "sour";
-        this.weapon = "knife";
-        this.gun = "frosting_bag";
     }
     
     

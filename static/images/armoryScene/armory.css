@@ -1,0 +1,79 @@
+
+.layer {
+	width: 50%;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	z-index: 1;
+	transform: translate3d(-50%,-50%,0);
+}
+.layer-img {
+	width: 100%;
+}
+.layer .btn4 {
+	width: 24%;
+	position: absolute;
+	left: 39%;
+	top: 69%;
+	z-index: 1;
+}
+
+.layer-mm3,
+.layer-mm2,
+.layer-mm {
+	width: 50%;
+	position: absolute;
+	left: 50%;
+	top: 47%;
+	z-index: 1;
+	transform: translate3d(-50%,-50%,0);
+}
+
+.layer-mm3 .w,
+.layer-mm2 .w,
+.layer-mm .w {
+	width: 100%;
+}
+
+.game-input {
+	width: 50%;
+	position: absolute;
+	left: 25%;
+	top: 37%;
+	z-index: 1;
+	height: 30px;
+	text-align: center;
+	color: #000000;
+}
+
+.btn4_2,
+.btn4,
+.btn5,
+.btn6 {
+	width: 23%;
+	position: absolute;
+	left: 25%;
+	top: 60%;
+	z-index: 1;
+}
+
+.btn6 {
+	left: 52.7%;
+}
+
+.btn4 {
+	left: 39%;
+	top: 66%;
+}
+
+.btn4_2 {
+	left: 39%;
+	top: 66%;
+}
+
+.layer-mm3,
+.layer-mm2,
+.layer-mm,
+.layer {
+	display:none
+}

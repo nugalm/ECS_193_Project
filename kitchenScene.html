@@ -3,69 +3,107 @@
 <head>
   <meta charset="utf-8">
   <title>The Marfare</title>
+  <style type="text/css">
+	html, body {
+	  overflow: hidden;
+	}
+  </style>
+
+	<link rel="stylesheet" type="text/css" href="./static/images/armoryScene/armory.css">
+	<script src="./static/images/armoryScene/jquery-1.8.3.min.js"></script>
 
 </head>
   <script src="static/phaser.min.js"></script>
-    <script src="static/phaser.js"></script>
-     <script src="static/Character.js"></script>
-    <script src="static/SweetCharacter.js"></script>
-    <script src="static/SpicyCharacter.js"></script>
-    <script src="static/SaltyCharacter.js"></script>
-    <script src="static/SourCharacter.js"></script>
-    <script src="static/projectileHandler.js"></script>
-    <script src="static/drawer.js"></script>
-    <script src="static/colliderHandler.js"></script>
-    <script src="static/loadScene.js"></script>
-    <script src="static/menuScene.js"></script>
-    <script src="static/armoryScene.js"></script>
-    <script src="static/gameScene.js"></script>
-    <script src="static/weapon.js"></script>
-    <script src="static/fork.js"></script>
-    <script src="static/client.js"></script>
+	<script src="static/phaser.js"></script>
+	 <script src="static/Character.js"></script>
+	<script src="static/SweetCharacter.js"></script>
+	<script src="static/SpicyCharacter.js"></script>
+	<script src="static/SaltyCharacter.js"></script>
+	<script src="static/SourCharacter.js"></script>
+	<script src="static/projectileHandler.js"></script>
+	<script src="static/drawer.js"></script>
+	<script src="static/colliderHandler.js"></script>
+	<script src="static/loadScene.js"></script>
+	<script src="static/menuScene.js"></script>
+	<script src="static/armoryScene.js"></script>
+	<script src="static/gameScene.js"></script>
+	<script src="static/weapon.js"></script>
+	<script src="static/fork.js"></script>
+	<script src="static/healthBar.js"></script>
+	<script src="static/client.js"></script>
+	<script src="static/keyboardHandler.js"></script>
 <body oncontextmenu="return false;">
   <script type="text/javascript">
-      
-      var config = {
-          // .AUTO tells phaser to default to WEBGL, else default to canvas
-            type: Phaser.AUTO,
-         // scale: {
-            width: window.innerWidth,
-            height: window.innerHeight,
-          //}
-          // tells Phaser that our game requires the Arcade Physics system
-            physics: {
-                default: 'arcade',
-                arcade: {
-                    gravity: { y: 300 },
-                    debug: false
-                }
-            },
-            scene: [loadScene, menuScene, armoryScene, gameScene],
-            audio: {
-                disableWebAudio: true
-            }
-      };
-      
-      
-      
-      var origin = window.location.origin;
-    /*  var socket = io.connect(origin);
-      var socket_id;
-      socket.on('connect', function() {
-          socket_id = socket.id;
-          socket.emit('newPlayer');
-      });*/
-      
-     // var client = new Client(socket);
-      
-      var game = new Phaser.Game(config);
-      
-      //this.scene.start('loadScene', {socket: this.socket}); 
-      
-      //var dumPhysics = this.physics;
+	  
+	  var config = {
+		  // .AUTO tells phaser to default to WEBGL, else default to canvas
+			type: Phaser.AUTO,
+		 // scale: {
+			width: window.innerWidth,
+			height: window.innerHeight,
+		  //}
+		  // tells Phaser that our game requires the Arcade Physics system
+			physics: {
+				default: 'arcade',
+				arcade: {
+					gravity: { y: 300 },
+					debug: false
+				}
+			},
 
- 
-      
+			parent: "user-input",
+			dom: {
+				createContainer: true
+			},
+			scene: [loadScene, menuScene, armoryScene, gameScene],
+			audio: {
+				disableWebAudio: true
+			}
+	  };
+	  
+	 /* var origin = window.location.origin;
+	  var socket = io.connect(origin);
+	  var socket_id;
+	  socket.on('connect', function() {
+		  socket_id = socket.id;
+		  socket.emit('newPlayer');
+	  });
+	  
+	  var client = new Client(socket);*/
+	  
+	  var game = new Phaser.Game(config);
+	  
+	  //this.scene.start('loadScene', {socket: this.socket}); 
+	  //var dumPhysics = this.physics;
+
   </script>
+
+	<div class="layer">
+		<img src="./static/images/armoryScene/block_2_1_layer.png" class="layer-img block_2_1">
+		<img src="./static/images/armoryScene/block_2_2_layer.png" class="layer-img block_2_2">
+		<img src="./static/images/armoryScene/block_2_3_layer.png" class="layer-img block_2_3">
+		<img src="./static/images/armoryScene/dialogue_q1.png" class="layer-img question_mark1">
+		<img src="./static/images/armoryScene/dialogue_q2.png" class="layer-img question_mark2">
+		<img src="./static/images/armoryScene/dialogue_q3.png" class="layer-img question_mark3">
+		<img src="./static/images/armoryScene/btn4.png" class="btn4">
+	</div>
+
+	<div class="layer-mm">
+		<img src="./static/images/armoryScene/input.png" class="w">
+		<input type="text" class="game-input" placeholder="You know the secret! ">
+		<img src="./static/images/armoryScene/btn5.png" class="btn5">
+		<img src="./static/images/armoryScene/btn6.png" class="btn6">
+	</div>
+
+	<div class="layer-mm2">
+		<img src="./static/images/armoryScene/output1.png" class="w">
+		<img src="./static/images/armoryScene/btn4.png" class="btn4_2">
+	</div>
+
+	<div class="layer-mm3">
+		<img src="./static/images/armoryScene/output2.png" class="w">
+		<img src="./static/images/armoryScene/btn4.png" class="btn4_2">
+	</div>
+
 </body>
 </html>
