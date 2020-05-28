@@ -83,6 +83,7 @@ class gameScene extends Phaser.Scene {
     
     create()
     {   
+        
         this.keyboardHandler.initCursors();
         this.projectileHandler.initProjectiles();
 
