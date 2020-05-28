@@ -20,6 +20,7 @@ class Character {
         this.gun = "bottle";
         
         this.sprite;
+        this.meleeSprite;
         this.myContainer;
         this.DISPLAY = 150;
         this.HITBOX = 50;
@@ -30,6 +31,7 @@ class Character {
         this.isDashing = false;
         this.isEquipping = false;
         this.hitCount = 1;
+        this.isCollidingWithDrop = false;
         
         
         this.username;
@@ -75,17 +77,28 @@ class Character {
     
     initSprite(context) 
     {
-
+        
         this.sprite.displayWidth = this.DISPLAY;
         this.sprite.displayHeight = this.DISPLAY + 50;
         this.sprite.setSize(0, 0);
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
+        this.initMeleeSprite(context);
         this.initContainer(context);
         this.initCooldown();
         this.context = context;
     }
     
+    initMeleeSprite(context)
+    {
+        this.meleeSprite = context.physics.add.sprite(0, this.sprite.y, 'knife_layer_static');
+        this.meleeSprite.setScale(0.5);
+        
+    }
+    updateMeleeSpriteRotation()
+    {
+        this.meleeSprite.setRotation(this.sprite.rotation);
+    }
     initContainer(context)
     {
         /*
@@ -94,7 +107,7 @@ class Character {
         
         this.myContainer = context.add.container(x,y, [this.username, this.sprite, this.healthBar.healthBar]);
         */
-        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar]);
+        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar, this.meleeSprite]);
         
         this.myContainer.setSize(this.HITBOX, this.HITBOX);
         
@@ -144,6 +157,7 @@ class Character {
         }
         
         this.updateRotation(context);
+        this.updateMeleeSpriteRotation();
         this.updateMovement(context);
         this.updateEquip(context);
         this.updateHealth();
@@ -158,6 +172,7 @@ class Character {
     {
         this.isMeleeing = true;
         this.hitCount = 1;
+        this.meleeSprite.setVisible(false);
         
         if (this.weapon == "whisk") {
             this.sprite.anims.play('whisk_twirl');
@@ -192,7 +207,7 @@ class Character {
 
         if (this.gun == "bottle") {
             this.sprite.anims.play('bottle_squeeze');
-            
+            this.playMeleeLayerIdle();
             
             var info = {anims: 'bottle_squeeze', melee: false, hitCount: 0};
             
@@ -200,14 +215,18 @@ class Character {
             
         }    
         else if (this.gun == "frosting_bag") {
+            
             this.sprite.anims.play('frosting_bag_squeeze');
+            this.playMeleeLayerFrostingBag();
             
             var info = {anims: 'frosting_bag_squeeze', melee: false, hitCount: 0};
             
             this.client.socket.emit('doAnim', info);
         }
         else if (this.gun == "salt_shaker") {
-            this.sprite.anims.play('salt_shaker_shake')
+            
+            this.sprite.anims.play('salt_shaker_shake');
+            this.playMeleeLayerSaltShaker();
             
             var info = {anims: 'salt_shaker_shake', melee: false, hitCount: 0};
             
@@ -250,11 +269,83 @@ class Character {
         this.isDashing = true;
         
         this.sprite.anims.play('mouse_dash');
+        this.playMeleeLayerDash();
+        
+        
         
         var info = {anims: 'mouse_dash', melee: false, hitCount: 0};
             
         this.client.socket.emit('doAnim', info);
     }
+    
+    playMeleeLayerDash() 
+    {
+        if (this.weapon == "knife") 
+        {
+            this.meleeSprite.anims.play('knife_dash');
+        }
+        else if(this.weapon == "whisk") 
+        {
+            this.meleeSprite.anims.play('whisk_dash');
+        }
+        else if (this.weapon == "fork") 
+        {
+            this.meleeSprite.anims.play("fork_dash");
+        }
+    }
+    
+    // used for walking, idle, and bottle shoot
+    playMeleeLayerIdle()
+    {
+        if (this.weapon == "knife") 
+        {
+            this.meleeSprite.anims.play('knife_layer_idle');
+        }
+        else if(this.weapon == "whisk") 
+        {
+            this.meleeSprite.anims.play('whisk_layer_idle');
+        }
+        else if (this.weapon == "fork") 
+        {
+            this.meleeSprite.anims.play("fork_layer_idle");
+        }
+    }
+    
+    playMeleeLayerSaltShaker()
+    {
+        if (this.weapon == "knife") 
+        {
+            this.meleeSprite.anims.play('knife_salt_shaker');
+        }
+        else if(this.weapon == "whisk") 
+        {
+            this.meleeSprite.anims.play('whisk_salt_shaker');
+        }
+        else if (this.weapon == "fork") 
+        {
+            this.meleeSprite.anims.play("fork_salt_shaker");
+        }
+    }
+    
+    playMeleeLayerFrostingBag()
+    {
+        if (this.weapon == "knife") 
+        {
+            this.meleeSprite.anims.play('knife_frosting_bag');
+        }
+        else if(this.weapon == "whisk") 
+        {
+            this.meleeSprite.anims.play('whisk_frosting_bag');
+        }
+        else if (this.weapon == "fork") 
+        {
+            this.meleeSprite.anims.play("fork_frosting_bag");
+        }
+    }
+    
+    
+    
+    
     
     updateRotation(context)
     {
@@ -288,6 +379,7 @@ class Character {
 
                 if (!this.isSpecialAnimating()) 
                 {
+                    this.playMeleeLayerIdle();
                     this.sprite.anims.play('left', true);
                     
                     var info = {anims: 'left', melee: false, hitCount: 0};
@@ -302,6 +394,7 @@ class Character {
                 this.myContainer.body.setVelocityX(160);
                 if (!this.isSpecialAnimating())  
                 {
+                    this.playMeleeLayerIdle();
                     this.sprite.anims.play('left', true);
                     
                     var info = {anims: 'left', melee: false, hitCount: 0};
@@ -317,6 +410,7 @@ class Character {
                 this.myContainer.body.setVelocityY(160);
                 if (!this.isSpecialAnimating()) 
                 {
+                    this.playMeleeLayerIdle();
                     this.sprite.anims.play('left', true);
                     
                     var info = {anims: 'left', melee: false, hitCount: 0};
@@ -331,6 +425,7 @@ class Character {
                 this.myContainer.body.setVelocityY(-160);
                 if (!this.isSpecialAnimating()) 
                 {
+                    this.playMeleeLayerIdle();
                     this.sprite.anims.play('left', true);
                     
                     var info = {anims: 'left', melee: false, hitCount: 0};
@@ -349,8 +444,9 @@ class Character {
                 {
                     if (this.sprite.anims.currentAnim != null && this.sprite.anims.currentAnim.key != 'turn')
                     {
+                        this.playMeleeLayerIdle();
                         this.sprite.anims.play('turn');
-
+                        
                         var info = {anims: 'turn', melee: false, hitCount: 0};
 
                         this.client.socket.emit('doAnim', info);

@@ -22,6 +22,7 @@ class Dummies
             this.context.salt.startPositionY = this.positionY;
             this.context.salt.username = this.context.add.text(-20, -70, "Salty", { fontSize: '24px', fill: 'white' });
             this.context.salt.sprite = this.context.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+            this.context.salt.meleeSprite = this.context.physics.add.sprite(0, 0, 'knife_layer');
             this.context.salt.initSprite(this.context);
     } 
 
@@ -32,6 +33,7 @@ class Dummies
             this.context.sour.startPositionX = 400;
             this.context.sour.username = this.context.add.text(-20, -70, "Sour", { fontSize: '24px', fill: 'white' });
             this.context.sour.sprite = this.context.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+            this.context.sour.meleeSprite = this.context.physics.add.sprite(0, 0, 'knife_layer');
             this.context.sour.initSprite(this.context);
     }
 
@@ -42,6 +44,7 @@ class Dummies
             this.context.sweet.startPositionX = 600;
             this.context.sweet.username = this.context.add.text(-20, -70, "Sweet", { fontSize: '24px', fill: 'white' });
             this.context.sweet.sprite = this.context.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+            this.context.sweet.meleeSprite = this.context.physics.add.sprite(0, 0, 'knife_layer');
             this.context.sweet.initSprite(this.context);
     }
 
@@ -52,6 +55,7 @@ class Dummies
             this.context.spicy.startPositionX = 800;
             this.context.spicy.username = this.context.add.text(-20, -70, "Spicy", { fontSize: '24px', fill: 'white' });
             this.context.spicy.sprite = this.context.physics.add.sprite(0, 0, 'kitchenScene', 'mouse_walk/mouse_walk-2.png');
+            this.context.spicy.meleeSprite = this.context.physics.add.sprite(0, 0, 'knife_layer');
             this.context.spicy.initSprite(this.context);
     }
     

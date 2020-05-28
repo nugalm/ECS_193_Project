@@ -9,8 +9,7 @@ class HealthBar
     
     initHealthBar(context)
     {
-        this.healthBar = context.add.image(0, 50, 'green_bar')
-       
+        this.healthBar = context.add.image(0, 50, 'green_bar');
     }
     
     update(_value)
