@@ -51,6 +51,8 @@ class gameScene extends Phaser.Scene {
         this.cooldownEvent;
         this.weaponRespawnEvent;
         this.meleeCooldownEvent;
+        
+        this.dropsPlayerOverlap;
     }
     
     // If we ever need to load specific data from previous scene.
@@ -170,7 +172,16 @@ class gameScene extends Phaser.Scene {
         
         this.randomDropsHandler.init();
         
-        this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpDrop, null, this);
+         this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpDrop, null, this);
+        
+        this.player.myContainer.on("overlap", function() 
+                                         {
+                            alert("overlapping start");
+        }, this);
+        this.player.myContainer.off("overlap", function() 
+                                         {
+                            alert("overlapping end");
+        }, this);
         
      
         //Multiplayer
@@ -256,6 +267,7 @@ class gameScene extends Phaser.Scene {
 
     }  
     
+    /*
     pickUpWeapon(player_container, weapon)
     {
         if(this.player.isEquipping)
@@ -267,11 +279,12 @@ class gameScene extends Phaser.Scene {
             this.cooldownEvent.delay = this.player.cooldown;
             this.meleeCooldownEvent.delay = this.player.meleeCooldown;
         }
-    }
+    }*/
     
     pickUpDrop(player_container, drop)
     {
-        console.log("inside pickUpDrop");
+       // player.isCollidingWithDrop = true;
+       // console.log("inside pickUpDrop");
         if (drop instanceof Weapon) {
             if(this.player.isEquipping)
             {

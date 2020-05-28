@@ -30,6 +30,7 @@ class Character {
         this.isDashing = false;
         this.isEquipping = false;
         this.hitCount = 1;
+        this.isCollidingWithDrop = false;
         
         
         this.username;

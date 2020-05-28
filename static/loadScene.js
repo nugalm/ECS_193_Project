@@ -14,7 +14,9 @@ class loadScene extends Phaser.Scene
             });
         this.loadingText;
         this.bg;
-        
+        this.start_button;
+        this.tutorial_button;
+        this.credits_button;
        
     }
     
@@ -32,6 +34,7 @@ class loadScene extends Phaser.Scene
         
         this.preloaders();
        
+        this.loadButtons();
         this.loadProjectiles();
         this.loadDrops();
         this.loadMenuSelect();
@@ -64,10 +67,11 @@ class loadScene extends Phaser.Scene
             y: height - (height / 7),
             text: 'The Mice are getting ready...',
             style: {
-                font: 'bold 30px monospace',
+                font: '30px monospace',
                 fill: '#ffffff'
             }
         });
+        console.log(this.loadingText.style.font);
         this.loadingText.setOrigin(0.5, 0.5);
         
         //percent 
@@ -85,7 +89,7 @@ class loadScene extends Phaser.Scene
         
         //preloaders
         this.load.on('progress', function (value) {
-            console.log(value);
+           // console.log(value);
             percentText.setText(parseInt(value * 100) + '%');
             progressBar.clear();
             progressBar.fillStyle(0xffffff, 1);
@@ -93,15 +97,16 @@ class loadScene extends Phaser.Scene
         }, this);
 
         this.load.on('fileprogress', function (file) {
-            console.log(file.src);
+           // console.log(file.src);
         });
 
         this.load.on('complete', function () {
-            console.log('complete');
+          //  console.log('complete');
             progressBar.destroy();
             progressBox.destroy();
             percentText.destroy();
-            this.loadingText.text = 'The Mice Are Ready! Click to Enter the Marfare!';
+           // this.loadingText.text = 'The Mice Are Ready! Click to Enter the Marfare!';
+            this.loadingText.destroy();
         }, this);
     }
     
@@ -111,6 +116,14 @@ class loadScene extends Phaser.Scene
     {
         this.sound.add('game_audio');
         this.sound.add('selection_audio');
+        
+        
+        this.initButtons();
+        
+        
+        
+        
+        
         
             var frameNames = this.anims.generateFrameNames('kitchenScene', {
                 start: 0, end: 19, zeroPad: 0, 
@@ -285,12 +298,87 @@ class loadScene extends Phaser.Scene
             
         
         
-        this.input.on('pointerdown', function(p)
-        {       if (p.leftButtonDown())
-                {  
+        
+        
+        
+        //enter game scene
+        this.start_button.on('pointerup', function(p)
+        {       //if (p.leftButtonDown())
+               // {  
                     this.scene.start('menuScene', {socket: this.socket}); 
-                }
-        }, this);   
+                //}
+        }, this);
+        
+        //tutorial pop-up
+        this.tutorial_button.on('pointerup', function(p)
+        {       
+            //TODO: tutorial page
+        }, this);
+        
+        //credits pop-up
+        this.credits_button.on('pointerup', function(p)
+        {      
+            //TODO: credits page
+        }, this);
+        
+        this.start_button.on('pointerover', function (p) 
+        {
+            this.start_button.setTint(0x808080);
+        }, this);
+        
+        this.start_button.on('pointerout', function (p)
+        {
+            this.start_button.setTint(0xffffff);
+        }, this)
+        
+        this.tutorial_button.on('pointerover', function (p) 
+        {
+            this.tutorial_button.setTint(0x808080);
+        }, this);
+        
+        this.tutorial_button.on('pointerout', function (p)
+        {
+            this.tutorial_button.setTint(0xffffff);
+        }, this)
+        
+        this.credits_button.on('pointerover', function (p) 
+        {
+            this.credits_button.setTint(0x808080);
+        }, this);
+        
+        this.credits_button.on('pointerout', function (p)
+        {
+            this.credits_button.setTint(0xffffff);
+        }, this)
+        
+    }
+    
+    initButtons()
+    {
+        this.start_button = this.add.sprite((this.game.config.width / 3) - 150, this.game.config.height - (this.game.config.height / 9), 'start_button');
+        this.tutorial_button = this.add.sprite((this.game.config.width / 3) + 150, this.game.config.height - (this.game.config.height / 9), 'tutorial_button');
+        this.credits_button =  this.add.sprite((this.game.config.width / 3) + 450, this.game.config.height - (this.game.config.height / 9), 'credits_button');
+        
+        this.initButton(this.start_button);
+        this.initButton(this.tutorial_button);
+        this.initButton(this.credits_button);
+        
+       
+    }
+    
+  
+    
+    initButton(_button) 
+    {
+        _button.setScale(0.5);
+        _button.setInteractive();
+    }
+    
+    loadButtons() 
+    {
+        this.load.image('start_button', 'static/images/loadingScene/btn1_start.png');
+        this.load.image('tutorial_button', 'static/images/loadingScene/btn2_tutorial.png');
+        this.load.image('credits_button', 'static/images/loadingScene/btn3_credits.png');
     }
     
     loadProjectiles()
