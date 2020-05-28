@@ -215,10 +215,11 @@ class SocketFunc {
             }
             
             if((drop.x == info.x) && (drop.y == info.y)){
-                this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
                 drop.destroy();
             }
         }, self);
+        
+        self.randomDropsHandler.updateAvailablePositions(info.x, info.y);
     }
     
     syncDrops(self, info){
