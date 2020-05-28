@@ -77,7 +77,7 @@ class Character {
     {
 
         this.sprite.displayWidth = this.DISPLAY;
-        this.sprite.displayHeight = this.DISPLAY;
+        this.sprite.displayHeight = this.DISPLAY + 50;
         this.sprite.setSize(0, 0);
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
