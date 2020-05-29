@@ -54,7 +54,7 @@ class SocketFunc {
                         
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
                         
-                        self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
+                        //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
                         
                         
                         //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].sprite, self.meleeHit, null, self);
@@ -142,7 +142,7 @@ class SocketFunc {
         if(!(projs.id in self.otherProjectiles)){
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
@@ -168,7 +168,7 @@ class SocketFunc {
         if(!(projs.id in self.otherProjectiles)){
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
@@ -188,7 +188,7 @@ class SocketFunc {
         if(!(projs.id in self.otherProjectiles)){
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
         }
