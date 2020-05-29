@@ -240,6 +240,21 @@ class gameScene extends Phaser.Scene {
             self.socketFunc.syncDrops(self, info);  
         });
         
+        this.client.socket.on("updateMeleeSpriteAnim", function(info){
+            if(self.otherPlayers[info.id] == null){
+                return;
+            } 
+            self.otherPlayers[info.id].meleeSprite.anims.play(info.anim);
+        });
+        
+        this.client.socket.on("seeMeleeSpriteClient", function(info){
+            console.log("setting melee sprite visibility");
+             if(self.otherPlayers[info.id] == null){
+                return;
+            } 
+            self.otherPlayers[info.id].meleeSprite.setVisible(info.visible);
+        })
+        
         // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
             for(var id in self.otherPlayers){
@@ -465,6 +480,7 @@ class gameScene extends Phaser.Scene {
            animation.key === 'whisk_twirl')
         {
             this.player.meleeSprite.setVisible(true);
+            this.client.socket.emit("seeMeleeSpriteServer", true);  
             this.player.isMeleeing = false;
             this.player.hitCount = 0;
         }

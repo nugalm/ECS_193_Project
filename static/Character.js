@@ -106,6 +106,12 @@ class Character {
     updateMeleeSpriteRotation()
     {
         this.meleeSprite.setRotation(this.sprite.rotation);
+        
+        for(var id in this.context.otherPlayers){
+            var player = this.context.otherPlayers[id]
+            
+            player.meleeSprite.setRotation(player.sprite.rotation);
+        }
     }
     initContainer(context)
     {
@@ -181,6 +187,8 @@ class Character {
         this.isMeleeing = true;
         this.hitCount = 1;
         this.meleeSprite.setVisible(false);
+        
+        this.client.socket.emit("seeMeleeSpriteServer", false);
         
         if (this.weapon == "whisk") {
             this.sprite.anims.play('whisk_twirl');
@@ -288,17 +296,20 @@ class Character {
     
     playMeleeLayerDash() 
     {
-        if (this.weapon == "knife") 
+       if (this.weapon == "knife") 
         {
             this.meleeSprite.anims.play('knife_dash');
+            this.client.socket.emit('doMeleeSpriteAnim', 'knife_dash');
         }
         else if(this.weapon == "whisk") 
         {
             this.meleeSprite.anims.play('whisk_dash');
+            this.client.socket.emit('doMeleeSpriteAnim', 'whisk_dash');
         }
         else if (this.weapon == "fork") 
         {
             this.meleeSprite.anims.play("fork_dash");
+            this.client.socket.emit('doMeleeSpriteAnim', 'fork_dash');
         }
     }
     
@@ -308,14 +319,17 @@ class Character {
         if (this.weapon == "knife") 
         {
             this.meleeSprite.anims.play('knife_layer_idle');
+            this.client.socket.emit('doMeleeSpriteAnim', 'knife_layer_idle');
         }
         else if(this.weapon == "whisk") 
         {
             this.meleeSprite.anims.play('whisk_layer_idle');
+            this.client.socket.emit('doMeleeSpriteAnim', 'whisk_layer_idle');
         }
         else if (this.weapon == "fork") 
         {
             this.meleeSprite.anims.play("fork_layer_idle");
+            this.client.socket.emit('doMeleeSpriteAnim', 'fork_layer_idle');
         }
     }
     
@@ -324,14 +338,17 @@ class Character {
         if (this.weapon == "knife") 
         {
             this.meleeSprite.anims.play('knife_salt_shaker');
+            this.client.socket.emit('doMeleeSpriteAnim', 'knife_salt_shaker');
         }
         else if(this.weapon == "whisk") 
         {
             this.meleeSprite.anims.play('whisk_salt_shaker');
+            this.client.socket.emit('doMeleeSpriteAnim', 'whisk_salt_shaker');
         }
         else if (this.weapon == "fork") 
         {
             this.meleeSprite.anims.play("fork_salt_shaker");
+            this.client.socket.emit('doMeleeSpriteAnim', 'fork_salt_shaker');
         }
     }
     
@@ -340,14 +357,18 @@ class Character {
         if (this.weapon == "knife") 
         {
             this.meleeSprite.anims.play('knife_frosting_bag');
+            this.client.socket.emit('doMeleeSpriteAnim', 'knife_frosting_bag');
         }
+        
         else if(this.weapon == "whisk") 
         {
             this.meleeSprite.anims.play('whisk_frosting_bag');
+            this.client.socket.emit('doMeleeSpriteAnim', 'whisk_frosting_bag');
         }
         else if (this.weapon == "fork") 
         {
             this.meleeSprite.anims.play("fork_frosting_bag");
+            this.client.socket.emit('doMeleeSpriteAnim', 'fork_frosting_bag');
         }
     }
     

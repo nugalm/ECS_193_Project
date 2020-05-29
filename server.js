@@ -250,6 +250,16 @@ io.on('connection', function(socket) {
         socket.broadcast.emit('syncDropsServer', info); 
     });
     
+    socket.on('doMeleeSpriteAnim', function(key){
+        var info = {id: socket.id, anim: key};
+        socket.broadcast.emit("updateMeleeSpriteAnim", info); 
+    });
+    
+    socket.on('seeMeleeSpriteServer', function(visible){
+        var info = {id: socket.id, visible: visible};
+        socket.broadcast.emit("seeMeleeSpriteClient", info); 
+    });
+    
     socket.on('hasDied', function() {
         //console.log('user disconnected');
         // remove this player from our players object

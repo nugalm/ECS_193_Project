@@ -239,13 +239,13 @@ class SocketFunc {
         if(info.isWeapon){
             drops.add(new Weapon({scene: self, x: info.x,
                                   y: info.y, key: info.type}));
-            this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
+            self.randomDropsHandler.updateAvailablePositions(info.x, info.y);
         }
                 
         else{
             drops.add(new Drop({scene: self, x: info.x,
                                 y: info.y, key: info.type}));
-            this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
+            self.randomDropsHandler.updateAvailablePositions(info.x, info.y);
         }
         
         
@@ -272,6 +272,10 @@ class SocketFunc {
     updateAnim(self, player) {
         self.otherPlayers[player.id].isMeleeing = player.info.melee;
         self.otherPlayers[player.id].hitCount = player.info.hitCount;
+        
+        if(self.otherPlayers[player.id].sprite.anims == null){
+            return;
+        }
             
         if(player.info.anims === 'left'){
             self.otherPlayers[player.id].sprite.anims.play(player.info.anims, true);
