@@ -22,23 +22,24 @@ class Drop extends Phaser.Physics.Arcade.Sprite
     {
         if (this.type == 'knife_drop_image') 
         {
-            this.setSize(40, 100);
-            this.setOffset(90, 80);
+            this.setDisplaySize(150, 150);
+            this.setSize(90, 100);
+            this.setOffset(70, 100);
             this.anims.play("knife_idle");
         }
         else if (this.type == "fork_drop_image")
         {
-            this.setDisplaySize(150, 150);
-            this.setSize(50, 130);
-            this.setOffset(80, 75);
+            this.setDisplaySize(150, 200);
+            this.setSize(60, 110);
+            this.setOffset(80, 85);
             this.anims.play("fork_idle");
             
         }
         else if (this.type == "whisk_drop_image") 
         {
-            this.setDisplaySize(200, 200);
-            this.setSize(50, 130);
-            this.setOffset(90, 75);
+            this.setDisplaySize(150, 200);
+            this.setSize(70, 120);
+            this.setOffset(80, 95);
             this.anims.play("whisk_idle");
         }
         
@@ -53,8 +54,8 @@ class Drop extends Phaser.Physics.Arcade.Sprite
         else if (this.type == "squirter_drop_image")
         {    
             this.setDisplaySize(200, 250);
-            this.setSize(50, 90);
-            this.setOffset(120, 70);
+            this.setSize(60, 90);
+            this.setOffset(80, 110);
             this.anims.play("squirter_idle");
            
             
@@ -76,7 +77,7 @@ class Drop extends Phaser.Physics.Arcade.Sprite
         else if (this.type == "blueberry_drop_image") 
         {
             this.setDisplaySize(100, 150);
-            this.setSize(50, 50);
+            this.setSize(60, 60);
             this.setOffset(85, 120);
             this.anims.play("blueberry_idle");
             

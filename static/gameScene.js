@@ -38,8 +38,8 @@ class gameScene extends Phaser.Scene {
         this.socketFunc = new SocketFunc();
 
         // variables using to test (e.g. damage system, collision, etc.)
-        this.dummies;
-        this.dummiesGroup;
+       // this.dummies;
+       // this.dummiesGroup;
         this.sour;
         this.sweet;
         this.spicy;
@@ -109,15 +109,15 @@ class gameScene extends Phaser.Scene {
         this.drawer.drawCharacter();
         
        // dummies for testing
-        this.dummies = new Dummies(this);
-        this.dummies.initAllDummies();
-        this.dummies.initGroup();
+       // this.dummies = new Dummies(this);
+       // this.dummies.initAllDummies();
+       // this.dummies.initGroup();
         
         
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
         
-        this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
+       // this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
         
         
         
@@ -127,7 +127,7 @@ class gameScene extends Phaser.Scene {
         this.physics.world.enable(this.projectiles);
         
 
-        this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
+        //this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
         
         //camera
         this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
@@ -261,7 +261,7 @@ class gameScene extends Phaser.Scene {
         {
             return;   
         }
-        this.dummies.updateHealth();
+        //this.dummies.updateHealth();
         //console.log("gun cooldown in milliseconds:",this.cooldownEvent.delay);
         //console.log("weapon cooldown:",this.meleeCooldownEvent.delay);
           
@@ -464,7 +464,7 @@ class gameScene extends Phaser.Scene {
            animation.key === 'knife_swipe' ||
            animation.key === 'whisk_twirl')
         {
-            this.player.meleeSprite.setVisible(true);
+            //this.player.meleeSprite.setVisible(true);
             this.player.isMeleeing = false;
             this.player.hitCount = 0;
         }

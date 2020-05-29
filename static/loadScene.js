@@ -472,7 +472,7 @@ class loadScene extends Phaser.Scene
     loadMeleeLayer()
     {
         this.load.image('knife_layer_static',
-                       'static/images/weapon_layer/knife/knife_layer_001.png');
+                       'static/images/weapon_layer/knife/knife_layer_static.png');
         
         this.load.spritesheet('knife_layer','static/images/weapon_layer/knife/knife_layer.png', {frameWidth: 242, frameHeight: 332})
         
@@ -515,51 +515,51 @@ class loadScene extends Phaser.Scene
     loadDrops()
     {
         //melee 
-        this.load.image('fork_drop_image', 'static/images/drops/fork/fork-drop.0000.png');
+        this.load.image('fork_drop_image', 'static/images/drops_v2/fork/fork-drop-v2.0000.png');
         
         this.load.spritesheet('fork_drop', 
-        'static/images/drops/fork/fork_drop.png',{frameWidth:252, frameHeight: 332 });
+        'static/images/drops_v2/fork/fork_drop.png',{frameWidth:222, frameHeight: 332 });
         
-        this.load.image('knife_drop_image', 'static/images/drops/knife_drop_still_2.png');
+        this.load.image('knife_drop_image', 'static/images/drops_v2/knife/knife-drop-v2.0000.png');
         
         this.load.spritesheet('knife_drop', 
-        'static/images/drops/knife_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/knife/knife_drop.png', {frameWidth: 222 , frameHeight: 332});
         
-        this.load.image('whisk_drop_image', 'static/images/drops/whisk/whisk-drop.0000.png');
+        this.load.image('whisk_drop_image', 'static/images/drops_v2/whisk/whisk-drop-v2.0000.png');
         
         this.load.spritesheet('whisk_drop', 
-        'static/images/drops/whisk/whisk_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/whisk/whisk_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         
         //ranged
-        this.load.image('salt_shaker_drop_image', 'static/images/drops/salt-shaker/salt-shaker-drop.0000.png');
+        this.load.image('salt_shaker_drop_image', 'static/images/drops_v2/salt-shaker/salt-shaker-drop-v2.0000.png');
         this.load.spritesheet('salt_shaker_drop', 
-        'static/images/drops/salt-shaker/salt_shaker_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/salt-shaker/salt_shaker_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         
-        this.load.image('squirter_drop_image', 'static/images/drops/squirter/squirter-drop.0000.png');
+        this.load.image('squirter_drop_image', 'static/images/drops_v2/squirter/squirter-drop-v2.0000.png');
         this.load.spritesheet('squirter_drop', 
-        'static/images/drops/squirter/squirter_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/squirter/squirter_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         
         
-        this.load.image('frosting_bag_drop_image', 'static/images/drops/frosting-bag/frostbag-drop.0000.png');
+        this.load.image('frosting_bag_drop_image', 'static/images/drops_v2/frostingbag/frosting-bag-drop-v2.0000.png');
         this.load.spritesheet('frosting_bag_drop', 
-        'static/images/drops/frosting-bag/frosting_bag_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/frostingbag/frosting_bag_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         // food
-        this.load.image('blueberry_drop_image', 'static/images/drops/blueberry/blueberry.0000.png');
+        this.load.image('blueberry_drop_image', 'static/images/drops_v2/blueberry/blueberry-drop-v2.0000.png');
         this.load.spritesheet('blueberry_drop', 
-        'static/images/drops/blueberry/blueberry_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/blueberry/blueberry_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         
-        this.load.image('avocado_drop_image', 'static/images/drops/avocado/avocado.0000.png');
+        this.load.image('avocado_drop_image', 'static/images/drops_v2/avocado/avocado-drop-v2.0000.png');
         this.load.spritesheet('avocado_drop', 
-        'static/images/drops/avocado/avocado_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/avocado/avocado_drop.png', {frameWidth: 222 , frameHeight: 332});
         
-        this.load.image('pepper_drop_image', 'static/images/drops/pepper/pepper.0000.png');
+        this.load.image('pepper_drop_image', 'static/images/drops_v2/pepper/pepper-drop-v2.0000.png');
         this.load.spritesheet('pepper_drop', 
-        'static/images/drops/pepper/pepper_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/pepper/pepper_drop.png', {frameWidth: 222 , frameHeight: 332});
     }
     
     loadMenuSelect()
