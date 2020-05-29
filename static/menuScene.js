@@ -48,8 +48,6 @@ class menuScene extends Phaser.Scene
         this.addButtonTexts();
         this.turnButtonsOn();
         this.userPrompt();
-        
-
     }
     
     addButtonSprites()

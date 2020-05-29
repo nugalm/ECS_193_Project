@@ -213,6 +213,10 @@ class ProjectileHandler
                 continue;
             }
             
+            if(this.context.otherProjectiles[id].children == null){
+                return;
+            }
+            
             this.context.otherProjectiles[id].children.iterate(function(child) {
                     if(child == undefined){
                         return;

@@ -123,7 +123,9 @@ class Drawer
     **/
     isViableTile(tile)
     {
-        
+        if(tile == null){
+            return false;
+        }
         
         if (tile.collides == true) 
         {
