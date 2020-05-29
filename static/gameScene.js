@@ -257,13 +257,10 @@ class gameScene extends Phaser.Scene {
         
         // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
-            for(var id in self.otherPlayers){
-                if(id === myId){
-                    console.log("deletion");
-                    //self.otherPlayers[id].myContainer.destroy();
-                    delete self.otherPlayers[id];
-                }
-            } 
+            if(!(self.otherPlayers[myId] == null)){
+                self.otherPlayers[myId].myContainer.destroy();
+                delete self.otherPlayers[myId];
+            }
         });
           
     } 
@@ -285,7 +282,8 @@ class gameScene extends Phaser.Scene {
         this.projectileHandler.moveProjectiles();
 
         if(this.player.health <= 0){
-            this.scene.start("menuScene", {});
+            this.client.socket.emit("died");
+            this.scene.start("menuScene", {socket: this.client.socket});
         }
 
     }  

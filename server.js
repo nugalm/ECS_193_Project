@@ -108,6 +108,27 @@ io.on('connection', function(socket) {
     
     // Client sends character.js info onto server to store 
     socket.on('startPlayer', function(player){
+        if(!(socket.id in serverPlayers)){
+            serverPlayers[socket.id] = 
+            {
+                name: 'player',
+                position: {x: 200, y: 450},
+                health: 50,
+                power: 50,
+                mana: 50,
+                speed: 50,
+                stamina: 50,
+                element: "none",
+                gun: "none",
+                weapon: "none",
+                oldPosition: {x: 200, y: 450},
+                velocity: {x: 0, y: 0},
+                render: false,
+                object: 'mouse_walk/mouse_walk-2.png',
+                rotation: 0
+            };
+        }
+        
         serverPlayers[socket.id].element = player.element;
         //serverPlayers[socket.id].position.x = player.position.x;
         //serverPlayers[socket.id].position.y = player.position.y;
@@ -260,10 +281,10 @@ io.on('connection', function(socket) {
         socket.broadcast.emit("seeMeleeSpriteClient", info); 
     });
     
-    socket.on('hasDied', function() {
+    socket.on('died', function() {
         //console.log('user disconnected');
         // remove this player from our players object
-        //delete serverPlayers[socket.id];
+        delete serverPlayers[socket.id];
         // emit a message to all players to remove this player
         socket.broadcast.emit('deleteTime', socket.id);
         //console.log('removed player ' + socket.id);
