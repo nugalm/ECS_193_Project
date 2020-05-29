@@ -464,7 +464,7 @@ class gameScene extends Phaser.Scene {
            animation.key === 'knife_swipe' ||
            animation.key === 'whisk_twirl')
         {
-            //this.player.meleeSprite.setVisible(true);
+            this.player.meleeSprite.setVisible(true);
             this.player.isMeleeing = false;
             this.player.hitCount = 0;
         }

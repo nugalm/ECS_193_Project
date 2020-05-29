@@ -91,7 +91,15 @@ class Character {
     
     initMeleeSprite(context)
     {
-        this.meleeSprite = context.physics.add.sprite(0, this.sprite.y, 'fork_layer_static');
+        if  (this.weapon == "knife") {
+            this.meleeSprite = context.physics.add.sprite(0, this.sprite.y, 'knife_layer_static');
+        }
+        else if  (this.weapon == "fork") {
+            this.meleeSprite = context.physics.add.sprite(0, this.sprite.y, 'fork_layer_static');
+        }
+        else if  (this.weapon == "whisk") {
+            this.meleeSprite = context.physics.add.sprite(0, this.sprite.y, 'whisk_layer_static');
+        }
         this.meleeSprite.setScale(0.5);
         
     }
