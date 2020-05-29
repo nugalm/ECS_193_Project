@@ -144,8 +144,8 @@ class SocketFunc {
                 
                 //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
                 self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
-                self.physics.world.enable(self.otherProjectiles[projs.id]);
-            }
+                //self.physics.world.enable(self.otherProjectiles[projs.id]);
+        }
         
         var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "salt_projectile_1"}, "salt");
         //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
@@ -156,11 +156,9 @@ class SocketFunc {
         self.projectileHandler.setDeletionTimer(projectile);
         projectile.anims.play("salt_shaker_projectile_anim");
         projectile.setSize(50,50);
-        //projectile.salt = true;
-        //projectile.lifespan = 250;
         projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
         self.otherProjectiles[projs.id].add(projectile);
-        self.physics.world.enable(projectile);
+        //self.physics.world.enable(projectile);
      
     }
     
@@ -194,7 +192,6 @@ class SocketFunc {
         }
         
         var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "frosting_bag_projectile"}, "frosting");
-        //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
         projectile.frosting = true;

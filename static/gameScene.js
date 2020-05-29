@@ -63,24 +63,22 @@ class gameScene extends Phaser.Scene {
         //this.player.printStat();
 
         this.username = data.username;
-        console.log("Username in gamescene: ", this.username);
-       
     }
     
     // No need to preload here. We frontload all images/sprites/in loadScene 
     // and can refer to the keywords we initialized there as we like
     preload() 
     {
+        
+        this.sound.setVolume(0.1);
+        this.sound.play('game_audio', {loop: 1});
+        
         var info = {
             name: this.username,
             element:  this.player.element,
             position: {x: this.player.startPositionX, y: this.player.startPositionY}
         };
-        
-        this.sound.setVolume(0.1);
-        this.sound.play('game_audio', {loop: 1});
-        
-        this.client.socket.emit('startPlayer', info);   
+        this.client.socket.emit('startPlayer', info);
     }
     
     create()
@@ -243,7 +241,12 @@ class gameScene extends Phaser.Scene {
         this.client.socket.on("updateMeleeSpriteAnim", function(info){
             if(self.otherPlayers[info.id] == null){
                 return;
-            } 
+            }
+            
+            if(self.otherPlayers[info.id].meleeSprite.anims == null){
+                return;
+            }
+            
             self.otherPlayers[info.id].meleeSprite.anims.play(info.anim);
         });
         
@@ -262,7 +265,8 @@ class gameScene extends Phaser.Scene {
                 delete self.otherPlayers[myId];
             }
         });
-          
+        
+        this.reconnectToMultiplayer();
     } 
     
     update()
@@ -282,10 +286,10 @@ class gameScene extends Phaser.Scene {
         this.projectileHandler.moveProjectiles();
 
         if(this.player.health <= 0){
-            this.client.socket.emit("died");
+            this.client.socket.disconnect();
+            this.clearScene();
             this.scene.start("menuScene", {socket: this.client.socket});
         }
-
     }  
     
     /*
@@ -513,6 +517,56 @@ class gameScene extends Phaser.Scene {
             console.log("Melee cooldown: " + this.player.meleeCooldown);
             this.player.canMelee = true;
         }
+    }
+    
+    reconnectToMultiplayer(){
+        
+        //if(this.phyiscs == null){
+        //    return;
+        //}
+          
+        //if(this.physics.add == null){
+        //    return
+        //}
+          
+        if(!(this.client.socket.connected)){
+            console.log("connect");
+            this.client.socket.connect();
+        }
+    }
+    
+    clearScene(){
+        for(var id in this.otherPlayers){
+            this.otherPlayers[id].myContainer.destroy();
+            delete this.otherPlayers[id];
+        }
+        
+        for(var id in this.otherProjectiles){
+            /*
+            if(this.otherProjectiles.children == null){
+                continue;
+            }
+            
+            
+            this.otherProjectiles.children.iterate(function(child){
+                if(child == null){
+                    return;
+                }
+                child.destroy();
+            });
+            */
+            this.otherProjectiles[id].destroy();
+            delete this.otherProjectiles[id];
+        }
+        
+        this.otherPlayersGroup.children.iterate(function(child){
+            if(child == null){
+                return;
+            }
+            child.destroy();
+        });
+        
+        this.playerGroup.destroy();
     }
     
 }
