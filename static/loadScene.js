@@ -34,6 +34,7 @@ class loadScene extends Phaser.Scene
         
         this.preloaders();
        
+        this.loadArmorySceneAssets();
         this.loadMeleeLayer();
         this.loadButtons();
         this.loadProjectiles();
@@ -50,7 +51,8 @@ class loadScene extends Phaser.Scene
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
-        this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3')
+        this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3');
+        this.load.audio('m', 'static/images/armoryScene/m.mp3');
  
     }
     
@@ -62,6 +64,7 @@ class loadScene extends Phaser.Scene
         this.sound.add('selection_audio');
         
         
+        
         this.initButtons();
         this.initAttackAnimations();
         this.initMovementAnimations();
@@ -70,6 +73,7 @@ class loadScene extends Phaser.Scene
         this.initProjectileAnimations();
         this.initButtonInputs();
         this.initMeleeLayers();
+        
        
         
         
@@ -645,6 +649,51 @@ class loadScene extends Phaser.Scene
         this.load.image('green_bar', 'static/images/drops/GreenBar.png');
         
         
+    }
+    
+    loadArmorySceneAssets()
+    {
+        		// loading assets
+		this.load.atlas('dice', 'static/images/armoryScene/dice.png', 'static/images/armoryScene/dice.json');
+		this.load.image('block_0', 'static/images/armoryScene/block_0.png');
+		this.load.image('block_1_1', 'static/images/armoryScene/meleeweapon_fork.jpg');
+		this.load.image('block_1_2', 'static/images/armoryScene/meleeweapon_whisk.jpg');
+		this.load.image('block_1_3', 'static/images/armoryScene/meleeweapon_knife.jpg');
+		this.load.image('block_1_4', 'static/images/armoryScene/rangedweapon_bottlesquirter1.jpg');
+		this.load.image('block_1_4_2', 'static/images/armoryScene/rangedweapon_bottlesquirter2.jpg');
+		this.load.image('block_1_5', 'static/images/armoryScene/rangedweapon_saltshaker.jpg');
+		this.load.image('block_1_6', 'static/images/armoryScene/rangedweapon_frostingbag.jpg');
+		this.load.image('block_2_1', 'static/images/armoryScene/healthbooster_avocado.jpg');
+		this.load.image('block_2_2', 'static/images/armoryScene/powerbooster_pepper.jpg');
+		this.load.image('block_2_3', 'static/images/armoryScene/speedbooster_blueberry.jpg');
+		this.load.image('block_18', 'static/images/armoryScene/block_18.png');
+		this.load.image('question_mark1', 'static/images/armoryScene/question_mark1.jpg');
+		this.load.image('question_mark2', 'static/images/armoryScene/question_mark2.jpg');
+		this.load.image('question_mark3', 'static/images/armoryScene/question_mark3.jpg');
+		this.load.image('start', 'static/images/armoryScene/start.png');
+		this.load.image('role', 'static/images/armoryScene/role.png');
+		this.load.image('w', 'static/images/armoryScene/w.png');
+		this.load.image('layer1', 'static/images/armoryScene/layer1.png');
+		this.load.image('layer2', 'static/images/armoryScene/dialogue_dice.png');
+
+		this.load.image('block_1_1_layer', 'static/images/armoryScene/dialogue_fork.png');
+		this.load.image('block_1_2_layer', 'static/images/armoryScene/dialogue_whisk.png');
+		this.load.image('block_1_3_layer', 'static/images/armoryScene/dialogue_knife.png');
+		this.load.image('block_1_4_layer', 'static/images/armoryScene/dialogue_bottlesquirter1.png');
+		this.load.image('block_1_4_2_layer', 'static/images/armoryScene/dialogue_bottlesquirter2.png');
+		this.load.image('block_1_5_layer', 'static/images/armoryScene/dialogue_saltshaker.png');
+		this.load.image('block_1_6_layer', 'static/images/armoryScene/dialogue_frostingbag.png');
+
+		this.load.image('layer1_btn1', 'static/images/armoryScene/layer1_btn1.png');
+		this.load.image('layer1_btn2', 'static/images/armoryScene/layer1_btn2.png');
+		this.load.image('layer2_btn1', 'static/images/armoryScene/layer2_btn1.png');
+		this.load.image('layer2_btn2', 'static/images/armoryScene/layer2_btn2.png');
+		this.load.image('close', 'static/images/armoryScene/close.png');
+		this.load.image('enter', 'static/images/armoryScene/enter.png');
+		this.load.image('propbar', 'static/images/armoryScene/propbar.png');
+		this.load.image('statsbar', 'static/images/armoryScene/statsbar.png');
+		this.load.image('background', 'static/images/armoryScene/background.jpg');
+		
     }
     
     preloaders()
