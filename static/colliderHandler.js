@@ -198,7 +198,7 @@ class ColliderHandler
         {
             damage = damage * 0.33;
         }
-      // alert("player power: " + player.power + "\n multiplier: " + multiplier + "\n total damage taken: " + damage);
+        console.log("player power: " + player.power + "\n multiplier: " + multiplier + "\n total damage taken: " + damage);
         return damage; 
         
         

@@ -143,7 +143,7 @@ class SocketFunc {
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
                 //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 //self.physics.world.enable(self.otherProjectiles[projs.id]);
         }
         
@@ -167,7 +167,7 @@ class SocketFunc {
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
                 //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
         
@@ -187,7 +187,7 @@ class SocketFunc {
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
                 //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
         }
         
@@ -264,8 +264,6 @@ class SocketFunc {
         */
     }
     
-    
-    
     updateAnim(self, player) {
         self.otherPlayers[player.id].isMeleeing = player.info.melee;
         self.otherPlayers[player.id].hitCount = player.info.hitCount;
@@ -279,9 +277,18 @@ class SocketFunc {
         }
         else {
             self.otherPlayers[player.id].sprite.anims.play(player.info.anims);
-        }
-           
+        }      
     }
     
-    
+    statChange(self, info){
+        if(self.otherPlayers[info.id] == null){
+            return
+        }
+        
+        self.otherPlayers[info.id].health += info.statChange.health;
+        self.otherPlayers[info.id].speed += info.statChange.speed;
+        self.otherPlayers[info.id].power += info.statChange.power;
+        
+        self.otherPlayers[info.id].updateHealth();
+    }
 }

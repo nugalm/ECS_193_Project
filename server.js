@@ -281,6 +281,11 @@ io.on('connection', function(socket) {
         socket.broadcast.emit("seeMeleeSpriteClient", info); 
     });
     
+    socket.on('statChangeClient', function(statChange){
+        var info = {id: socket.id, statChange: statChange};
+        socket.broadcast.emit("statChangeServer", info);
+    })
+    
     socket.on('died', function() {
         //console.log('user disconnected');
         // remove this player from our players object

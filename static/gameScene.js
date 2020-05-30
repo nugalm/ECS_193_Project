@@ -36,14 +36,9 @@ class gameScene extends Phaser.Scene {
         this.playerGroup;
         this.otherPlayersGroup;
         this.socketFunc = new SocketFunc();
-
-        // variables using to test (e.g. damage system, collision, etc.)
-       // this.dummies;
-       // this.dummiesGroup;
-        this.sour;
-        this.sweet;
-        this.spicy;
-        this.salt;
+        this.multiplayerProjCollider;
+        this.multiplayerMeleeCollider;
+        this.otherProjColliders = {};
         
         this.randomDropsHandler = new RandomDropsHandler(this);
         this.timedEvent;
@@ -191,9 +186,9 @@ class gameScene extends Phaser.Scene {
         
         this.otherPlayersGroup = this.physics.add.group();
         
-        this.physics.add.collider(this.projectiles, this.otherPlayersGroup, this.bulletHitOther, null, this);
+        this.multiplayerProjCollider = this.physics.add.collider(this.projectiles, this.otherPlayersGroup, this.bulletHitOther, null, this);
         
-        this.physics.add.overlap(this.otherPlayersGroup, this.playerGroup, this.meleeHitPlayer, null, this);
+        this.multiplayerMeleeCollider = this.physics.add.overlap(this.otherPlayersGroup, this.playerGroup, this.meleeHitPlayer, null, this);
     
         
         //Update client of all other players
@@ -258,12 +253,19 @@ class gameScene extends Phaser.Scene {
             self.otherPlayers[info.id].meleeSprite.setVisible(info.visible);
         })
         
+        this.client.socket.on("statChangeServer", function(info){
+            self.socketFunc.statChange(self, info);                   
+        });
+        
         // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
             if(!(self.otherPlayers[myId] == null)){
                 self.otherPlayers[myId].myContainer.destroy();
                 delete self.otherPlayers[myId];
+                self.otherProjColliders[myId].destroy();
+                delete self.otherProjColliders[myId];
             }
+            this.multiplayerProjCollider.destroy();
         });
         
         this.reconnectToMultiplayer();
@@ -567,6 +569,14 @@ class gameScene extends Phaser.Scene {
         });
         
         this.playerGroup.destroy();
+        
+        this.physics.world.removeCollider(this.multiplayerProjCollider);
+        this.physics.world.removeCollider(this.multiplayerMeleeCollider);
+        
+        for(var id in this.otherProjColliders){
+            this.physics.world.removeCollider(this.otherProjColliders[id]);
+        }
+        
+        this.physics.world.removeCollider(this.physics.world.colliders);
     }
-    
 }
