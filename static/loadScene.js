@@ -43,72 +43,15 @@ class loadScene extends Phaser.Scene
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         this.loadTileMap();
         this.loadMovementAnims();
+        this.loadIdleAnims();
         this.loadHealthBar();
-        
+        this.load.image('menu_background', 'static/images/menu_background.png');
         
         
         //audio
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
         this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3')
  
-    }
-    
-    preloaders()
-    {
-        var progressBar = this.add.graphics();
-        var progressBox = this.add.graphics();
-        progressBox.fillStyle(0x222222, 0.8);
-        progressBox.fillRect((this.game.config.width / 2) - 150, this.game.config.height - (this.game.config.height / 9), 320, 50);
-        var width = this.cameras.main.width;
-        var height = this.cameras.main.height;
-        
-        //text
-        this.loadingText = this.make.text({
-            x: width / 2,
-            y: height - (height / 7),
-            text: 'The Mice are getting ready...',
-            style: {
-                font: '30px monospace',
-                fill: '#ffffff'
-            }
-        });
-        console.log(this.loadingText.style.font);
-        this.loadingText.setOrigin(0.5, 0.5);
-        
-        //percent 
-        var percentText = this.make.text({
-            x: width / 2,
-            y: this.game.config.height - (this.game.config.height / 9) + 25,
-            text: '0%',
-            style: {
-            font: '18px monospace',
-            fill: '#ffffff'
-            }
-        }, this);
-        percentText.setOrigin(0.5, 0.5);
-        
-        
-        //preloaders
-        this.load.on('progress', function (value) {
-           // console.log(value);
-            percentText.setText(parseInt(value * 100) + '%');
-            progressBar.clear();
-            progressBar.fillStyle(0xffffff, 1);
-            progressBar.fillRect((this.game.config.width / 2) - 140, (this.game.config.height - (this.game.config.height / 9)) + 10, 300 * value, 30);
-        }, this);
-
-        this.load.on('fileprogress', function (file) {
-           // console.log(file.src);
-        });
-
-        this.load.on('complete', function () {
-          //  console.log('complete');
-            progressBar.destroy();
-            progressBox.destroy();
-            percentText.destroy();
-           // this.loadingText.text = 'The Mice Are Ready! Click to Enter the Marfare!';
-            this.loadingText.destroy();
-        }, this);
     }
     
     // Creating animations to be used in gameScene
@@ -120,44 +63,92 @@ class loadScene extends Phaser.Scene
         
         
         this.initButtons();
+        this.initAttackAnimations();
+        this.initMovementAnimations();
+        this.initIdleAnimations();
+        this.initDropsAnimations();
+        this.initProjectileAnimations();
+        this.initButtonInputs();
+        this.initMeleeLayers();
+       
         
         
         
         
+    }
+    
+    initIdleAnimations()
+    {
+        this.anims.create({
+            key: 'mouse_frosting_bag_idle',
+            frames: this.anims.generateFrameNames('mouse_idle_frosting_bag', {start: 0, end: 19}),
+            frameRate: 20,
+            repeat: -1
+        })
         
+        this.anims.create({
+            key: 'mouse_salt_shaker_idle',
+            frames: this.anims.generateFrameNames('mouse_idle_salt_shaker', {start: 0, end: 19}),
+            frameRate: 20,
+            repeat: -1
+        })
         
-            var frameNames = this.anims.generateFrameNames('kitchenScene', {
-                start: 0, end: 19, zeroPad: 0, 
-                prefix: 'mouse_walk/mouse_walk-', suffix:'.png'
-            });
-
-            var walkFrames = this.anims.generateFrameNames('walk_no_weapon', 
-            {
-                start: 0, end: 20                                  
-            })
+        this.anims.create({
+            key: 'mouse_squirter_idle',
+            frames: this.anims.generateFrameNames('mouse_idle_squirter', {start: 0, end: 19}),
+            frameRate: 20,
+            repeat: -1
+        })
+        
+    }
+    
+    initMovementAnimations()
+    {
+        var walkFrames = this.anims.generateFrameNames('walk_no_weapon', 
+        {
+            start: 0, end: 20                                  
+        })
             
-            this.anims.create({
-                key: 'left',
-                frames: walkFrames,
-                frameRate: 25,
-                repeat: -1
-            });
-                  
-          this.anims.create({
-                key: 'turn',
-                frames: this.anims.generateFrameNames('idle_no_weapon',{start: 0, end: 19}),
-                frameRate: 20,
-                repeat: -1
-            });
+        this.anims.create({
+            key: 'left',
+            frames: walkFrames,
+            frameRate: 25,
+            repeat: -1
+        });
         
-          this.anims.create({
-                key: 'right',
-                frames: frameNames,
-                frameRate: 25,
-                repeat: -1
-            });
+        this.anims.create({
+            key: 'mouse_salt_shaker_walk',
+            frames: this.anims.generateFrameNames('salt_shaker_walk', {start: 0, end: 20}),
+            frameRate: 25,
+            repeat: -1
+        });
         
-            this.anims.create({
+        this.anims.create({
+            key: 'mouse_squirter_walk',
+            frames: this.anims.generateFrameNames('squirter_walk', {start: 0, end: 20}),
+            frameRate: 25,
+            repeat: -1
+        });
+        
+        this.anims.create({
+            key: 'mouse_frosting_bag_walk',
+            frames: this.anims.generateFrameNames('frosting_bag_walk', {start: 0, end: 20}),
+            frameRate: 25,
+            repeat: -1
+        });
+        
+        
+        this.anims.create({
+            key: 'mouse_dash',
+            frames: this.anims.generateFrameNames('dash', {start: 0, end: 20} ),
+            frameRate: 40,
+            repeat: 0 
+        });
+    }
+    
+    initAttackAnimations()
+    {
+        this.anims.create({
                key: 'fork_stab',
                 frames: this.anims.generateFrameNames('fork', {start: 0, end: 26}),
                 frameRate: 33,
@@ -181,15 +172,7 @@ class loadScene extends Phaser.Scene
                 
             });
         
-            this.anims.create({
-                key: 'mouse_dash',
-                frames: this.anims.generateFrameNames('dash', {start: 0, end: 20} ),
-                frameRate: 40,
-                repeat: 0
-                
-            });
-        
-            this.anims.create({
+        this.anims.create({
                key: 'knife_swipe',
                 frames: this.anims.generateFrameNames('knife', {start: 0, end: 20}),
                 frameRate: 26,
@@ -209,9 +192,35 @@ class loadScene extends Phaser.Scene
                 frameRate: 15,
                 repeat: 0
             });
+    }
+    
+    initProjectileAnimations()
+    {
+        this.anims.create({
+               key: 'bottle_projectile_anim',
+                frames: this.anims.generateFrameNames('ketchup', {start: 0, end: 5}),
+                frameRate: 12,
+                repeat: -1
+            }); 
         
-            // drops
             this.anims.create({
+               key: 'frosting_bag_projectile_anim',
+                frames: this.anims.generateFrameNames('frosting', {start: 0, end: 4}),
+                frameRate: 10,
+                repeat: -1
+            }); 
+        
+            this.anims.create({
+               key: 'salt_shaker_projectile_anim',
+                frames: this.anims.generateFrameNames('salt', {start: 0, end: 4}),
+                frameRate: 10,
+                repeat: -1
+            }); 
+    }
+    
+    initDropsAnimations()
+    {
+                  this.anims.create({
                key: 'knife_idle',
                 frames: this.anims.generateFrameNames('knife_drop', {start: 0, end: 3}),
                 frameRate: 6,
@@ -273,81 +282,6 @@ class loadScene extends Phaser.Scene
                 frameRate: 6,
                 repeat: -1
             });
-        
-        
-           this.anims.create({
-               key: 'bottle_projectile_anim',
-                frames: this.anims.generateFrameNames('ketchup', {start: 0, end: 5}),
-                frameRate: 12,
-                repeat: -1
-            }); 
-        
-            this.anims.create({
-               key: 'frosting_bag_projectile_anim',
-                frames: this.anims.generateFrameNames('frosting', {start: 0, end: 4}),
-                frameRate: 10,
-                repeat: -1
-            }); 
-        
-            this.anims.create({
-               key: 'salt_shaker_projectile_anim',
-                frames: this.anims.generateFrameNames('salt', {start: 0, end: 4}),
-                frameRate: 10,
-                repeat: -1
-            }); 
-        
-        this.initMeleeLayers();
-
-        //enter game scene
-        this.start_button.on('pointerup', function(p)
-        {       //if (p.leftButtonDown())
-               // {  
-                    this.scene.start('menuScene', {socket: this.socket}); 
-                //}
-        }, this);
-        
-        //tutorial pop-up
-        this.tutorial_button.on('pointerup', function(p)
-        {       
-            //TODO: tutorial page
-        }, this);
-        
-        //credits pop-up
-        this.credits_button.on('pointerup', function(p)
-        {      
-            //TODO: credits page
-        }, this);
-        
-        this.start_button.on('pointerover', function (p) 
-        {
-            this.start_button.setTint(0x808080);
-        }, this);
-        
-        this.start_button.on('pointerout', function (p)
-        {
-            this.start_button.setTint(0xffffff);
-        }, this)
-        
-        this.tutorial_button.on('pointerover', function (p) 
-        {
-            this.tutorial_button.setTint(0x808080);
-        }, this);
-        
-        this.tutorial_button.on('pointerout', function (p)
-        {
-            this.tutorial_button.setTint(0xffffff);
-        }, this)
-        
-        this.credits_button.on('pointerover', function (p) 
-        {
-            this.credits_button.setTint(0x808080);
-        }, this);
-        
-        this.credits_button.on('pointerout', function (p)
-        {
-            this.credits_button.setTint(0xffffff);
-        }, this)
-        
     }
     
     initMeleeLayers() 
@@ -441,6 +375,59 @@ class loadScene extends Phaser.Scene
         
     }
     
+    initButtonInputs()
+    {
+        //enter game scene
+        this.start_button.on('pointerup', function(p)
+        {       //if (p.leftButtonDown())
+               // {  
+                    this.scene.start('menuScene', {socket: this.socket}); 
+                //}
+        }, this);
+        
+        //tutorial pop-up
+        this.tutorial_button.on('pointerup', function(p)
+        {       
+            //TODO: tutorial page
+        }, this);
+        
+        //credits pop-up
+        this.credits_button.on('pointerup', function(p)
+        {      
+            //TODO: credits page
+        }, this);
+        
+        this.start_button.on('pointerover', function (p) 
+        {
+            this.start_button.setTint(0x808080);
+        }, this);
+        
+        this.start_button.on('pointerout', function (p)
+        {
+            this.start_button.setTint(0xffffff);
+        }, this)
+        
+        this.tutorial_button.on('pointerover', function (p) 
+        {
+            this.tutorial_button.setTint(0x808080);
+        }, this);
+        
+        this.tutorial_button.on('pointerout', function (p)
+        {
+            this.tutorial_button.setTint(0xffffff);
+        }, this)
+        
+        this.credits_button.on('pointerover', function (p) 
+        {
+            this.credits_button.setTint(0x808080);
+        }, this);
+        
+        this.credits_button.on('pointerout', function (p)
+        {
+            this.credits_button.setTint(0xffffff);
+        }, this)
+    }
+    
     initButtons()
     {
         this.start_button = this.add.sprite((this.game.config.width / 3) - 150, this.game.config.height - (this.game.config.height / 9), 'start_button');
@@ -453,8 +440,6 @@ class loadScene extends Phaser.Scene
         
        
     }
-    
-  
     
     initButton(_button) 
     {
@@ -492,6 +477,7 @@ class loadScene extends Phaser.Scene
         
         
     }
+    
     loadProjectiles()
     {
         //projectiles
@@ -623,6 +609,33 @@ class loadScene extends Phaser.Scene
         this.load.spritesheet('walk_no_weapon',
         'static/images/Mouse_Walk_Animations/mouse_walk_no_weapon.png',
                               {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('salt_shaker_walk',
+        'static/images/Mouse_Walk_Animations/salt_shaker_walk/salt_shaker_walk.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('frosting_bag_walk',
+        'static/images/Mouse_Walk_Animations/frosting_bag_walk/frosting_bag_walk.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('squirter_walk',
+        'static/images/Mouse_Walk_Animations/squirter_walk/squirter_walk.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        
+        
+    }
+    
+    loadIdleAnims()
+    {
+        this.load.spritesheet('mouse_idle_frosting_bag', 'static/images/Mouse_Walk_Animations/frosting_bag_idle/frosting_bag_idle.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('mouse_idle_salt_shaker', 'static/images/Mouse_Walk_Animations/salt_shaker_idle/salt_shaker_idle.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('mouse_idle_squirter', 'static/images/Mouse_Walk_Animations/squirter_idle/squirter_idle.png',
+                              {frameWidth: 242, frameHeight: 332});
     }
     
     loadHealthBar()
@@ -632,6 +645,64 @@ class loadScene extends Phaser.Scene
         this.load.image('green_bar', 'static/images/drops/GreenBar.png');
         
         
+    }
+    
+    preloaders()
+    {
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect((this.game.config.width / 2) - 150, this.game.config.height - (this.game.config.height / 9), 320, 50);
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        
+        //text
+        this.loadingText = this.make.text({
+            x: width / 2,
+            y: height - (height / 7),
+            text: 'The Mice are getting ready...',
+            style: {
+                font: '30px monospace',
+                fill: '#ffffff'
+            }
+        });
+        console.log(this.loadingText.style.font);
+        this.loadingText.setOrigin(0.5, 0.5);
+        
+        //percent 
+        var percentText = this.make.text({
+            x: width / 2,
+            y: this.game.config.height - (this.game.config.height / 9) + 25,
+            text: '0%',
+            style: {
+            font: '18px monospace',
+            fill: '#ffffff'
+            }
+        }, this);
+        percentText.setOrigin(0.5, 0.5);
+        
+        
+        //preloaders
+        this.load.on('progress', function (value) {
+           // console.log(value);
+            percentText.setText(parseInt(value * 100) + '%');
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect((this.game.config.width / 2) - 140, (this.game.config.height - (this.game.config.height / 9)) + 10, 300 * value, 30);
+        }, this);
+
+        this.load.on('fileprogress', function (file) {
+           // console.log(file.src);
+        });
+
+        this.load.on('complete', function () {
+          //  console.log('complete');
+            progressBar.destroy();
+            progressBox.destroy();
+            percentText.destroy();
+           // this.loadingText.text = 'The Mice Are Ready! Click to Enter the Marfare!';
+            this.loadingText.destroy();
+        }, this);
     }
     
 }

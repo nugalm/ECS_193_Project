@@ -86,6 +86,7 @@ class Character {
         this.initMeleeSprite(context);
         this.initContainer(context);
         this.initCooldown();
+        this.playIdle();
         this.context = context;
     }
     
@@ -294,6 +295,38 @@ class Character {
         this.client.socket.emit('doAnim', info);
     }
     
+    playIdle()
+    {
+        if (this.gun == "frosting_bag") 
+        {
+            this.sprite.anims.play('mouse_frosting_bag_idle');
+        }
+        else if (this.gun == "salt_shaker") 
+        {
+            this.sprite.anims.play('mouse_salt_shaker_idle');
+        }
+        else if (this.gun == "bottle") 
+        {
+            this.sprite.anims.play('mouse_squirter_idle');
+        }
+    }
+    
+    playWalk()
+    {
+        if (this.gun == "frosting_bag") 
+        {
+            this.sprite.anims.play('mouse_frosting_bag_walk', true);
+        }
+        else if (this.gun == "salt_shaker") 
+        {
+            this.sprite.anims.play('mouse_salt_shaker_walk', true);
+        }
+        else if (this.gun == "bottle") 
+        {
+            this.sprite.anims.play('mouse_squirter_walk', true);
+        }
+    }
+    
     playMeleeLayerDash() 
     {
        if (this.weapon == "knife") 
@@ -409,8 +442,8 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.playMeleeLayerIdle();
-                    this.sprite.anims.play('left', true);
-                    
+                  //  this.sprite.anims.play('left', true);
+                    this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
                     this.client.socket.emit('doAnim', info);
@@ -424,8 +457,8 @@ class Character {
                 if (!this.isSpecialAnimating())  
                 {
                     this.playMeleeLayerIdle();
-                    this.sprite.anims.play('left', true);
-                    
+                   // this.sprite.anims.play('left', true);
+                    this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
@@ -440,8 +473,8 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.playMeleeLayerIdle();
-                    this.sprite.anims.play('left', true);
-                    
+                  //  this.sprite.anims.play('left', true);
+                    this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
                     this.client.socket.emit('doAnim', info);
@@ -455,8 +488,8 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.playMeleeLayerIdle();
-                    this.sprite.anims.play('left', true);
-                    
+                    //this.sprite.anims.play('left', true);
+                    this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
                     this.client.socket.emit('doAnim', info);
@@ -471,10 +504,11 @@ class Character {
 
                 if (!this.isSpecialAnimating())  
                 {
-                    if (this.sprite.anims.currentAnim != null && this.sprite.anims.currentAnim.key != 'turn')
+                    if (this.sprite.anims.currentAnim != null && !this.isIdleAnimating())
                     {
                         this.playMeleeLayerIdle();
-                        this.sprite.anims.play('turn');
+                        this.playIdle();
+                       // this.sprite.anims.play('mouse_frosting_bag_idle');
                         
                         var info = {anims: 'turn', melee: false, hitCount: 0};
 
@@ -544,6 +578,15 @@ class Character {
         return animating;
     }
     
+    isIdleAnimating()
+    {
+        var animating = ((this.sprite.anims.isPlaying) &&
+                        ((this.sprite.anims.currentAnim.key === 'mouse_frosting_bag_idle') ||
+                        (this.sprite.anims.currentAnim.key === 'mouse_salt_shaker_idle') ||
+                        (this.sprite.anims.currentAnim.key === 'mouse_squirter_idle')) )
+        
+        return animating;
+    }
     takeDamage(damageAmount, killer, method) 
     {
         

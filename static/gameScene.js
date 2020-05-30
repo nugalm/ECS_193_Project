@@ -141,13 +141,13 @@ class gameScene extends Phaser.Scene {
         });
     
         // Weapon Respawn
-        this.weaponRespawnEvent = this.time.addEvent
+        /*this.weaponRespawnEvent = this.time.addEvent
         ({
             delay: 3000,
             callback: this.weaponCallbackFunction,
             callbackScope: this,
             loop: true
-        });
+        });*/
         
         // Handles player's gun cooldown
         this.cooldownEvent = this.time.addEvent 
