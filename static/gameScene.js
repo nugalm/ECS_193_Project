@@ -263,6 +263,9 @@ class gameScene extends Phaser.Scene {
             if(!(self.otherPlayers[myId] == null)){
                 self.otherPlayers[myId].myContainer.destroy();
                 delete self.otherPlayers[myId];
+                
+                self.otherProjectiles[myId].destroy();
+                delete self.otherProjectiles[myId];
             }
         });
         

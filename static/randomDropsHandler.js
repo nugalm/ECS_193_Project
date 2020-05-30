@@ -377,4 +377,40 @@ class RandomDropsHandler
         
         
     }
+    
+    updateUnavailablePositions(x, y) 
+    {
+        // only need to switch x since none of our hard coded x positions are the same 
+        switch (x) 
+        {
+            case this.positionX1:
+                this.isAvailable1 = false;
+                break;
+            case this.positionX2:
+                this.isAvailable2 = false;
+                break;
+            case this.positionX3:
+                this.isAvailable3 = false;
+                break;
+            case this.positionX4:
+                this.isAvailable4 = false;
+                break;
+            case this.positionX5:
+                this.isAvailable5 = false;
+                break;
+            case this.positionX6:
+                this.isAvailable6 = false;
+                break;
+            case this.positionX7:
+                this.isAvailable7 = false;
+                break;
+            case this.positionX8:
+                this.isAvailable8 = false;
+                break;
+            case this.positionX9:
+                this.isAvailable9 = false;
+                break;
+        }
+        
+    }
 }

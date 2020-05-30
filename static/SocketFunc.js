@@ -222,9 +222,11 @@ class SocketFunc {
     syncDrops(self, info){
         var drops = self.randomDropsHandler.group;
         console.log("In sync");
+        var didDestroy = false;
         
         drops.children.each(function(drop){
             if(drop == null){
+                console.log("drop is null");
                 return;
             }
             
@@ -236,32 +238,14 @@ class SocketFunc {
         if(info.isWeapon){
             drops.add(new Weapon({scene: self, x: info.x,
                                   y: info.y, key: info.type}));
-            self.randomDropsHandler.updateAvailablePositions(info.x, info.y);
-        }
-                
-        else{
-            drops.add(new Drop({scene: self, x: info.x,
-                                y: info.y, key: info.type}));
-            self.randomDropsHandler.updateAvailablePositions(info.x, info.y);
-        }
-        
-        
-        /*
-        if(same){
-            return;
-        }
-        
-        
-        if(info.isWeapon){
-            drops.add(new Weapon({scene: self, x: info.x,
-                                  y: info.y, key: info.type}));
         }
                 
         else{
             drops.add(new Drop({scene: self, x: info.x,
                                 y: info.y, key: info.type}));
         }
-        */
+        
+        self.randomDropsHandler.updateUnavailablePositions(info.x, info.y);
     }
     
     
@@ -282,6 +266,4 @@ class SocketFunc {
         }
            
     }
-    
-    
 }
