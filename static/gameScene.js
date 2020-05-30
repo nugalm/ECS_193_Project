@@ -2,11 +2,13 @@ class gameScene extends Phaser.Scene {
     constructor()
     {
         super({key: 'gameScene'});
-
+        
         // User's info
         this.player;
         this.username;
-    
+        this.score;
+        this.scoreText;
+        
         // WASD movement
         this.cursors; 
 
@@ -78,7 +80,9 @@ class gameScene extends Phaser.Scene {
             element:  this.player.element,
             position: {x: this.player.startPositionX, y: this.player.startPositionY}
         };
+        
         this.client.socket.emit('startPlayer', info);
+        
     }
     
     create()
@@ -102,8 +106,6 @@ class gameScene extends Phaser.Scene {
             this.username,
          { fontSize: '24px', fill: 'white' });
         
-
-    
         this.drawer.drawCharacter();
         
        // dummies for testing
@@ -131,6 +133,7 @@ class gameScene extends Phaser.Scene {
         this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
         
+    
         // Fruit Respawn
         this.timedEvent = this.time.addEvent
         ({
@@ -172,14 +175,17 @@ class gameScene extends Phaser.Scene {
         
          this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpDrop, null, this);
         
-        this.player.myContainer.on("overlap", function() 
+        this.scene.launch('UIScene');
+        
+        
+     /*  this.player.myContainer.on("overlap", function() 
                                          {
                             alert("overlapping start");
         }, this);
         this.player.myContainer.off("overlap", function() 
                                          {
                             alert("overlapping end");
-        }, this);
+        }, this);*/
         
      
         //Multiplayer
@@ -281,10 +287,7 @@ class gameScene extends Phaser.Scene {
             return;   
         }
         //this.dummies.updateHealth();
-        //console.log("gun cooldown in milliseconds:",this.cooldownEvent.delay);
-        //console.log("weapon cooldown:",this.meleeCooldownEvent.delay);
-          
-
+        
         this.player.update(this);
         this.projectileHandler.moveProjectiles();
 
@@ -293,6 +296,7 @@ class gameScene extends Phaser.Scene {
             this.clearScene();
             this.scene.start("menuScene", {socket: this.client.socket});
         }
+          
     }  
     
     /*
@@ -311,7 +315,7 @@ class gameScene extends Phaser.Scene {
     
     pickUpDrop(player_container, drop)
     {
-
+        
         var info = {x: drop.x, y: drop.y};
         if (drop instanceof Weapon) {
             if(this.player.isEquipping)
@@ -323,6 +327,7 @@ class gameScene extends Phaser.Scene {
                 this.cooldownEvent.delay = this.player.cooldown;
                 this.meleeCooldownEvent.delay = this.player.meleeCooldown;
                 this.client.socket.emit("updateDropsClient", info);
+               
             }
         }
         
@@ -332,6 +337,7 @@ class gameScene extends Phaser.Scene {
             this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
             drop.destroy();
             this.client.socket.emit("updateDropsClient", info);
+            
         }
     }
     
@@ -492,6 +498,7 @@ class gameScene extends Phaser.Scene {
     
         if (animation.key === 'mouse_dash')
         {
+            
             this.player.isDashing = false;
            
         }

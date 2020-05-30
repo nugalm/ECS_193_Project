@@ -10,6 +10,7 @@ class HealthBar
     initHealthBar(context)
     {
         this.healthBar = context.add.image(0, 50, 'green_bar');
+        this.healthBar.setDisplaySize(80, 80);
     }
     
     update(_value)
