@@ -41,7 +41,8 @@ class menuScene extends Phaser.Scene
       // this.bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'menu_background');
      //   this.bg.setDisplaySize(this.game.config.width, this.game.config.height);
         this.add.text(100, 100, 'Choose your taste!', { fontSize: '24px', fill: 'white' });
-        
+
+        this.initBackground();
         // Create the four different character selections
         this.addButtonSprites();
 
@@ -52,6 +53,11 @@ class menuScene extends Phaser.Scene
         this.userPrompt();
     }
     
+    initBackground()
+    {
+        this.bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'menu_bg');
+        this.bg.setDisplaySize(this.game.config.width, this.game.config.height);
+    }
     addButtonSprites()
     {
         
