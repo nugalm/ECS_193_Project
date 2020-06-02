@@ -501,9 +501,9 @@ class loadScene extends Phaser.Scene
     
     initButtons()
     {
-        this.start_button = this.add.sprite((this.game.config.width / 3) - 150, this.game.config.height - (this.game.config.height / 9), 'start_button');
-        this.tutorial_button = this.add.sprite((this.game.config.width / 3) + 150, this.game.config.height - (this.game.config.height / 9), 'tutorial_button');
-        this.credits_button =  this.add.sprite((this.game.config.width / 3) + 450, this.game.config.height - (this.game.config.height / 9), 'credits_button');
+        this.start_button = this.add.sprite((this.game.config.width / 4), this.game.config.height - (this.game.config.height / 9), 'start_button');
+        this.tutorial_button = this.add.sprite((this.game.config.width / 4) + (this.game.config.width / 4 ), this.game.config.height - (this.game.config.height / 9), 'tutorial_button');
+        this.credits_button =  this.add.sprite((this.game.config.width / 4) + (2 * this.game.config.width / 4 ), this.game.config.height - (this.game.config.height / 9), 'credits_button');
         
         this.initButton(this.start_button);
         this.initButton(this.tutorial_button);
