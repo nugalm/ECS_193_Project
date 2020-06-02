@@ -189,6 +189,9 @@ io.on('connection', function(socket) {
     
 
     socket.on('movement', function(data) {
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
         
         serverPlayers[socket.id].oldPosition = serverPlayers[socket.id].position;
         serverPlayers[socket.id].position = data.position;
@@ -202,6 +205,10 @@ io.on('connection', function(socket) {
     });
     
     socket.on('addProjectileServer', function(obj){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
         //serverProj[socket.id].push(added);
         
@@ -211,6 +218,10 @@ io.on('connection', function(socket) {
     });
     
     socket.on('addSaltProjectileServer', function(obj){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
         var info = {id: socket.id, obj: added};
         
@@ -218,6 +229,10 @@ io.on('connection', function(socket) {
     });
     
     socket.on('addBottleProjectileServer', function(obj){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
         var info = {id: socket.id, obj: added};
         
@@ -225,6 +240,10 @@ io.on('connection', function(socket) {
     });
     
     socket.on('addFrostingProjectileServer', function(obj){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         var added = {x: obj.x, y: obj.y, rotation: obj.rotation, render: true};
         var info = {id: socket.id, obj: added};
         
@@ -252,6 +271,10 @@ io.on('connection', function(socket) {
     */
     
     socket.on("doDamage", function (damage){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         serverPlayers[socket.id].health -= damage;
         
         var info = {id: socket.id, damage: damage};
@@ -260,31 +283,55 @@ io.on('connection', function(socket) {
     })
     
     socket.on('doAnim', function(info){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         socket.broadcast.emit('updateAnim', {id: socket.id, info: info});
     });
     
     socket.on('updateDropsClient', function(info){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         socket.broadcast.emit('updateDropsServer', info);
     });
     
     socket.on('syncDropsClient', function(info){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         socket.broadcast.emit('syncDropsServer', info); 
     });
     
     socket.on('doMeleeSpriteAnim', function(key){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         var info = {id: socket.id, anim: key};
         socket.broadcast.emit("updateMeleeSpriteAnim", info); 
     });
     
     socket.on('seeMeleeSpriteServer', function(visible){
+        if(serverPlayers[socket.id] == null){
+            return;
+        }
+        
         var info = {id: socket.id, visible: visible};
         socket.broadcast.emit("seeMeleeSpriteClient", info); 
+    });
+    
+    socket.on("updateDeathScoreServer", function(player_id){
+        socket.broadcast.emit("updateDeathScoreClient", player_id);   
     });
     
     socket.on('died', function() {
         //console.log('user disconnected');
         // remove this player from our players object
-        delete serverPlayers[socket.id];
+        serverPlayers[socket.id].render = false;
         // emit a message to all players to remove this player
         socket.broadcast.emit('deleteTime', socket.id);
         //console.log('removed player ' + socket.id);

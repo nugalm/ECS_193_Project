@@ -143,7 +143,7 @@ class SocketFunc {
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
                 //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 //self.physics.world.enable(self.otherProjectiles[projs.id]);
         }
         
@@ -167,7 +167,8 @@ class SocketFunc {
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
                 //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
         
@@ -187,7 +188,7 @@ class SocketFunc {
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
                 //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
         }
         
@@ -248,6 +249,11 @@ class SocketFunc {
         self.randomDropsHandler.updateUnavailablePositions(info.x, info.y);
     }
     
+    updateKillScore(self, player_id){
+        if(self.client.socket.id == player_id){
+            
+        }
+    }
     
     
     updateAnim(self, player) {
