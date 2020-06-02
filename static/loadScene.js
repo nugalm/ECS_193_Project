@@ -1,7 +1,5 @@
 class loadScene extends Phaser.Scene 
 {
-    
-    
     constructor()
     {
         super( 
@@ -17,6 +15,10 @@ class loadScene extends Phaser.Scene
         this.start_button;
         this.tutorial_button;
         this.credits_button;
+        this.credits_;
+        this.tutorial_;
+        this.credits_close;
+        this.tutorial_close;
        
     }
     
@@ -53,6 +55,7 @@ class loadScene extends Phaser.Scene
         this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
         this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3');
         this.load.audio('m', 'static/images/armoryScene/m.mp3');
+        this.load.audio('salt_shaker_attack_audio', 'static/Sound/gameScene/salt_shaker_attack_audio.mp3');
  
     }
     
@@ -62,9 +65,13 @@ class loadScene extends Phaser.Scene
     {
         this.sound.add('game_audio');
         this.sound.add('selection_audio');
+        this.sound.add('salt_shaker_attack_audio', {volume: 1});
+       
         
         
         
+        
+        this.initPopUps();
         this.initButtons();
         this.initAttackAnimations();
         this.initMovementAnimations();
@@ -80,6 +87,7 @@ class loadScene extends Phaser.Scene
         
         
     }
+    
     
     initIdleAnimations()
     {
@@ -383,23 +391,72 @@ class loadScene extends Phaser.Scene
     {
         //enter game scene
         this.start_button.on('pointerup', function(p)
-        {       //if (p.leftButtonDown())
-               // {  
-                    this.scene.start('menuScene', {socket: this.socket}); 
-                //}
+        {       
+            this.scene.start('menuScene', {socket: this.socket}); 
+                
         }, this);
         
         //tutorial pop-up
         this.tutorial_button.on('pointerup', function(p)
         {       
-            //TODO: tutorial page
+            this.credits_.setVisible(false);
+            this.credits_close.setVisible(false);
+            if (this.tutorial_.visible == false) {
+                this.tutorial_.setVisible(true);
+                this.tutorial_close.setVisible(true);
+            }
+            else 
+            {
+                this.tutorial_.setVisible(false);
+                this.tutorial_close.setVisible(false);
+            }
+        }, this);
+        
+        this.tutorial_close.on('pointerup', function(p)
+        {
+            this.setPopUpsNotVisible();
+        }, this);
+        
+        this.credits_close.on('pointerup', function(p)
+        {
+            this.setPopUpsNotVisible();
         }, this);
         
         //credits pop-up
         this.credits_button.on('pointerup', function(p)
-        {      
-            //TODO: credits page
+        {   
+            this.tutorial_.setVisible(false);
+            this.tutorial_close.setVisible(false);
+            if (this.credits_.visible == false) { 
+                this.credits_.setVisible(true);
+                this.credits_close.setVisible(true);
+            }
+            else 
+            {
+                this.credits_.setVisible(false);
+                this.credits_close.setVisible(false);
+            }
         }, this);
+        
+        this.credits_close.on('pointerover', function (p) 
+        {
+            this.credits_close.setTint(0x808080);
+        }, this);
+        
+        this.credits_close.on('pointerout', function (p)
+        {
+            this.credits_close.setTint(0xffffff);
+        }, this);
+        
+        this.tutorial_close.on('pointerover', function (p) 
+        {
+            this.tutorial_close.setTint(0x808080);
+        }, this);
+        
+        this.tutorial_close.on('pointerout', function (p)
+        {
+            this.tutorial_close.setTint(0xffffff);
+        }, this)
         
         this.start_button.on('pointerover', function (p) 
         {
@@ -432,6 +489,16 @@ class loadScene extends Phaser.Scene
         }, this)
     }
     
+    setPopUpsNotVisible()
+    {
+        this.credits_.setVisible(false);
+        this.tutorial_.setVisible(false);
+        this.credits_close.setVisible(false);
+        this.tutorial_close.setVisible(false);
+    }
+    
+    
+    
     initButtons()
     {
         this.start_button = this.add.sprite((this.game.config.width / 3) - 150, this.game.config.height - (this.game.config.height / 9), 'start_button');
@@ -451,11 +518,32 @@ class loadScene extends Phaser.Scene
         _button.setInteractive();
     }
     
+    
+    initPopUps()
+    {
+        this.credits_ = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'credits_pop_up');
+        this.credits_.setScale(0.5);
+            
+        this.tutorial_ = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'tutorial_pop_up');
+        this.tutorial_.setScale(0.5);
+        
+        this.credits_close = this.add.image(this.credits_.x + this.credits_.displayWidth / 5, this.credits_.y + this.credits_.displayHeight / 4, "close");
+        this.credits_close.setInteractive();
+        
+        this.tutorial_close = this.add.image(this.tutorial_.x + this.tutorial_.displayWidth / 3, this.tutorial_.y + this.tutorial_.displayHeight / 3, 'close');
+        this.tutorial_close.setInteractive();
+        
+        this.setPopUpsNotVisible();
+    }
     loadButtons() 
     {
         this.load.image('start_button', 'static/images/loadingScene/btn1_start.png');
         this.load.image('tutorial_button', 'static/images/loadingScene/btn2_tutorial.png');
         this.load.image('credits_button', 'static/images/loadingScene/btn3_credits.png');
+        
+        //button pop-ups
+        this.load.image('tutorial_pop_up', 'static/images/loadingScene/tutorial.png')
+        this.load.image('credits_pop_up','static/images/loadingScene/credits.png');
     }
     
     loadMeleeLayer()
@@ -559,6 +647,7 @@ class loadScene extends Phaser.Scene
         this.load.image('loadingSweet', 'static/images/sweetMouse.png');
         this.load.image('loadingSalty', 'static/images/saltyMouse.png');
         this.load.image('loadingSour', 'static/images/sourMouse.png');
+        this.load.image('menu_bg', 'static/images/mousecave.png');
     }
     
     loadAttackSpriteSheets()
