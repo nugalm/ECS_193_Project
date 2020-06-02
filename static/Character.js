@@ -11,6 +11,7 @@ class Character {
         
         //stats
         this.health = 50;
+        this.maxHealth = 50;
         this.power = 50;
         this.mana = 50;
         this.speed = 50;
@@ -57,6 +58,7 @@ class Character {
         
         this.dashMultiplier = 5;
 
+        this.killed_text = "";
 	}
 
 	printStat(){
@@ -167,12 +169,13 @@ class Character {
     
     update(context)
     {
+        this.updateMeleeSpriteRotation();
+        
         if(this.health <= 0){
             return;
         }
         
         this.updateRotation(context);
-        this.updateMeleeSpriteRotation();
         this.updateMovement(context);
         this.updateEquip(context);
         this.updateHealth();
@@ -597,10 +600,10 @@ class Character {
         {
             this.health = 0;
             if(!(killer == null)){
-                //alert(killer._text + " killed you via " + method);
+                this.killed_text = killer._text + " killed you via " + method;
             }
-            this.myContainer.destroy();
-            this.client.socket.emit("hadDied");
+            //this.myContainer.destroy();
+            //this.client.socket.emit("hadDied");
         }
         
     }

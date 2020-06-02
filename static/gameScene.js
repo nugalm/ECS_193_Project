@@ -38,6 +38,7 @@ class gameScene extends Phaser.Scene {
         this.playerGroup;
         this.otherPlayersGroup;
         this.socketFunc = new SocketFunc();
+        this.otherProjColliders = {};
 
         // variables using to test (e.g. damage system, collision, etc.)
        // this.dummies;
@@ -55,6 +56,12 @@ class gameScene extends Phaser.Scene {
         this.meleeCooldownEvent;
         
         this.dropsPlayerOverlap;
+        
+        this.respawn_button;
+        this.restart_button;
+        this.killed_message;
+        this.lastX;
+        this.lastY;
     }
     
     // If we ever need to load specific data from previous scene.
@@ -71,6 +78,8 @@ class gameScene extends Phaser.Scene {
     // and can refer to the keywords we initialized there as we like
     preload() 
     {
+        this.load.image('respawn_button', 'static/images/gameScene/btn_respawn.png');
+        this.load.image('restart_button', 'static/images/gameScene/btn_restart.png');
         
         this.sound.setVolume(0.1);
         this.sound.play('game_audio', {loop: 1});
@@ -228,6 +237,10 @@ class gameScene extends Phaser.Scene {
         });
         
         this.client.socket.on('updateDamage', function(info){
+            if(self.otherPlayers[info.id] == null){
+                return;
+            }
+            
             self.otherPlayers[info.id].takeDamage(info.damage);
             self.otherPlayers[info.id].updateHealth();
         });
@@ -269,34 +282,39 @@ class gameScene extends Phaser.Scene {
             if(!(self.otherPlayers[myId] == null)){
                 self.otherPlayers[myId].myContainer.destroy();
                 delete self.otherPlayers[myId];
-                
-                self.otherProjectiles[myId].destroy();
-                delete self.otherProjectiles[myId];
+                /*
+                if(!(self.otherProjectiles[myId] == null)){
+                    self.otherProjectiles[myId].destroy();
+                    delete self.otherProjectiles[myId];
+                }
+                */
             }
         });
         
-        this.reconnectToMultiplayer();
+        //this.reconnectToMultiplayer();        
+        //this.setupDeathButtons();
     } 
     
     update()
       {
         var self = this;
        // console.log("time event loop value: ",this.timedEvent.loop);
-        if (this.gameOver)
-        {
-            return;   
-        }
+          
         //this.dummies.updateHealth();
         
         this.player.update(this);
-        this.projectileHandler.moveProjectiles();
-
-        if(this.player.health <= 0){
-            this.client.socket.disconnect();
-            this.clearScene();
-            this.scene.start("menuScene", {socket: this.client.socket});
-        }
+        this.projectileHandler.moveProjectiles();  
           
+        if(this.player.health <= 0){
+            //this.client.socket.disconnect();
+            //this.clearScene();
+            //this.scene.start("menuScene", {socket: this.client.socket});
+            this.lastX = this.player.myContainer.x
+            this.lastY = this.player.myContainer.y
+            this.player.myContainer.setVisible(false);
+            this.client.socket.emit("died");
+            this.addAfterDeathButtons();
+        }
     }  
     
     /*
@@ -416,6 +434,8 @@ class gameScene extends Phaser.Scene {
                 if(damageAmount >= this.player.health){
                     killer = this.otherPlayers[id].username;
                     method = this.otherPlayers[id].weapon;
+                    
+                    this.client.socket.emit("updateDeathScoreServer", id);
                 }
                 
                 this.player.takeDamage(damageAmount, killer, method);
@@ -470,6 +490,8 @@ class gameScene extends Phaser.Scene {
             else if (bullet.frosting){
                 method = "frosting"
             }
+            
+            this.client.socket.emit("updateDeathScoreServer", bullet.id);
         }
         
         this.player.takeDamage(damageAmount, killer, method);
@@ -480,7 +502,6 @@ class gameScene extends Phaser.Scene {
     }
     
     bulletHitOther(bullet, player){
-        //this.player.takeDamage(this.colliderHandler.projectileHit(bullet, this.player, this.player));
         bullet.destroy();
     }
     
@@ -544,6 +565,99 @@ class gameScene extends Phaser.Scene {
             this.client.socket.connect();
         }
     }
+    
+    addAfterDeathButtons(){
+        if(!(this.respawn_button == null)){
+            return;
+        }
+        
+        if(!(this.restart_button == null)){
+            return;
+        }
+            
+        this.setupDeathButtons();
+    }
+    
+    setupDeathButtons(){
+        this.respawn_button = this.add.sprite(this.lastX , this.lastY + 50, 'respawn_button');
+        this.restart_button = this.add.sprite(this.lastX, this.lastY - 50, 'restart_button');
+        this.killed_message = this.add.text(this.lastX - 75, this.lastY - 125, this.player.killed_text, {font: "16px Arial", fill: "#ffffff"});
+        
+        this.respawn_button.depth = 2000;
+        this.restart_button.depth = 2000;
+        this.killed_message.depth = 2000;
+        this.respawn_button.setInteractive();
+        this.restart_button.setInteractive();
+        
+        // Does respawn button stuff
+        
+        this.respawn_button.on('pointerup', function(p)
+        {       
+            this.player.health = this.player.maxHealth;
+            this.player.myContainer.setVisible(true);
+            this.player.updateHealth();
+            
+            this.restart_button.destroy();
+            this.respawn_button.destroy();
+            this.killed_message.destroy();
+            this.restart_button = null;
+            this.respawn_button = null;
+            this.killed_message = null;
+        }, this);
+        
+        this.respawn_button.on('pointerover', function (p) 
+        {
+            this.respawn_button.setTint(0x808080);
+        }, this);
+        
+        this.respawn_button.on('pointerout', function (p)
+        {
+            this.respawn_button.setTint(0xffffff);
+        }, this)
+        
+        // Does restart button stuff
+        this.restart_button.on('pointerup', function(p)
+        {
+            window.location.reload();
+        }, this);
+        
+        this.restart_button.on('pointerover', function (p) 
+        {
+            this.restart_button.setTint(0x808080);
+        }, this);
+        
+        this.restart_button.on('pointerout', function (p)
+        {
+            this.restart_button.setTint(0xffffff);
+        }, this)   
+    }
+    
+    /*
+    clearProjColliders(){
+        for(var id in this.otherProjColliders){
+            if(this.otherProjColliders[id] == null){
+                return;
+            }
+            
+            this.otherProjColliders[id].destroy();
+        }
+    }
+    
+    addProjColliders(){
+        for(var id in this.otherProjectiles){
+            if(this.otherProjectiles[id]){
+                return;
+            }
+            
+            if(this.otherProjColliders[id] == null){
+                this.otherProjColliders[id] = this.physics.add.collider
+                    (this.otherProjectiles[id], this.playerGroup, this.bulletHitPlayer, null, this);
+            }
+            
+        }
+        
+    }
+    */
     
     clearScene(){
         for(var id in this.otherPlayers){
