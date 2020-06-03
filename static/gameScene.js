@@ -184,7 +184,7 @@ class gameScene extends Phaser.Scene {
         
          this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpDrop, null, this);
         
-        this.scene.launch('UIScene');
+        this.scene.launch('UIScene', {name: this.username});
         
         
      /*  this.player.myContainer.on("overlap", function() 
@@ -275,7 +275,15 @@ class gameScene extends Phaser.Scene {
                 return;
             } 
             self.otherPlayers[info.id].meleeSprite.setVisible(info.visible);
-        })
+        });
+        
+        this.client.socket.on('statChangeClient', function(info){
+            self.socketFunc.statUpdate(self, info);
+        });
+        
+        this.client.socket.on("updateDeathScoreClient", function(player_id){
+            self.socketFunc.updateKillScore(self, player_id);
+        });
         
         // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
@@ -341,6 +349,7 @@ class gameScene extends Phaser.Scene {
                 this.cooldownEvent.delay = this.player.cooldown;
                 this.meleeCooldownEvent.delay = this.player.meleeCooldown;
                 this.client.socket.emit("updateDropsClient", info);
+                this.events.emit("addScore");
                
             }
         }
@@ -351,6 +360,7 @@ class gameScene extends Phaser.Scene {
             this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
             drop.destroy();
             this.client.socket.emit("updateDropsClient", info);
+            this.events.emit("addScore");
             
         }
     }
@@ -487,7 +497,11 @@ class gameScene extends Phaser.Scene {
                 method = "frosting"
             }
             
-            this.client.socket.emit("updateDeathScoreServer", bullet.id);
+            if(!this.gameOver) {
+                this.client.socket.emit("updateDeathScoreServer", bullet.id);
+            }
+            
+            this.gameOver = true;
         }
         
         this.player.takeDamage(damageAmount, killer, method);
@@ -594,6 +608,8 @@ class gameScene extends Phaser.Scene {
         
         this.respawn_button.on('pointerup', function(p)
         {       
+            this.events.emit("reset");
+            
             this.player.health = this.player.maxHealth;
             this.player.myContainer.setVisible(true);
             this.player.myContainer.body.enable = true;
@@ -605,6 +621,8 @@ class gameScene extends Phaser.Scene {
             this.restart_button = null;
             this.respawn_button = null;
             this.killed_message = null;
+            
+            this.gameOver = false;
         }, this);
         
         this.respawn_button.on('pointerover', function (p) 
