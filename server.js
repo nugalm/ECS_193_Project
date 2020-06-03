@@ -324,8 +324,19 @@ io.on('connection', function(socket) {
         socket.broadcast.emit("seeMeleeSpriteClient", info); 
     });
     
+    socket.on('statChangeServer', function(statChange){
+        var info = {id: socket.id, statChange: statChange};
+        socket.broadcast.emit('statChangeClient', info); 
+    });
+    
     socket.on("updateDeathScoreServer", function(player_id){
         socket.broadcast.emit("updateDeathScoreClient", player_id);   
+    });
+    
+    socket.on("scoreBoardUpdateServer", function(score){
+        var info = {name: serverPlayers[socket.id].name, score: score, id: socket.id};
+        
+        socket.broadcast.emit("scoreBoardUpdateClient", info);
     });
     
     socket.on('died', function() {

@@ -639,20 +639,24 @@ class Character {
     
     pickUpFood(drop, context) 
     {
+        var statChange = {health: 0, speed: 0, power: 0};
         if (drop.type == "avocado_drop_image")
         {
             this.health += 100;
+            statChange.health = 100;
         }
         else if (drop.type == "blueberry_drop_image") 
         {
             this.speed += 50;
+            statChange.speed = 50;
         }
         else if (drop.type == "pepper_drop_image") 
         {
             this.power += 100;
             this.pepper_time(context);
+            statChange.power = 100;
         }
-        
+        this.client.socket.emit("statChangeServer", statChange);
         
     }
     
@@ -670,7 +674,9 @@ class Character {
          	
     noMorePepper()	
     {	
+        var statChange = {health: 0, speed: 0, power: -100};
         this.power = this.power - 100;	
+        this.client.socket.emit("statChangeServer", statChange);
       //  alert("power after pepper subtraction: "+ this.power)	
     }
     

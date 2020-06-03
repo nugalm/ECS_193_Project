@@ -251,8 +251,20 @@ class SocketFunc {
     
     updateKillScore(self, player_id){
         if(self.client.socket.id == player_id){
-            
+            self.events.emit("addKills");
         }
+    }
+    
+    statUpdate(self, info){
+        if(self.otherPlayers[info.id] == null){
+            return;
+        }
+        
+        self.otherPlayers[info.id].health += info.statChange.health;
+        self.otherPlayers[info.id].speed += info.statChange.speed;
+        self.otherPlayers[info.id].power += info.statChange.power;
+        
+        self.otherPlayers[info.id].updateHealth();
     }
     
     
