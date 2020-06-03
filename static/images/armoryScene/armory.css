@@ -18,6 +18,7 @@
 	z-index: 1;
 }
 
+.layer-over2,
 .layer-mm3,
 .layer-mm2,
 .layer-mm {
@@ -29,6 +30,7 @@
 	transform: translate3d(-50%,-50%,0);
 }
 
+.layer-over2 .w,
 .layer-mm3 .w,
 .layer-mm2 .w,
 .layer-mm .w {
@@ -46,7 +48,9 @@
 	color: #000000;
 }
 
+.btn4_3,
 .btn4_2,
+.btn4_2_enter,
 .btn4,
 .btn5,
 .btn6 {
@@ -66,11 +70,14 @@
 	top: 66%;
 }
 
+.btn4_2_enter,
+.btn4_3,
 .btn4_2 {
 	left: 39%;
 	top: 66%;
 }
 
+.layer-over2,
 .layer-mm3,
 .layer-mm2,
 .layer-mm,
