@@ -143,10 +143,10 @@ class gameScene extends Phaser.Scene {
         this.cameras.main.zoom = 1.5;
         
     
-        // Fruit Respawn
+        //Respawn
         this.timedEvent = this.time.addEvent
         ({
-            delay: 3000,
+            delay: 5000,
             callback: this.callbackFunction,
             callbackScope: this,
             loop: true
@@ -306,14 +306,10 @@ class gameScene extends Phaser.Scene {
         this.projectileHandler.moveProjectiles();  
           
         if(this.player.health <= 0){
-            //this.client.socket.disconnect();
-            //this.clearScene();
-            //this.scene.start("menuScene", {socket: this.client.socket});
             this.lastX = this.player.myContainer.x
             this.lastY = this.player.myContainer.y
-            this.player.myContainer.setVisible(false);
             this.client.socket.emit("died");
-            this.addAfterDeathButtons();
+            this.player.myContainer.body.enable = false;
         }
     }  
     
@@ -523,6 +519,11 @@ class gameScene extends Phaser.Scene {
             this.player.isDashing = false;
            
         }
+        
+        if (animation.key === 'mouse_death')
+        {
+            this.addAfterDeathButtons();
+        }
     }
 
     callbackFunction() 
@@ -545,7 +546,7 @@ class gameScene extends Phaser.Scene {
     {
         if (this.player.canMelee == false)
         {
-            console.log("Melee cooldown: " + this.player.meleeCooldown);
+           // console.log("Melee cooldown: " + this.player.meleeCooldown);
             this.player.canMelee = true;
         }
     }
@@ -595,6 +596,7 @@ class gameScene extends Phaser.Scene {
         {       
             this.player.health = this.player.maxHealth;
             this.player.myContainer.setVisible(true);
+            this.player.myContainer.body.enable = true;
             this.player.updateHealth();
             
             this.restart_button.destroy();

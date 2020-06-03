@@ -150,12 +150,19 @@ class loadScene extends Phaser.Scene
         });
         
         
-        this.anims.create({
+        this.anims.create ({
             key: 'mouse_dash',
             frames: this.anims.generateFrameNames('dash', {start: 0, end: 20} ),
             frameRate: 40,
             repeat: 0 
         });
+        
+        this.anims.create ({
+            key: 'mouse_death',
+            frames: this.anims.generateFrameNames('death', {start: 0, end: 19}),
+            frameRate: 30,
+            repeat: 0
+        })
     }
     
     initAttackAnimations()
@@ -715,7 +722,9 @@ class loadScene extends Phaser.Scene
         'static/images/Mouse_Walk_Animations/squirter_walk/squirter_walk.png',
                               {frameWidth: 242, frameHeight: 332});
         
-        
+        this.load.spritesheet('death',
+        'static/images/death/death/death.png',
+                              {frameWidth: 242, frameHeight: 332});
         
     }
     

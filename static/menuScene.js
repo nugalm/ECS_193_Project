@@ -184,7 +184,7 @@ class menuScene extends Phaser.Scene
     {
         var text = this.add.text(this.promptPositionX + 125, 
             this.promptPositionY + 220, 
-            'Please enter your name', 
+            'Please enter your name and click the Enter button', 
             { color: 'white', fontSize: '24px '});
 
         // Prompt for the username

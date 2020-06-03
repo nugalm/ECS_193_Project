@@ -414,7 +414,7 @@ class Character {
     
     updateRotation(context)
     {
-        // lock rotation if player is shooting,meleeing, or dashing	
+    
         if (this.isSpecialAnimating()) 	
         {	
             return;	
@@ -602,8 +602,7 @@ class Character {
             if(!(killer == null)){
                 this.killed_text = killer._text + " killed you via " + method;
             }
-            //this.myContainer.destroy();
-            //this.client.socket.emit("hadDied");
+            this.sprite.anims.play('mouse_death');
         }
         
     }
