@@ -9,7 +9,7 @@ class ProjectileHandler
         this.saltBulletSize = 75;
         
         // time it takes for projectile to disappear (in milliseconds)
-        this.saltTime = 500;
+        this.saltTime = 600;
         this.bottleTime = 1000;
         this.frostingTime = 2000;
         
