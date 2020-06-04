@@ -134,7 +134,7 @@ class Character {
         }
         else if (this.gun == "frosting_bag")
         {
-            this.cooldown = 2000;
+            this.cooldown = 1500;
         }
         
         if (this.weapon == "fork") 
