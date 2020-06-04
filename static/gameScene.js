@@ -57,8 +57,8 @@ class gameScene extends Phaser.Scene {
         
         this.dropsPlayerOverlap;
         
-        this.respawn_button;
-        this.restart_button;
+        this.respawn_button = null;
+        this.restart_button = null;
         this.killed_message;
         this.lastX;
         this.lastY;
@@ -285,6 +285,14 @@ class gameScene extends Phaser.Scene {
             self.socketFunc.updateKillScore(self, player_id);
         });
         
+        this.client.socket.on('implementDeath', function(player_id){
+            self.socketFunc.haveDied(self, player_id);
+        });
+        
+        this.client.socket.on('respawnClient', function(info){
+            self.socketFunc.haveRespawn(self, info); 
+        });
+        
         // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
             if(!(self.otherPlayers[myId] == null)){
@@ -316,7 +324,6 @@ class gameScene extends Phaser.Scene {
         if(this.player.health <= 0){
             this.lastX = this.player.myContainer.x
             this.lastY = this.player.myContainer.y
-            this.client.socket.emit("died");
             this.player.myContainer.body.enable = false;
         }
     }  
@@ -589,11 +596,16 @@ class gameScene extends Phaser.Scene {
         if(!(this.restart_button == null)){
             return;
         }
-            
+        
+        console.log("Adding death buttons");
+        
         this.setupDeathButtons();
     }
     
     setupDeathButtons(){
+        console.log('Setting up death buttons');
+        this.client.socket.emit("died");
+        
         this.respawn_button = this.add.sprite(this.lastX , this.lastY + 50, 'respawn_button');
         this.restart_button = this.add.sprite(this.lastX, this.lastY - 50, 'restart_button');
         this.killed_message = this.add.text(this.lastX - 75, this.lastY - 125, this.player.killed_text, {font: "16px Arial", fill: "#ffffff"});
@@ -623,6 +635,9 @@ class gameScene extends Phaser.Scene {
             this.killed_message = null;
             
             this.gameOver = false;
+            
+            var info = {id: this.client.socket.id, health: this.player.maxHealth};
+            this.client.socket.emit('respawnServer', info);
         }, this);
         
         this.respawn_button.on('pointerover', function (p) 
