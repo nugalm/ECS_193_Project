@@ -603,6 +603,12 @@ class Character {
                 this.killed_text = killer._text + " killed you via " + method;
             }
             this.sprite.anims.play('mouse_death');
+            
+            var info = {anims: 'mouse_death', melee: false, hitCount: 0};
+            
+            // apparently this will make the wrong player itself actually do
+            // death animation 
+            // this.client.socket.emit('doAnim', info);
         }
         
     }

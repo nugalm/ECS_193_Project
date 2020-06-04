@@ -284,4 +284,26 @@ class SocketFunc {
         }
            
     }
+    
+    haveDied(self, player_id)
+    {
+        if(self.otherPlayers[player_id] == null){
+            return;
+        }
+        
+        self.otherPlayers[player_id].myContainer.body.enable = false;
+        self.otherPlayers[player_id].health = 0;
+        self.otherPlayers[player_id].updateHealth();
+    }
+    
+    haveRespawn(self, info)
+    {
+        if(self.otherPlayers[info.id] == null){
+            return;
+        }
+        
+        self.otherPlayers[info.id].myContainer.body.enable = true;
+        self.otherPlayers[info.id].health = info.health;
+        self.otherPlayers[info.id].updateHealth();
+    }
 }

@@ -344,8 +344,12 @@ io.on('connection', function(socket) {
         // remove this player from our players object
         serverPlayers[socket.id].render = false;
         // emit a message to all players to remove this player
-        socket.broadcast.emit('deleteTime', socket.id);
+        socket.broadcast.emit('implementDeath', socket.id);
         //console.log('removed player ' + socket.id);
+    });
+    
+    socket.on('respawnServer', function(info){
+        socket.broadcast.emit('respawnClient', info); 
     });
     
     socket.on('disconnect', function() {
