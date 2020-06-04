@@ -588,7 +588,14 @@ class gameScene extends Phaser.Scene {
         if(!(this.restart_button == null)){
             return;
         }
+<<<<<<< Updated upstream
             
+=======
+        
+        console.log("Adding death buttons");
+        
+        this.events.emit("reset");
+>>>>>>> Stashed changes
         this.setupDeathButtons();
     }
     
@@ -607,8 +614,6 @@ class gameScene extends Phaser.Scene {
         
         this.respawn_button.on('pointerup', function(p)
         {       
-            this.events.emit("reset");
-            
             this.player.health = this.player.maxHealth;
             this.player.myContainer.setVisible(true);
             this.player.updateHealth();

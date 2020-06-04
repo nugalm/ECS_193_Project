@@ -78,6 +78,11 @@ class UIScene extends Phaser.Scene
             this.putIntoPlaces();
             this.sortPlaces();
             this.setPlaces();
+            
+            var i = 0;
+            for(i = 0; i < this.placesText.length; i++){
+                this.placesText[i].setText("");
+            }
         }, this);
         
         
@@ -90,6 +95,12 @@ class UIScene extends Phaser.Scene
             self.sortPlaces();
             self.setPlaces();
         });
+        
+        this.client.socket.on("implementDeath", function(player_id){
+            if(player_id in self.players){
+                delete self.players[player_id];
+            }
+        }); 
     }
     
     update()
@@ -142,11 +153,11 @@ class UIScene extends Phaser.Scene
             
             if(this.placesText[i] == null)
             {
-                this.placesText[i] = this.add.text(600, (i * 30), this.places[i].name + " : " + this.places[i].score, {fontSize: '32px', fill: '#ffffff'});
+                this.placesText[i] = this.add.text(600, (i * 30),(i + 1) + ".) " + this.places[i].name + " : " + this.places[i].score, {fontSize: '32px', fill: '#ffffff'});
             }
             else
             {
-                this.placesText[i].setText(this.places[i].name + " : " + this.places[i].score);
+                this.placesText[i].setText((i + 1) +  ".) " + this.places[i].name + " : " + this.places[i].score);
             }
         }
     }
