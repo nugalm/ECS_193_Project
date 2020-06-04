@@ -57,7 +57,7 @@ class Character {
         this.pepperEvent;	
         this.pepperTime = 10000;
         
-        this.dashMultiplier = 5;
+        this.dashMultiplier = 4;
 
         this.killed_text = "";
 	}
