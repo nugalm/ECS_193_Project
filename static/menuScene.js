@@ -110,12 +110,14 @@ class menuScene extends Phaser.Scene
         this.saltyButton.setInteractive();
         this.saltyButton.on('pointerover', function()
         {
-            this.saltyButton.setTint(0x808080);
+           // this.saltyButton.setTint(0x808080);
+            this.saltyButton.setScale(0.9);
         }, this);
         
         this.saltyButton.on('pointerout', function()
         {
             this.saltyButton.setTint(this.saltyButtonTint);
+            this.saltyButton.setScale(0.7);
         }, this);
         this.saltyButton.on('pointerup', function(p) 
         {
@@ -129,12 +131,14 @@ class menuScene extends Phaser.Scene
         this.spicyButton.setInteractive();
         this.spicyButton.on('pointerover', function()
         {
-            this.spicyButton.setTint(0x808080);
+            //this.spicyButton.setTint(0x808080);
+            this.spicyButton.setScale(0.9);
         }, this);
         
         this.spicyButton.on('pointerout', function()
         {
             this.spicyButton.setTint(0xffffff);
+            this.spicyButton.setScale(0.7);
         }, this);
         this.spicyButton.on('pointerup', function(p) 
         {
