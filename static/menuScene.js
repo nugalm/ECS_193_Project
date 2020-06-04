@@ -9,7 +9,7 @@ class menuScene extends Phaser.Scene
         this.sourButton;
         this.sweetButton;
         this.buttonPositionX = (config.width / 4) - (config.width  / 8);
-        this.buttonPositionY = config.height / 2;
+        this.buttonPositionY = config.height / 2.5;
         this.buttonPositionOffset = config.width / 4;
         this.IMAGE_SCALE = 0.07;
         this.scale = 0.8;
@@ -42,10 +42,7 @@ class menuScene extends Phaser.Scene
         this.initBackground();
         // Create the four different character selections
         this.addButtonSprites();
-
         this.scaleCharImages();
-        this.tempSetTintforButtons();
-        this.addButtonTexts();
         this.turnButtonsOn();
         this.userPrompt();
     }
@@ -68,32 +65,14 @@ class menuScene extends Phaser.Scene
         this.sweetButton = this.add.sprite(this.buttonPositionX + this.buttonPositionOffset * 3, this.buttonPositionY, 'loadingSweet');
     }
     
-    tempSetTintforButtons()
-    {
-        this.sourButton.setTint(this.sourButtonTint);
-    }
-    
-    
     scaleCharImages()
     {
-    //    this.scaleCharImage(this.saltyButton);
-       // this.scaleCharImage(this.spicyButton);
         this.saltyButton.setScale(0.7);
         this.spicyButton.setScale(0.7);
-        this.scaleCharImage(this.sourButton);
-        this.scaleCharImage(this.sweetButton);
+        this.sourButton.setScale(0.7);
+        this.sweetButton.setScale(0.7);
     }
 
-    addButtonTexts()
-    {
-       // this.add.text(this.saltyButton.x - 50, this.saltyButton.y - this.buttonTextOffsetY, 'Salty');
-        
-        //this.add.text(this.spicyButton.x - 50, this.spicyButton.y - this.buttonTextOffsetY, 'Spicy');
-        
-        this.add.text(this.sourButton.x - 50, this.sourButton.y - this.buttonTextOffsetY, 'Sour');
-        
-        this.add.text(this.sweetButton.x - 50, this.sweetButton.y - this.buttonTextOffsetY, 'Sweet');
-    }
     
     scaleCharImage(_button)
     {
@@ -143,12 +122,12 @@ class menuScene extends Phaser.Scene
         this.sourButton.setInteractive();
         this.sourButton.on('pointerover', function()
         {
-            this.sourButton.setTint(0x808080);
+            this.sourButton.setScale(0.9);
         }, this);
         
         this.sourButton.on('pointerout', function()
         {
-            this.sourButton.setTint(this.sourButtonTint);
+            this.sourButton.setScale(0.7);
         }, this);
         this.sourButton.on('pointerup', function(p) 
         {
@@ -159,12 +138,12 @@ class menuScene extends Phaser.Scene
         this.sweetButton.setInteractive();
         this.sweetButton.on('pointerover', function()
         {
-            this.sweetButton.setTint(0x808080);
+            this.sweetButton.setScale(0.9);
         }, this);
         
         this.sweetButton.on('pointerout', function()
         {
-            this.sweetButton.setTint(this.sweetButtonTint);
+            this.sweetButton.setScale(0.7);
         }, this);
         this.sweetButton.on('pointerup', function(p) 
         {

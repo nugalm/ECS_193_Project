@@ -62,6 +62,8 @@ class gameScene extends Phaser.Scene {
         this.killed_message;
         this.lastX;
         this.lastY;
+        
+        this.footstep;
     }
     
     // If we ever need to load specific data from previous scene.
@@ -83,7 +85,7 @@ class gameScene extends Phaser.Scene {
         
         this.sound.setVolume(0.1);
         this.sound.play('game_audio', {loop: 1});
-        
+    
         var info = {
             name: this.username,
             element:  this.player.element,

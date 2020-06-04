@@ -640,9 +640,9 @@ class loadScene extends Phaser.Scene
     {
         //menu scene chars
         this.load.image('loadingSpicy', 'static/images/mouseSpicy.png');
-        this.load.image('loadingSweet', 'static/images/sweetMouse.png');
+        this.load.image('loadingSweet', 'static/images/mouseSweet.png');
         this.load.image('loadingSalty', 'static/images/mouseSalty.png');
-        this.load.image('loadingSour', 'static/images/sourMouse.png');
+        this.load.image('loadingSour', 'static/images/mouseSour.png');
         this.load.image('menu_bg', 'static/images/mousecave.png');
     }
     
@@ -809,6 +809,7 @@ class loadScene extends Phaser.Scene
         this.load.audio('fork_attack_audio', 'static/Sound/gameScene/fork_attack_audio.mp3');
         this.load.audio('squirter_attack_audio','static/Sound/gameScene/squirter_attack_audio.mp3');
         this.load.audio('frosting_bag_attack_audio','static/Sound/gameScene/frosting_bag_attack_audio.mp3');
+        this.load.audio('mouse_footstep', 'static/Sound/gameScene/footstep.mp3');
     }
     
     preloaders()
