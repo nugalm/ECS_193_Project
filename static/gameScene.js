@@ -588,14 +588,11 @@ class gameScene extends Phaser.Scene {
         if(!(this.restart_button == null)){
             return;
         }
-<<<<<<< Updated upstream
-            
-=======
+
         
         console.log("Adding death buttons");
         
         this.events.emit("reset");
->>>>>>> Stashed changes
         this.setupDeathButtons();
     }
     
