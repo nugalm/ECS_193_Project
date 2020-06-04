@@ -105,12 +105,6 @@ class Character {
     updateMeleeSpriteRotation()
     {
         this.meleeSprite.setRotation(this.sprite.rotation);
-        
-        for(var id in this.context.otherPlayers){
-            var player = this.context.otherPlayers[id]
-            
-            player.meleeSprite.setRotation(player.sprite.rotation);
-        }
     }
     initContainer(context)
     {
@@ -159,14 +153,14 @@ class Character {
     }
     
     update(context)
-    {
-        this.updateMeleeSpriteRotation();
-        
+    {   
+        this.updateOtherMeleeSprite();
         if(this.health <= 0){
             return;
         }
         
         this.updateRotation(context);
+        this.updateMeleeSpriteRotation();
         this.updateMovement(context);
         this.updateEquip(context);
         this.updateHealth();
@@ -505,10 +499,6 @@ class Character {
                     {
                         this.playMeleeLayerIdle();
                         this.playIdle();
-                        
-                        var info = {anims: 'turn', melee: false, hitCount: 0};
-
-                        this.client.socket.emit('doAnim', info);
                     }
                 }
             }
@@ -668,5 +658,12 @@ class Character {
         this.velocity = 160 + (0.1 * this.speed); 
     }
     
+    updateOtherMeleeSprite(){
+        for(var id in this.context.otherPlayers){
+            var player = this.context.otherPlayers[id]
+            
+            player.meleeSprite.setRotation(player.sprite.rotation);
+        }
+    }
     
 }
