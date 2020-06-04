@@ -11,6 +11,7 @@ class Character {
         
         //stats
         this.health = 50;
+        this.maxHealth = 50;
         this.power = 50;
         this.mana = 50;
         this.speed = 50;
@@ -20,6 +21,7 @@ class Character {
         this.gun = "bottle";
         
         this.sprite;
+        this.meleeSprite;
         this.myContainer;
         this.DISPLAY = 150;
         this.HITBOX = 50;
@@ -30,6 +32,7 @@ class Character {
         this.isDashing = false;
         this.isEquipping = false;
         this.hitCount = 1;
+        this.isCollidingWithDrop = false;
         
         
         this.username;
@@ -55,6 +58,7 @@ class Character {
         
         this.dashMultiplier = 5;
 
+        this.killed_text = "";
 	}
 
 	printStat(){
@@ -75,17 +79,43 @@ class Character {
     
     initSprite(context) 
     {
-
+        
         this.sprite.displayWidth = this.DISPLAY;
-        this.sprite.displayHeight = this.DISPLAY;
+        this.sprite.displayHeight = this.DISPLAY + 50;
         this.sprite.setSize(0, 0);
         this.sprite.body.setAllowGravity(false);
         this.healthBar.initHealthBar(context);
+        this.initMeleeSprite(context);
         this.initContainer(context);
         this.initCooldown();
+        this.playIdle();
         this.context = context;
     }
     
+    initMeleeSprite(context)
+    {
+        if  (this.weapon == "knife") {
+            this.meleeSprite = context.physics.add.sprite(0, this.sprite.y, 'knife_layer_static');
+        }
+        else if  (this.weapon == "fork") {
+            this.meleeSprite = context.physics.add.sprite(0, this.sprite.y, 'fork_layer_static');
+        }
+        else if  (this.weapon == "whisk") {
+            this.meleeSprite = context.physics.add.sprite(0, this.sprite.y, 'whisk_layer_static');
+        }
+        this.meleeSprite.setScale(0.5);
+        
+    }
+    updateMeleeSpriteRotation()
+    {
+        this.meleeSprite.setRotation(this.sprite.rotation);
+        
+        for(var id in this.context.otherPlayers){
+            var player = this.context.otherPlayers[id]
+            
+            player.meleeSprite.setRotation(player.sprite.rotation);
+        }
+    }
     initContainer(context)
     {
         /*
@@ -94,7 +124,7 @@ class Character {
         
         this.myContainer = context.add.container(x,y, [this.username, this.sprite, this.healthBar.healthBar]);
         */
-        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar]);
+        this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar, this.meleeSprite]);
         
         this.myContainer.setSize(this.HITBOX, this.HITBOX);
         
@@ -139,6 +169,8 @@ class Character {
     
     update(context)
     {
+        this.updateMeleeSpriteRotation();
+        
         if(this.health <= 0){
             return;
         }
@@ -158,6 +190,9 @@ class Character {
     {
         this.isMeleeing = true;
         this.hitCount = 1;
+        this.meleeSprite.setVisible(false);
+        
+        this.client.socket.emit("seeMeleeSpriteServer", false);
         
         if (this.weapon == "whisk") {
             this.sprite.anims.play('whisk_twirl');
@@ -168,6 +203,7 @@ class Character {
         }
         else if (this.weapon == "fork") {
             this.sprite.anims.play('fork_stab');
+            context.sound.play('fork_attack_audio');
             
             var info = {anims: 'fork_stab', melee: true, hitCount: 1};
             
@@ -175,6 +211,7 @@ class Character {
         }
         else if (this.weapon == "knife") {
             this.sprite.anims.play('knife_swipe');
+            context.sound.play('knife_attack_audio');
             
             var info = {anims: 'knife_swipe', melee: true, hitCount: 1};
             
@@ -192,7 +229,7 @@ class Character {
 
         if (this.gun == "bottle") {
             this.sprite.anims.play('bottle_squeeze');
-            
+            this.playMeleeLayerIdle();
             
             var info = {anims: 'bottle_squeeze', melee: false, hitCount: 0};
             
@@ -200,14 +237,18 @@ class Character {
             
         }    
         else if (this.gun == "frosting_bag") {
+            
             this.sprite.anims.play('frosting_bag_squeeze');
+            this.playMeleeLayerFrostingBag();
             
             var info = {anims: 'frosting_bag_squeeze', melee: false, hitCount: 0};
             
             this.client.socket.emit('doAnim', info);
         }
         else if (this.gun == "salt_shaker") {
-            this.sprite.anims.play('salt_shaker_shake')
+            
+            this.sprite.anims.play('salt_shaker_shake');
+            this.playMeleeLayerSaltShaker();
             
             var info = {anims: 'salt_shaker_shake', melee: false, hitCount: 0};
             
@@ -250,16 +291,133 @@ class Character {
         this.isDashing = true;
         
         this.sprite.anims.play('mouse_dash');
+        this.playMeleeLayerDash();
+        
+        
         
         var info = {anims: 'mouse_dash', melee: false, hitCount: 0};
             
         this.client.socket.emit('doAnim', info);
     }
     
+    playIdle()
+    {
+        if (this.gun == "frosting_bag") 
+        {
+            this.sprite.anims.play('mouse_frosting_bag_idle');
+        }
+        else if (this.gun == "salt_shaker") 
+        {
+            this.sprite.anims.play('mouse_salt_shaker_idle');
+        }
+        else if (this.gun == "bottle") 
+        {
+            this.sprite.anims.play('mouse_squirter_idle');
+        }
+    }
+    
+    playWalk()
+    {
+        if (this.gun == "frosting_bag") 
+        {
+            this.sprite.anims.play('mouse_frosting_bag_walk', true);
+        }
+        else if (this.gun == "salt_shaker") 
+        {
+            this.sprite.anims.play('mouse_salt_shaker_walk', true);
+        }
+        else if (this.gun == "bottle") 
+        {
+            this.sprite.anims.play('mouse_squirter_walk', true);
+        }
+    }
+    
+    playMeleeLayerDash() 
+    {
+       if (this.weapon == "knife") 
+        {
+            this.meleeSprite.anims.play('knife_dash');
+            this.client.socket.emit('doMeleeSpriteAnim', 'knife_dash');
+        }
+        else if(this.weapon == "whisk") 
+        {
+            this.meleeSprite.anims.play('whisk_dash');
+            this.client.socket.emit('doMeleeSpriteAnim', 'whisk_dash');
+        }
+        else if (this.weapon == "fork") 
+        {
+            this.meleeSprite.anims.play("fork_dash");
+            this.client.socket.emit('doMeleeSpriteAnim', 'fork_dash');
+        }
+    }
+    
+    // used for walking, idle, and bottle shoot
+    playMeleeLayerIdle()
+    {
+        if (this.weapon == "knife") 
+        {
+            this.meleeSprite.anims.play('knife_layer_idle');
+            this.client.socket.emit('doMeleeSpriteAnim', 'knife_layer_idle');
+        }
+        else if(this.weapon == "whisk") 
+        {
+            this.meleeSprite.anims.play('whisk_layer_idle');
+            this.client.socket.emit('doMeleeSpriteAnim', 'whisk_layer_idle');
+        }
+        else if (this.weapon == "fork") 
+        {
+            this.meleeSprite.anims.play("fork_layer_idle");
+            this.client.socket.emit('doMeleeSpriteAnim', 'fork_layer_idle');
+        }
+    }
+    
+    playMeleeLayerSaltShaker()
+    {
+        if (this.weapon == "knife") 
+        {
+            this.meleeSprite.anims.play('knife_salt_shaker');
+            this.client.socket.emit('doMeleeSpriteAnim', 'knife_salt_shaker');
+        }
+        else if(this.weapon == "whisk") 
+        {
+            this.meleeSprite.anims.play('whisk_salt_shaker');
+            this.client.socket.emit('doMeleeSpriteAnim', 'whisk_salt_shaker');
+        }
+        else if (this.weapon == "fork") 
+        {
+            this.meleeSprite.anims.play("fork_salt_shaker");
+            this.client.socket.emit('doMeleeSpriteAnim', 'fork_salt_shaker');
+        }
+    }
+    
+    playMeleeLayerFrostingBag()
+    {
+        if (this.weapon == "knife") 
+        {
+            this.meleeSprite.anims.play('knife_frosting_bag');
+            this.client.socket.emit('doMeleeSpriteAnim', 'knife_frosting_bag');
+        }
+        
+        else if(this.weapon == "whisk") 
+        {
+            this.meleeSprite.anims.play('whisk_frosting_bag');
+            this.client.socket.emit('doMeleeSpriteAnim', 'whisk_frosting_bag');
+        }
+        else if (this.weapon == "fork") 
+        {
+            this.meleeSprite.anims.play("fork_frosting_bag");
+            this.client.socket.emit('doMeleeSpriteAnim', 'fork_frosting_bag');
+        }
+    }
+    
+    
+    
+    
+    
     updateRotation(context)
     {
-        // lock rotation if player is shooting,meleeing, or dashing	
-        if (this.isSpecialAnimating()) 	
+    
+        if (this.isMeleeOrDashAnimating()) 	
         {	
             return;	
         }
@@ -288,8 +446,9 @@ class Character {
 
                 if (!this.isSpecialAnimating()) 
                 {
-                    this.sprite.anims.play('left', true);
-                    
+                    this.playMeleeLayerIdle();
+                  //  this.sprite.anims.play('left', true);
+                    this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
                     this.client.socket.emit('doAnim', info);
@@ -302,8 +461,9 @@ class Character {
                 this.myContainer.body.setVelocityX(160);
                 if (!this.isSpecialAnimating())  
                 {
-                    this.sprite.anims.play('left', true);
-                    
+                    this.playMeleeLayerIdle();
+                   // this.sprite.anims.play('left', true);
+                    this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
@@ -317,8 +477,9 @@ class Character {
                 this.myContainer.body.setVelocityY(160);
                 if (!this.isSpecialAnimating()) 
                 {
-                    this.sprite.anims.play('left', true);
-                    
+                    this.playMeleeLayerIdle();
+                  //  this.sprite.anims.play('left', true);
+                    this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
                     this.client.socket.emit('doAnim', info);
@@ -331,8 +492,9 @@ class Character {
                 this.myContainer.body.setVelocityY(-160);
                 if (!this.isSpecialAnimating()) 
                 {
-                    this.sprite.anims.play('left', true);
-                    
+                    this.playMeleeLayerIdle();
+                    //this.sprite.anims.play('left', true);
+                    this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
                     this.client.socket.emit('doAnim', info);
@@ -347,10 +509,12 @@ class Character {
 
                 if (!this.isSpecialAnimating())  
                 {
-                    if (this.sprite.anims.currentAnim != null && this.sprite.anims.currentAnim.key != 'turn')
+                    if (this.sprite.anims.currentAnim != null && !this.isIdleAnimating())
                     {
-                        this.sprite.anims.play('turn');
-
+                        this.playMeleeLayerIdle();
+                        this.playIdle();
+                       // this.sprite.anims.play('mouse_frosting_bag_idle');
+                        
                         var info = {anims: 'turn', melee: false, hitCount: 0};
 
                         this.client.socket.emit('doAnim', info);
@@ -419,6 +583,27 @@ class Character {
         return animating;
     }
     
+    isIdleAnimating()
+    {
+        var animating = ((this.sprite.anims.isPlaying) &&
+                        ((this.sprite.anims.currentAnim.key === 'mouse_frosting_bag_idle') ||
+                        (this.sprite.anims.currentAnim.key === 'mouse_salt_shaker_idle') ||
+                        (this.sprite.anims.currentAnim.key === 'mouse_squirter_idle')) )
+        
+        return animating;
+    }
+    
+    isMeleeOrDashAnimating()
+    {
+        var animating = ((this.sprite.anims.isPlaying) &&
+                        ((this.sprite.anims.currentAnim.key === 'fork_stab') ||
+                        (this.sprite.anims.currentAnim.key === 'whisk_twirl') ||
+                        (this.sprite.anims.currentAnim.key === 'knife_swipe') ||
+                        (this.sprite.anims.currentAnim.key === 'mouse_dash')) )
+        
+        return animating;
+    }
+    
     takeDamage(damageAmount, killer, method) 
     {
         
@@ -429,10 +614,15 @@ class Character {
         {
             this.health = 0;
             if(!(killer == null)){
-                //alert(killer._text + " killed you via " + method);
+                this.killed_text = killer._text + " killed you via " + method;
             }
-            this.myContainer.destroy();
-            this.client.socket.emit("hadDied");
+            this.sprite.anims.play('mouse_death');
+            
+            var info = {anims: 'mouse_death', melee: false, hitCount: 0};
+            
+            // apparently this will make the wrong player itself actually do
+            // death animation 
+            // this.client.socket.emit('doAnim', info);
         }
         
     }
@@ -468,20 +658,24 @@ class Character {
     
     pickUpFood(drop, context) 
     {
+        var statChange = {health: 0, speed: 0, power: 0};
         if (drop.type == "avocado_drop_image")
         {
             this.health += 100;
+            statChange.health = 100;
         }
         else if (drop.type == "blueberry_drop_image") 
         {
             this.speed += 50;
+            statChange.speed = 50;
         }
         else if (drop.type == "pepper_drop_image") 
         {
             this.power += 100;
             this.pepper_time(context);
+            statChange.power = 100;
         }
-        
+        this.client.socket.emit("statChangeServer", statChange);
         
     }
     
@@ -499,7 +693,9 @@ class Character {
          	
     noMorePepper()	
     {	
+        var statChange = {health: 0, speed: 0, power: -100};
         this.power = this.power - 100;	
+        this.client.socket.emit("statChangeServer", statChange);
       //  alert("power after pepper subtraction: "+ this.power)	
     }
     

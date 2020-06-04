@@ -1,7 +1,5 @@
 class loadScene extends Phaser.Scene 
 {
-    
-    
     constructor()
     {
         super( 
@@ -14,7 +12,13 @@ class loadScene extends Phaser.Scene
             });
         this.loadingText;
         this.bg;
-        
+        this.start_button;
+        this.tutorial_button;
+        this.credits_button;
+        this.credits_;
+        this.tutorial_;
+        this.credits_close;
+        this.tutorial_close;
        
     }
     
@@ -32,6 +36,9 @@ class loadScene extends Phaser.Scene
         
         this.preloaders();
        
+        this.loadArmorySceneAssets();
+        this.loadMeleeLayer();
+        this.loadButtons();
         this.loadProjectiles();
         this.loadDrops();
         this.loadMenuSelect();
@@ -39,111 +46,117 @@ class loadScene extends Phaser.Scene
         this.load.multiatlas('kitchenScene', 'static/images/atlas.json', 'static/images');
         this.loadTileMap();
         this.loadMovementAnims();
+        this.loadIdleAnims();
         this.loadHealthBar();
-        
-        
-        
-        //audio
-        this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
-        this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3')
+        this.load.image('menu_background', 'static/images/menu_background.png');
+        this.loadAudio();
  
-    }
-    
-    preloaders()
-    {
-        var progressBar = this.add.graphics();
-        var progressBox = this.add.graphics();
-        progressBox.fillStyle(0x222222, 0.8);
-        progressBox.fillRect((this.game.config.width / 2) - 150, this.game.config.height - (this.game.config.height / 9), 320, 50);
-        var width = this.cameras.main.width;
-        var height = this.cameras.main.height;
-        
-        //text
-        this.loadingText = this.make.text({
-            x: width / 2,
-            y: height - (height / 7),
-            text: 'The Mice are getting ready...',
-            style: {
-                font: 'bold 30px monospace',
-                fill: '#ffffff'
-            }
-        });
-        this.loadingText.setOrigin(0.5, 0.5);
-        
-        //percent 
-        var percentText = this.make.text({
-            x: width / 2,
-            y: this.game.config.height - (this.game.config.height / 9) + 25,
-            text: '0%',
-            style: {
-            font: '18px monospace',
-            fill: '#ffffff'
-            }
-        }, this);
-        percentText.setOrigin(0.5, 0.5);
-        
-        
-        //preloaders
-        this.load.on('progress', function (value) {
-            console.log(value);
-            percentText.setText(parseInt(value * 100) + '%');
-            progressBar.clear();
-            progressBar.fillStyle(0xffffff, 1);
-            progressBar.fillRect((this.game.config.width / 2) - 140, (this.game.config.height - (this.game.config.height / 9)) + 10, 300 * value, 30);
-        }, this);
-
-        this.load.on('fileprogress', function (file) {
-            console.log(file.src);
-        });
-
-        this.load.on('complete', function () {
-            console.log('complete');
-            progressBar.destroy();
-            progressBox.destroy();
-            percentText.destroy();
-            this.loadingText.text = 'The Mice Are Ready! Click to Enter the Marfare!';
-        }, this);
     }
     
     // Creating animations to be used in gameScene
     // prompt user to click to enter gameScene
     create()
     {
-        this.sound.add('game_audio');
-        this.sound.add('selection_audio');
         
-            var frameNames = this.anims.generateFrameNames('kitchenScene', {
-                start: 0, end: 19, zeroPad: 0, 
-                prefix: 'mouse_walk/mouse_walk-', suffix:'.png'
-            });
-
-            var walkFrames = this.anims.generateFrameNames('walk_no_weapon', 
-            {
-                start: 0, end: 20                                  
-            })
+       
+        this.addSounds();
+        this.initPopUps();
+        this.initButtons();
+        this.initAttackAnimations();
+        this.initMovementAnimations();
+        this.initIdleAnimations();
+        this.initDropsAnimations();
+        this.initProjectileAnimations();
+        this.initButtonInputs();
+        this.initMeleeLayers();
+        
+       
+        
+        
+        
+        
+    }
+    
+    
+    initIdleAnimations()
+    {
+        this.anims.create({
+            key: 'mouse_frosting_bag_idle',
+            frames: this.anims.generateFrameNames('mouse_idle_frosting_bag', {start: 0, end: 19}),
+            frameRate: 20,
+            repeat: -1
+        })
+        
+        this.anims.create({
+            key: 'mouse_salt_shaker_idle',
+            frames: this.anims.generateFrameNames('mouse_idle_salt_shaker', {start: 0, end: 19}),
+            frameRate: 20,
+            repeat: -1
+        })
+        
+        this.anims.create({
+            key: 'mouse_squirter_idle',
+            frames: this.anims.generateFrameNames('mouse_idle_squirter', {start: 0, end: 19}),
+            frameRate: 20,
+            repeat: -1
+        })
+        
+    }
+    
+    initMovementAnimations()
+    {
+        var walkFrames = this.anims.generateFrameNames('walk_no_weapon', 
+        {
+            start: 0, end: 20                                  
+        })
             
-            this.anims.create({
-                key: 'left',
-                frames: walkFrames,
-                frameRate: 25,
-                repeat: -1
-            });
-                  
-          this.anims.create({
-                key: 'turn',
-                frames: this.anims.generateFrameNames('idle_no_weapon',{start: 0, end: 19}),
-                frameRate: 20,
-                repeat: -1
-            });
+        this.anims.create({
+            key: 'left',
+            frames: walkFrames,
+            frameRate: 25,
+            repeat: -1
+        });
         
-          this.anims.create({
-                key: 'right',
-                frames: frameNames,
-                frameRate: 25,
-                repeat: -1
-            });
+        this.anims.create({
+            key: 'mouse_salt_shaker_walk',
+            frames: this.anims.generateFrameNames('salt_shaker_walk', {start: 0, end: 20}),
+            frameRate: 25,
+            repeat: -1
+        });
         
-            this.anims.create({
+        this.anims.create({
+            key: 'mouse_squirter_walk',
+            frames: this.anims.generateFrameNames('squirter_walk', {start: 0, end: 20}),
+            frameRate: 25,
+            repeat: -1
+        });
+        
+        this.anims.create({
+            key: 'mouse_frosting_bag_walk',
+            frames: this.anims.generateFrameNames('frosting_bag_walk', {start: 0, end: 20}),
+            frameRate: 25,
+            repeat: -1
+        });
+        
+        
+        this.anims.create ({
+            key: 'mouse_dash',
+            frames: this.anims.generateFrameNames('dash', {start: 0, end: 20} ),
+            frameRate: 40,
+            repeat: 0 
+        });
+        
+        this.anims.create ({
+            key: 'mouse_death',
+            frames: this.anims.generateFrameNames('death', {start: 0, end: 19}),
+            frameRate: 30,
+            repeat: 0
+        })
+    }
+    
+    initAttackAnimations()
+    {
+        this.anims.create({
                key: 'fork_stab',
                 frames: this.anims.generateFrameNames('fork', {start: 0, end: 26}),
                 frameRate: 33,
@@ -167,15 +180,7 @@ class loadScene extends Phaser.Scene
                 
             });
         
-            this.anims.create({
-                key: 'mouse_dash',
-                frames: this.anims.generateFrameNames('dash', {start: 0, end: 20} ),
-                frameRate: 40,
-                repeat: 0
-                
-            });
-        
-            this.anims.create({
+        this.anims.create({
                key: 'knife_swipe',
                 frames: this.anims.generateFrameNames('knife', {start: 0, end: 20}),
                 frameRate: 26,
@@ -195,9 +200,35 @@ class loadScene extends Phaser.Scene
                 frameRate: 15,
                 repeat: 0
             });
+    }
+    
+    initProjectileAnimations()
+    {
+        this.anims.create({
+               key: 'bottle_projectile_anim',
+                frames: this.anims.generateFrameNames('ketchup', {start: 0, end: 5}),
+                frameRate: 12,
+                repeat: -1
+            }); 
         
-            // drops
             this.anims.create({
+               key: 'frosting_bag_projectile_anim',
+                frames: this.anims.generateFrameNames('frosting', {start: 0, end: 4}),
+                frameRate: 10,
+                repeat: -1
+            }); 
+        
+            this.anims.create({
+               key: 'salt_shaker_projectile_anim',
+                frames: this.anims.generateFrameNames('salt', {start: 0, end: 4}),
+                frameRate: 10,
+                repeat: -1
+            }); 
+    }
+    
+    initDropsAnimations()
+    {
+                  this.anims.create({
                key: 'knife_idle',
                 frames: this.anims.generateFrameNames('knife_drop', {start: 0, end: 3}),
                 frameRate: 6,
@@ -259,38 +290,280 @@ class loadScene extends Phaser.Scene
                 frameRate: 6,
                 repeat: -1
             });
+    }
+    
+    initMeleeLayers() 
+    {
+        //knife
+        this.anims.create({
+            key: 'knife_dash',
+            frames: this.anims.generateFrameNames('knife_layer', {start: 36, end: 56}),
+            frameRate: 40,
+            repeat: 0
+        })
         
+        this.anims.create({
+            key: 'knife_layer_idle',
+            frames: this.anims.generateFrameNames('knife_layer', {start: 0, end: 0}),
+            frameRate: 0,
+            repeat: -1
+        })
         
-           this.anims.create({
-               key: 'bottle_projectile_anim',
-                frames: this.anims.generateFrameNames('ketchup', {start: 0, end: 5}),
-                frameRate: 12,
-                repeat: -1
-            }); 
+         this.anims.create({
+            key: 'knife_salt_shaker',
+            frames: this.anims.generateFrameNames('knife_layer', {start: 2, end: 12}),
+            frameRate: 15,
+            repeat: 0
+        })
         
-            this.anims.create({
-               key: 'frosting_bag_projectile_anim',
-                frames: this.anims.generateFrameNames('frosting', {start: 0, end: 4}),
-                frameRate: 10,
-                repeat: -1
-            }); 
+         this.anims.create({
+            key: 'knife_frosting_bag',
+            frames: this.anims.generateFrameNames('knife_layer', {start: 14, end: 34}),
+            frameRate: 20,
+            repeat: 0
+        })
         
-            this.anims.create({
-               key: 'salt_shaker_projectile_anim',
-                frames: this.anims.generateFrameNames('salt', {start: 0, end: 4}),
-                frameRate: 10,
-                repeat: -1
-            }); 
+        //fork
+        this.anims.create({
+            key: 'fork_dash',
+            frames: this.anims.generateFrameNames('fork_layer', {start: 36, end: 56}),
+            frameRate: 40,
+            repeat: 0
+        })
         
+        this.anims.create({
+            key: 'fork_layer_idle',
+            frames: this.anims.generateFrameNames('fork_layer', {start: 0, end: 0}),
+            frameRate: 0,
+            repeat: -1
+        })
+        
+         this.anims.create({
+            key: 'fork_salt_shaker',
+            frames: this.anims.generateFrameNames('fork_layer', {start: 2, end: 12}),
+            frameRate: 15,
+            repeat: 0
+        })
+        
+         this.anims.create({
+            key: 'fork_frosting_bag',
+            frames: this.anims.generateFrameNames('fork_layer', {start: 14, end: 34}),
+            frameRate: 20,
+            repeat: 0
+        })
+        
+        //whisk
+        this.anims.create({
+            key: 'whisk_dash',
+            frames: this.anims.generateFrameNames('whisk_layer', {start: 36, end: 56}),
+            frameRate: 40,
+            repeat: 0
+        })
+        
+        this.anims.create({
+            key: 'whisk_layer_idle',
+            frames: this.anims.generateFrameNames('whisk_layer', {start: 0, end: 0}),
+            frameRate: 0,
+            repeat: -1
+        })
+        
+         this.anims.create({
+            key: 'whisk_salt_shaker',
+            frames: this.anims.generateFrameNames('whisk_layer', {start: 2, end: 12}),
+            frameRate: 15,
+            repeat: 0
+        })
+        
+         this.anims.create({
+            key: 'whisk_frosting_bag',
+            frames: this.anims.generateFrameNames('whisk_layer', {start: 14, end: 34}),
+            frameRate: 20,
+            repeat: 0
+        })
+        
+    }
+    
+    initButtonInputs()
+    {
+        //enter game scene
+        this.start_button.on('pointerup', function(p)
+        {       
+            this.scene.start('menuScene', {socket: this.socket}); 
+                
+        }, this);
+        
+        //tutorial pop-up
+        this.tutorial_button.on('pointerup', function(p)
+        {       
+            this.credits_.setVisible(false);
+            this.credits_close.setVisible(false);
+            if (this.tutorial_.visible == false) {
+                this.tutorial_.setVisible(true);
+                this.tutorial_close.setVisible(true);
+            }
+            else 
+            {
+                this.tutorial_.setVisible(false);
+                this.tutorial_close.setVisible(false);
+            }
+        }, this);
+        
+        this.tutorial_close.on('pointerup', function(p)
+        {
+            this.setPopUpsNotVisible();
+        }, this);
+        
+        this.credits_close.on('pointerup', function(p)
+        {
+            this.setPopUpsNotVisible();
+        }, this);
+        
+        //credits pop-up
+        this.credits_button.on('pointerup', function(p)
+        {   
+            this.tutorial_.setVisible(false);
+            this.tutorial_close.setVisible(false);
+            if (this.credits_.visible == false) { 
+                this.credits_.setVisible(true);
+                this.credits_close.setVisible(true);
+            }
+            else 
+            {
+                this.credits_.setVisible(false);
+                this.credits_close.setVisible(false);
+            }
+        }, this);
+        
+        this.credits_close.on('pointerover', function (p) 
+        {
+            this.credits_close.setTint(0x808080);
+        }, this);
+        
+        this.credits_close.on('pointerout', function (p)
+        {
+            this.credits_close.setTint(0xffffff);
+        }, this);
+        
+        this.tutorial_close.on('pointerover', function (p) 
+        {
+            this.tutorial_close.setTint(0x808080);
+        }, this);
+        
+        this.tutorial_close.on('pointerout', function (p)
+        {
+            this.tutorial_close.setTint(0xffffff);
+        }, this)
+        
+        this.start_button.on('pointerover', function (p) 
+        {
+            this.start_button.setTint(0x808080);
+        }, this);
+        
+        this.start_button.on('pointerout', function (p)
+        {
+            this.start_button.setTint(0xffffff);
+        }, this)
+        
+        this.tutorial_button.on('pointerover', function (p) 
+        {
+            this.tutorial_button.setTint(0x808080);
+        }, this);
+        
+        this.tutorial_button.on('pointerout', function (p)
+        {
+            this.tutorial_button.setTint(0xffffff);
+        }, this)
+        
+        this.credits_button.on('pointerover', function (p) 
+        {
+            this.credits_button.setTint(0x808080);
+        }, this);
+        
+        this.credits_button.on('pointerout', function (p)
+        {
+            this.credits_button.setTint(0xffffff);
+        }, this)
+    }
+    
+    setPopUpsNotVisible()
+    {
+        this.credits_.setVisible(false);
+        this.tutorial_.setVisible(false);
+        this.credits_close.setVisible(false);
+        this.tutorial_close.setVisible(false);
+    }
+    
+    
+    
+    initButtons()
+    {
+        this.start_button = this.add.sprite((this.game.config.width / 4), this.game.config.height - (this.game.config.height / 9), 'start_button');
+        this.tutorial_button = this.add.sprite((this.game.config.width / 4) + (this.game.config.width / 4 ), this.game.config.height - (this.game.config.height / 9), 'tutorial_button');
+        this.credits_button =  this.add.sprite((this.game.config.width / 4) + (2 * this.game.config.width / 4 ), this.game.config.height - (this.game.config.height / 9), 'credits_button');
+        
+        this.initButton(this.start_button);
+        this.initButton(this.tutorial_button);
+        this.initButton(this.credits_button);
+        
+       
+    }
+    
+    initButton(_button) 
+    {
+        _button.setScale(0.5);
+        _button.setInteractive();
+    }
+    
+    
+    initPopUps()
+    {
+        this.credits_ = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'credits_pop_up');
+        this.credits_.setScale(0.5);
             
+        this.tutorial_ = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'tutorial_pop_up');
+        this.tutorial_.setScale(0.5);
+        
+        this.credits_close = this.add.image(this.credits_.x + this.credits_.displayWidth / 5, this.credits_.y + this.credits_.displayHeight / 4, "close");
+        this.credits_close.setInteractive();
+        
+        this.tutorial_close = this.add.image(this.tutorial_.x + this.tutorial_.displayWidth / 3, this.tutorial_.y + this.tutorial_.displayHeight / 3, 'close');
+        this.tutorial_close.setInteractive();
+        
+        this.setPopUpsNotVisible();
+    }
+    loadButtons() 
+    {
+        this.load.image('start_button', 'static/images/loadingScene/btn1_start.png');
+        this.load.image('tutorial_button', 'static/images/loadingScene/btn2_tutorial.png');
+        this.load.image('credits_button', 'static/images/loadingScene/btn3_credits.png');
+        
+        //button pop-ups
+        this.load.image('tutorial_pop_up', 'static/images/loadingScene/tutorial.png')
+        this.load.image('credits_pop_up','static/images/loadingScene/credits.png');
+    }
+    
+    loadMeleeLayer()
+    {
+        this.load.image('knife_layer_static',
+                       'static/images/weapon_layer/knife/knife_layer_static.png');
+        
+        this.load.spritesheet('knife_layer','static/images/weapon_layer/knife/knife_layer.png', {frameWidth: 242, frameHeight: 332})
         
         
-        this.input.on('pointerdown', function(p)
-        {       if (p.leftButtonDown())
-                {  
-                    this.scene.start('menuScene', {socket: this.socket}); 
-                }
-        }, this);   
+        
+        
+        this.load.image('whisk_layer_static', 
+                       'static/images/weapon_layer/whisk/whisk_layer_static.png');
+        this.load.spritesheet('whisk_layer', 
+                       'static/images/weapon_layer/whisk/whisk_layer.png', {frameWidth: 242, frameHeight: 332});
+        
+        
+        this.load.image('fork_layer_static', 'static/images/weapon_layer/fork/fork_layer_static.png');
+        this.load.spritesheet('fork_layer',  'static/images/weapon_layer/fork/fork_layer.png', {frameWidth: 242, frameHeight: 332});
+        
+        
+        
+        
     }
     
     loadProjectiles()
@@ -316,51 +589,51 @@ class loadScene extends Phaser.Scene
     loadDrops()
     {
         //melee 
-        this.load.image('fork_drop_image', 'static/images/drops/fork/fork-drop.0000.png');
+        this.load.image('fork_drop_image', 'static/images/drops_v2/fork/fork-drop-v2.0000.png');
         
         this.load.spritesheet('fork_drop', 
-        'static/images/drops/fork/fork_drop.png',{frameWidth:252, frameHeight: 332 });
+        'static/images/drops_v2/fork/fork_drop.png',{frameWidth:222, frameHeight: 332 });
         
-        this.load.image('knife_drop_image', 'static/images/drops/knife_drop_still_2.png');
+        this.load.image('knife_drop_image', 'static/images/drops_v2/knife/knife-drop-v2.0000.png');
         
         this.load.spritesheet('knife_drop', 
-        'static/images/drops/knife_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/knife/knife_drop.png', {frameWidth: 222 , frameHeight: 332});
         
-        this.load.image('whisk_drop_image', 'static/images/drops/whisk/whisk-drop.0000.png');
+        this.load.image('whisk_drop_image', 'static/images/drops_v2/whisk/whisk-drop-v2.0000.png');
         
         this.load.spritesheet('whisk_drop', 
-        'static/images/drops/whisk/whisk_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/whisk/whisk_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         
         //ranged
-        this.load.image('salt_shaker_drop_image', 'static/images/drops/salt-shaker/salt-shaker-drop.0000.png');
+        this.load.image('salt_shaker_drop_image', 'static/images/drops_v2/salt-shaker/salt-shaker-drop-v2.0000.png');
         this.load.spritesheet('salt_shaker_drop', 
-        'static/images/drops/salt-shaker/salt_shaker_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/salt-shaker/salt_shaker_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         
-        this.load.image('squirter_drop_image', 'static/images/drops/squirter/squirter-drop.0000.png');
+        this.load.image('squirter_drop_image', 'static/images/drops_v2/squirter/squirter-drop-v2.0000.png');
         this.load.spritesheet('squirter_drop', 
-        'static/images/drops/squirter/squirter_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/squirter/squirter_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         
         
-        this.load.image('frosting_bag_drop_image', 'static/images/drops/frosting-bag/frostbag-drop.0000.png');
+        this.load.image('frosting_bag_drop_image', 'static/images/drops_v2/frostingbag/frosting-bag-drop-v2.0000.png');
         this.load.spritesheet('frosting_bag_drop', 
-        'static/images/drops/frosting-bag/frosting_bag_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/frostingbag/frosting_bag_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         // food
-        this.load.image('blueberry_drop_image', 'static/images/drops/blueberry/blueberry.0000.png');
+        this.load.image('blueberry_drop_image', 'static/images/drops_v2/blueberry/blueberry-drop-v2.0000.png');
         this.load.spritesheet('blueberry_drop', 
-        'static/images/drops/blueberry/blueberry_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/blueberry/blueberry_drop.png', {frameWidth: 222 , frameHeight: 332});
         
         
-        this.load.image('avocado_drop_image', 'static/images/drops/avocado/avocado.0000.png');
+        this.load.image('avocado_drop_image', 'static/images/drops_v2/avocado/avocado-drop-v2.0000.png');
         this.load.spritesheet('avocado_drop', 
-        'static/images/drops/avocado/avocado_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/avocado/avocado_drop.png', {frameWidth: 222 , frameHeight: 332});
         
-        this.load.image('pepper_drop_image', 'static/images/drops/pepper/pepper.0000.png');
+        this.load.image('pepper_drop_image', 'static/images/drops_v2/pepper/pepper-drop-v2.0000.png');
         this.load.spritesheet('pepper_drop', 
-        'static/images/drops/pepper/pepper_drop.png', {frameWidth: 222 , frameHeight: 332});
+        'static/images/drops_v2/pepper/pepper_drop.png', {frameWidth: 222 , frameHeight: 332});
     }
     
     loadMenuSelect()
@@ -370,6 +643,7 @@ class loadScene extends Phaser.Scene
         this.load.image('loadingSweet', 'static/images/sweetMouse.png');
         this.load.image('loadingSalty', 'static/images/saltyMouse.png');
         this.load.image('loadingSour', 'static/images/sourMouse.png');
+        this.load.image('menu_bg', 'static/images/mousecave.png');
     }
     
     loadAttackSpriteSheets()
@@ -424,6 +698,35 @@ class loadScene extends Phaser.Scene
         this.load.spritesheet('walk_no_weapon',
         'static/images/Mouse_Walk_Animations/mouse_walk_no_weapon.png',
                               {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('salt_shaker_walk',
+        'static/images/Mouse_Walk_Animations/salt_shaker_walk/salt_shaker_walk.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('frosting_bag_walk',
+        'static/images/Mouse_Walk_Animations/frosting_bag_walk/frosting_bag_walk.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('squirter_walk',
+        'static/images/Mouse_Walk_Animations/squirter_walk/squirter_walk.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('death',
+        'static/images/death/death/death.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+    }
+    
+    loadIdleAnims()
+    {
+        this.load.spritesheet('mouse_idle_frosting_bag', 'static/images/Mouse_Walk_Animations/frosting_bag_idle/frosting_bag_idle.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('mouse_idle_salt_shaker', 'static/images/Mouse_Walk_Animations/salt_shaker_idle/salt_shaker_idle.png',
+                              {frameWidth: 242, frameHeight: 332});
+        
+        this.load.spritesheet('mouse_idle_squirter', 'static/images/Mouse_Walk_Animations/squirter_idle/squirter_idle.png',
+                              {frameWidth: 242, frameHeight: 332});
     }
     
     loadHealthBar()
@@ -433,6 +736,133 @@ class loadScene extends Phaser.Scene
         this.load.image('green_bar', 'static/images/drops/GreenBar.png');
         
         
+    }
+    
+    loadArmorySceneAssets()
+    {
+        		// loading assets
+		this.load.atlas('dice', 'static/images/armoryScene/dice.png', 'static/images/armoryScene/dice.json');
+		this.load.image('block_0', 'static/images/armoryScene/block_0.png');
+		this.load.image('block_1_1', 'static/images/armoryScene/meleeweapon_fork.jpg');
+		this.load.image('block_1_2', 'static/images/armoryScene/meleeweapon_whisk.jpg');
+		this.load.image('block_1_3', 'static/images/armoryScene/meleeweapon_knife.jpg');
+		this.load.image('block_1_4', 'static/images/armoryScene/rangedweapon_bottlesquirter1.jpg');
+		this.load.image('block_1_4_2', 'static/images/armoryScene/rangedweapon_bottlesquirter2.jpg');
+		this.load.image('block_1_5', 'static/images/armoryScene/rangedweapon_saltshaker.jpg');
+		this.load.image('block_1_6', 'static/images/armoryScene/rangedweapon_frostingbag.jpg');
+		this.load.image('block_2_1', 'static/images/armoryScene/healthbooster_avocado.jpg');
+		this.load.image('block_2_2', 'static/images/armoryScene/powerbooster_pepper.jpg');
+		this.load.image('block_2_3', 'static/images/armoryScene/speedbooster_blueberry.jpg');
+		this.load.image('block_18', 'static/images/armoryScene/block_18.png');
+		this.load.image('question_mark1', 'static/images/armoryScene/question_mark1.jpg');
+		this.load.image('question_mark2', 'static/images/armoryScene/question_mark2.jpg');
+		this.load.image('question_mark3', 'static/images/armoryScene/question_mark3.jpg');
+		this.load.image('start', 'static/images/armoryScene/start.png');
+		this.load.image('role', 'static/images/armoryScene/role.png');
+		this.load.image('w', 'static/images/armoryScene/w.png');
+		this.load.image('layer1', 'static/images/armoryScene/layer1.png');
+		this.load.image('layer2', 'static/images/armoryScene/dialogue_dice.png');
+
+		this.load.image('block_1_1_layer', 'static/images/armoryScene/dialogue_fork.png');
+		this.load.image('block_1_2_layer', 'static/images/armoryScene/dialogue_whisk.png');
+		this.load.image('block_1_3_layer', 'static/images/armoryScene/dialogue_knife.png');
+		this.load.image('block_1_4_layer', 'static/images/armoryScene/dialogue_bottlesquirter1.png');
+		this.load.image('block_1_4_2_layer', 'static/images/armoryScene/dialogue_bottlesquirter2.png');
+		this.load.image('block_1_5_layer', 'static/images/armoryScene/dialogue_saltshaker.png');
+		this.load.image('block_1_6_layer', 'static/images/armoryScene/dialogue_frostingbag.png');
+
+		this.load.image('layer1_btn1', 'static/images/armoryScene/layer1_btn1.png');
+		this.load.image('layer1_btn2', 'static/images/armoryScene/layer1_btn2.png');
+		this.load.image('layer2_btn1', 'static/images/armoryScene/layer2_btn1.png');
+		this.load.image('layer2_btn2', 'static/images/armoryScene/layer2_btn2.png');
+		this.load.image('close', 'static/images/armoryScene/close.png');
+		this.load.image('enter', 'static/images/armoryScene/enter.png');
+		this.load.image('propbar', 'static/images/armoryScene/propbar.png');
+		this.load.image('statsbar', 'static/images/armoryScene/statsbar.png');
+		this.load.image('background', 'static/images/armoryScene/background.jpg');
+		
+    }
+    
+    
+    addSounds()
+    {
+        this.sound.add('game_audio');
+        this.sound.add('selection_audio');
+        this.sound.add('salt_shaker_attack_audio', {volume: 1});
+        this.sound.add('food_pickup_audio');
+        this.sound.add('knife_attack_audio');
+        this.sound.add('fork_attack_audio');
+        this.sound.add('knife_pickup_audio');
+    }
+    
+    loadAudio()
+    {
+        this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
+        this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3');
+        this.load.audio('m', 'static/images/armoryScene/m.mp3');
+        this.load.audio('salt_shaker_attack_audio', 'static/Sound/gameScene/salt_shaker_attack_audio.mp3');
+        this.load.audio('food_pickup_audio', 'static/Sound/gameScene/food_pickup_audio.mp3');
+        this.load.audio('knife_attack_audio', 'static/Sound/gameScene/knife_swing_audio.mp3');
+        this.load.audio('knife_pickup_audio', 'static/Sound/gameScene/knife_pickup_audio.mp3');
+        this.load.audio('fork_attack_audio', 'static/Sound/gameScene/fork_attack_audio.mp3');
+    }
+    
+    preloaders()
+    {
+        var progressBar = this.add.graphics();
+        var progressBox = this.add.graphics();
+        progressBox.fillStyle(0x222222, 0.8);
+        progressBox.fillRect((this.game.config.width / 2) - 150, this.game.config.height - (this.game.config.height / 9), 320, 50);
+        var width = this.cameras.main.width;
+        var height = this.cameras.main.height;
+        
+        //text
+        this.loadingText = this.make.text({
+            x: width / 2,
+            y: height - (height / 7),
+            text: 'The Mice are getting ready...',
+            style: {
+                font: '30px monospace',
+                fill: '#ffffff'
+            }
+        });
+        console.log(this.loadingText.style.font);
+        this.loadingText.setOrigin(0.5, 0.5);
+        
+        //percent 
+        var percentText = this.make.text({
+            x: width / 2,
+            y: this.game.config.height - (this.game.config.height / 9) + 25,
+            text: '0%',
+            style: {
+            font: '18px monospace',
+            fill: '#ffffff'
+            }
+        }, this);
+        percentText.setOrigin(0.5, 0.5);
+        
+        
+        //preloaders
+        this.load.on('progress', function (value) {
+           // console.log(value);
+            percentText.setText(parseInt(value * 100) + '%');
+            progressBar.clear();
+            progressBar.fillStyle(0xffffff, 1);
+            progressBar.fillRect((this.game.config.width / 2) - 140, (this.game.config.height - (this.game.config.height / 9)) + 10, 300 * value, 30);
+        }, this);
+
+        this.load.on('fileprogress', function (file) {
+           // console.log(file.src);
+        });
+
+        this.load.on('complete', function () {
+          //  console.log('complete');
+            progressBar.destroy();
+            progressBox.destroy();
+            percentText.destroy();
+           // this.loadingText.text = 'The Mice Are Ready! Click to Enter the Marfare!';
+            this.loadingText.destroy();
+        }, this);
     }
     
 }

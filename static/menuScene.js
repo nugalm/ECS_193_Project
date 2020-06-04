@@ -13,6 +13,7 @@ class menuScene extends Phaser.Scene
         this.buttonPositionOffset = config.width / 4;
         this.IMAGE_SCALE = 0.07;
         this.buttonTextOffsetY = 140;
+        this.bg;
         
         this.saltyButtonTint = 0xffffff;
         this.sourButtonTint = 0xffffff;
@@ -37,9 +38,11 @@ class menuScene extends Phaser.Scene
     create()
     {
       //  this.sound.play('selection_audio');
-       
+      // this.bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'menu_background');
+     //   this.bg.setDisplaySize(this.game.config.width, this.game.config.height);
         this.add.text(100, 100, 'Choose your taste!', { fontSize: '24px', fill: 'white' });
-        
+
+        this.initBackground();
         // Create the four different character selections
         this.addButtonSprites();
 
@@ -48,10 +51,13 @@ class menuScene extends Phaser.Scene
         this.addButtonTexts();
         this.turnButtonsOn();
         this.userPrompt();
-        
-
     }
     
+    initBackground()
+    {
+        this.bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'menu_bg');
+        this.bg.setDisplaySize(this.game.config.width, this.game.config.height);
+    }
     addButtonSprites()
     {
         
@@ -101,76 +107,76 @@ class menuScene extends Phaser.Scene
         this.saltyButton.setInteractive();
         this.saltyButton.on('pointerover', function()
         {
-            this.saltyButton.setTint(0xf0ff00);
+            this.saltyButton.setTint(0x808080);
         }, this);
         
         this.saltyButton.on('pointerout', function()
         {
             this.saltyButton.setTint(this.saltyButtonTint);
         }, this);
-        this.saltyButton.on('pointerdown', function(p) 
+        this.saltyButton.on('pointerup', function(p) 
         {
-            if (p.leftButtonDown()){           
+           // if (p.leftButtonDown()){           
                // alert('everything tastes better with salt');
                 this.scene.start('armoryScene', { player: new SaltyCharacter(), socket: this.socket});
-            }
+           // }
         }, this);
         
         //spicy
         this.spicyButton.setInteractive();
         this.spicyButton.on('pointerover', function()
         {
-            this.spicyButton.setTint(0xf0ff00);
+            this.spicyButton.setTint(0x808080);
         }, this);
         
         this.spicyButton.on('pointerout', function()
         {
             this.spicyButton.setTint(0xffffff);
         }, this);
-        this.spicyButton.on('pointerdown', function(p) 
+        this.spicyButton.on('pointerup', function(p) 
         {
-            if (p.leftButtonDown()){  
+           // if (p.leftButtonDown()){  
                 //alert('is it hot in here..or is it just you?');
                 this.scene.start('armoryScene', { player: new SpicyCharacter(), socket: this.socket});
-            }
+          //  }
         }, this);
         
         //sour
         this.sourButton.setInteractive();
         this.sourButton.on('pointerover', function()
         {
-            this.sourButton.setTint(0xf0ff00);
+            this.sourButton.setTint(0x808080);
         }, this);
         
         this.sourButton.on('pointerout', function()
         {
             this.sourButton.setTint(this.sourButtonTint);
         }, this);
-        this.sourButton.on('pointerdown', function(p) 
+        this.sourButton.on('pointerup', function(p) 
         {
-            if (p.leftButtonDown()){  
+           // if (p.leftButtonDown()){  
                // alert('here, have a token of sour gratitude');
                 this.scene.start('armoryScene', { player: new SourCharacter(), socket: this.socket});
-            }
+          //  }
         }, this);
         
         //sweet
         this.sweetButton.setInteractive();
         this.sweetButton.on('pointerover', function()
         {
-            this.sweetButton.setTint(0xf0ff00);
+            this.sweetButton.setTint(0x808080);
         }, this);
         
         this.sweetButton.on('pointerout', function()
         {
             this.sweetButton.setTint(this.sweetButtonTint);
         }, this);
-        this.sweetButton.on('pointerdown', function(p) 
+        this.sweetButton.on('pointerup', function(p) 
         {
-            if (p.leftButtonDown()){  
+            //if (p.leftButtonDown()){  
                 //alert('mm.. the sweet smell of a winner');
                 this.scene.start('armoryScene', { player: new SweetCharacter(), socket: this.socket});
-            }
+           // }
         }, this);   
     }
 
@@ -178,7 +184,7 @@ class menuScene extends Phaser.Scene
     {
         var text = this.add.text(this.promptPositionX + 125, 
             this.promptPositionY + 220, 
-            'Please enter your name', 
+            'Please enter your name and click the Enter button', 
             { color: 'white', fontSize: '24px '});
 
         // Prompt for the username

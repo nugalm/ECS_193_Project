@@ -54,7 +54,7 @@ class SocketFunc {
                         
                         self.physics.add.collider(self.otherPlayers[id].myContainer, self.collidableLayer);
                         
-                        self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
+                        //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].myContainer, self.otherMeleeHitDummy, null, self);
                         
                         
                         //self.physics.add.overlap(self.dummiesGroup, self.otherPlayers[id].sprite, self.meleeHit, null, self);
@@ -142,10 +142,10 @@ class SocketFunc {
         if(!(projs.id in self.otherProjectiles)){
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
-                self.physics.world.enable(self.otherProjectiles[projs.id]);
-            }
+                //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                //self.physics.world.enable(self.otherProjectiles[projs.id]);
+        }
         
         var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "salt_projectile_1"}, "salt");
         //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
@@ -156,11 +156,9 @@ class SocketFunc {
         self.projectileHandler.setDeletionTimer(projectile);
         projectile.anims.play("salt_shaker_projectile_anim");
         projectile.setSize(50,50);
-        //projectile.salt = true;
-        //projectile.lifespan = 250;
         projectile.setDisplaySize(self.projectileHandler.saltBulletSize, self.projectileHandler.saltBulletSize);
         self.otherProjectiles[projs.id].add(projectile);
-        self.physics.world.enable(projectile);
+        //self.physics.world.enable(projectile);
      
     }
     
@@ -168,8 +166,9 @@ class SocketFunc {
         if(!(projs.id in self.otherProjectiles)){
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
             }
         
@@ -188,13 +187,12 @@ class SocketFunc {
         if(!(projs.id in self.otherProjectiles)){
                 self.otherProjectiles[projs.id] = self.physics.add.group();
                 
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
-                self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
+                //self.physics.add.collider(self.otherProjectiles[projs.id], self.dummiesGroup, self.bulletHitDummy, null, self);
+                self.otherProjColliders[projs.id] = self.physics.add.collider(self.otherProjectiles[projs.id], self.playerGroup, self.bulletHitPlayer, null, self);
                 self.physics.world.enable(self.otherProjectiles[projs.id]);
         }
         
         var projectile = new Projectile({scene: self, x: projs.obj.x, y: projs.obj.y, key: "frosting_bag_projectile"}, "frosting");
-        //var projectile = self.otherProjectiles[projs.id].create(projs.obj.x, projs.obj.y, 'projectile');
         projectile.rotation = projs.obj.rotation;
         projectile.element = self.otherPlayers[projs.id].element;
         projectile.frosting = true;
@@ -215,18 +213,21 @@ class SocketFunc {
             }
             
             if((drop.x == info.x) && (drop.y == info.y)){
-                this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
                 drop.destroy();
             }
         }, self);
+        
+        self.randomDropsHandler.updateAvailablePositions(info.x, info.y);
     }
     
     syncDrops(self, info){
         var drops = self.randomDropsHandler.group;
         console.log("In sync");
+        var didDestroy = false;
         
         drops.children.each(function(drop){
             if(drop == null){
+                console.log("drop is null");
                 return;
             }
             
@@ -238,39 +239,42 @@ class SocketFunc {
         if(info.isWeapon){
             drops.add(new Weapon({scene: self, x: info.x,
                                   y: info.y, key: info.type}));
-            this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
         }
                 
         else{
             drops.add(new Drop({scene: self, x: info.x,
                                 y: info.y, key: info.type}));
-            this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
         }
         
-        
-        /*
-        if(same){
+        self.randomDropsHandler.updateUnavailablePositions(info.x, info.y);
+    }
+    
+    updateKillScore(self, player_id){
+        if(self.client.socket.id == player_id){
+            self.events.emit("addKills");
+        }
+    }
+    
+    statUpdate(self, info){
+        if(self.otherPlayers[info.id] == null){
             return;
         }
         
+        self.otherPlayers[info.id].health += info.statChange.health;
+        self.otherPlayers[info.id].speed += info.statChange.speed;
+        self.otherPlayers[info.id].power += info.statChange.power;
         
-        if(info.isWeapon){
-            drops.add(new Weapon({scene: self, x: info.x,
-                                  y: info.y, key: info.type}));
-        }
-                
-        else{
-            drops.add(new Drop({scene: self, x: info.x,
-                                y: info.y, key: info.type}));
-        }
-        */
+        self.otherPlayers[info.id].updateHealth();
     }
-    
     
     
     updateAnim(self, player) {
         self.otherPlayers[player.id].isMeleeing = player.info.melee;
         self.otherPlayers[player.id].hitCount = player.info.hitCount;
+        
+        if(self.otherPlayers[player.id].sprite.anims == null){
+            return;
+        }
             
         if(player.info.anims === 'left'){
             self.otherPlayers[player.id].sprite.anims.play(player.info.anims, true);
@@ -281,5 +285,25 @@ class SocketFunc {
            
     }
     
+    haveDied(self, player_id)
+    {
+        if(self.otherPlayers[player_id] == null){
+            return;
+        }
+        
+        self.otherPlayers[player_id].myContainer.body.enable = false;
+        self.otherPlayers[player_id].health = 0;
+        self.otherPlayers[player_id].updateHealth();
+    }
     
+    haveRespawn(self, info)
+    {
+        if(self.otherPlayers[info.id] == null){
+            return;
+        }
+        
+        self.otherPlayers[info.id].myContainer.body.enable = true;
+        self.otherPlayers[info.id].health = info.health;
+        self.otherPlayers[info.id].updateHealth();
+    }
 }

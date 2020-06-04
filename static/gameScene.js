@@ -2,11 +2,13 @@ class gameScene extends Phaser.Scene {
     constructor()
     {
         super({key: 'gameScene'});
-
+        
         // User's info
         this.player;
         this.username;
-    
+        this.score;
+        this.scoreText;
+        
         // WASD movement
         this.cursors; 
 
@@ -36,10 +38,11 @@ class gameScene extends Phaser.Scene {
         this.playerGroup;
         this.otherPlayersGroup;
         this.socketFunc = new SocketFunc();
+        this.otherProjColliders = {};
 
         // variables using to test (e.g. damage system, collision, etc.)
-        this.dummies;
-        this.dummiesGroup;
+       // this.dummies;
+       // this.dummiesGroup;
         this.sour;
         this.sweet;
         this.spicy;
@@ -51,6 +54,14 @@ class gameScene extends Phaser.Scene {
         this.cooldownEvent;
         this.weaponRespawnEvent;
         this.meleeCooldownEvent;
+        
+        this.dropsPlayerOverlap;
+        
+        this.respawn_button = null;
+        this.restart_button = null;
+        this.killed_message;
+        this.lastX;
+        this.lastY;
     }
     
     // If we ever need to load specific data from previous scene.
@@ -61,24 +72,26 @@ class gameScene extends Phaser.Scene {
         //this.player.printStat();
 
         this.username = data.username;
-        console.log("Username in gamescene: ", this.username);
-       
     }
     
     // No need to preload here. We frontload all images/sprites/in loadScene 
     // and can refer to the keywords we initialized there as we like
     preload() 
     {
+        this.load.image('respawn_button', 'static/images/gameScene/btn_respawn.png');
+        this.load.image('restart_button', 'static/images/gameScene/btn_restart.png');
+        
+        this.sound.setVolume(0.1);
+        this.sound.play('game_audio', {loop: 1});
+        
         var info = {
             name: this.username,
             element:  this.player.element,
             position: {x: this.player.startPositionX, y: this.player.startPositionY}
         };
         
-        this.sound.setVolume(0.1);
-        this.sound.play('game_audio', {loop: 1});
+        this.client.socket.emit('startPlayer', info);
         
-        this.client.socket.emit('startPlayer', info);   
     }
     
     create()
@@ -102,20 +115,18 @@ class gameScene extends Phaser.Scene {
             this.username,
          { fontSize: '24px', fill: 'white' });
         
-
-    
         this.drawer.drawCharacter();
         
        // dummies for testing
-        this.dummies = new Dummies(this);
-        this.dummies.initAllDummies();
-        this.dummies.initGroup();
+       // this.dummies = new Dummies(this);
+       // this.dummies.initAllDummies();
+       // this.dummies.initGroup();
         
         
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
         
-        this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
+       // this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
         
         
         
@@ -125,29 +136,30 @@ class gameScene extends Phaser.Scene {
         this.physics.world.enable(this.projectiles);
         
 
-        this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
+        //this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
         
         //camera
         this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
         
-        // Fruit Respawn
+    
+        //Respawn
         this.timedEvent = this.time.addEvent
         ({
-            delay: 3000,
+            delay: 5000,
             callback: this.callbackFunction,
             callbackScope: this,
             loop: true
         });
     
         // Weapon Respawn
-        this.weaponRespawnEvent = this.time.addEvent
+        /*this.weaponRespawnEvent = this.time.addEvent
         ({
             delay: 3000,
             callback: this.weaponCallbackFunction,
             callbackScope: this,
             loop: true
-        });
+        });*/
         
         // Handles player's gun cooldown
         this.cooldownEvent = this.time.addEvent 
@@ -170,7 +182,19 @@ class gameScene extends Phaser.Scene {
         
         this.randomDropsHandler.init();
         
-        this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpDrop, null, this);
+         this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpDrop, null, this);
+        
+        this.scene.launch('UIScene', {name: this.username});
+        
+        
+     /*  this.player.myContainer.on("overlap", function() 
+                                         {
+                            alert("overlapping start");
+        }, this);
+        this.player.myContainer.off("overlap", function() 
+                                         {
+                            alert("overlapping end");
+        }, this);*/
         
      
         //Multiplayer
@@ -213,6 +237,10 @@ class gameScene extends Phaser.Scene {
         });
         
         this.client.socket.on('updateDamage', function(info){
+            if(self.otherPlayers[info.id] == null){
+                return;
+            }
+            
             self.otherPlayers[info.id].takeDamage(info.damage);
             self.otherPlayers[info.id].updateHealth();
         });
@@ -229,41 +257,78 @@ class gameScene extends Phaser.Scene {
             self.socketFunc.syncDrops(self, info);  
         });
         
+        this.client.socket.on("updateMeleeSpriteAnim", function(info){
+            if(self.otherPlayers[info.id] == null){
+                return;
+            }
+            
+            if(self.otherPlayers[info.id].meleeSprite.anims == null){
+                return;
+            }
+            
+            self.otherPlayers[info.id].meleeSprite.anims.play(info.anim);
+        });
+        
+        this.client.socket.on("seeMeleeSpriteClient", function(info){
+            console.log("setting melee sprite visibility");
+             if(self.otherPlayers[info.id] == null){
+                return;
+            } 
+            self.otherPlayers[info.id].meleeSprite.setVisible(info.visible);
+        });
+        
+        this.client.socket.on('statChangeClient', function(info){
+            self.socketFunc.statUpdate(self, info);
+        });
+        
+        this.client.socket.on("updateDeathScoreClient", function(player_id){
+            self.socketFunc.updateKillScore(self, player_id);
+        });
+        
+        this.client.socket.on('implementDeath', function(player_id){
+            self.socketFunc.haveDied(self, player_id);
+        });
+        
+        this.client.socket.on('respawnClient', function(info){
+            self.socketFunc.haveRespawn(self, info); 
+        });
+        
         // Meant for disconnect
         this.client.socket.on('deleteTime', function(myId){
-            for(var id in self.otherPlayers){
-                if(id === myId){
-                    console.log("deletion");
-                    //self.otherPlayers[id].myContainer.destroy();
-                    delete self.otherPlayers[id];
+            if(!(self.otherPlayers[myId] == null)){
+                self.otherPlayers[myId].myContainer.destroy();
+                delete self.otherPlayers[myId];
+                /*
+                if(!(self.otherProjectiles[myId] == null)){
+                    self.otherProjectiles[myId].destroy();
+                    delete self.otherProjectiles[myId];
                 }
-            } 
+                */
+            }
         });
-          
+        
+        //this.reconnectToMultiplayer();        
+        //this.setupDeathButtons();
     } 
     
     update()
       {
         var self = this;
        // console.log("time event loop value: ",this.timedEvent.loop);
-        if (this.gameOver)
-        {
-            return;   
-        }
-        this.dummies.updateHealth();
-        //console.log("gun cooldown in milliseconds:",this.cooldownEvent.delay);
-        //console.log("weapon cooldown:",this.meleeCooldownEvent.delay);
           
-
+        //this.dummies.updateHealth();
+        
         this.player.update(this);
-        this.projectileHandler.moveProjectiles();
-
+        this.projectileHandler.moveProjectiles();  
+          
         if(this.player.health <= 0){
-            this.scene.start("menuScene", {});
+            this.lastX = this.player.myContainer.x
+            this.lastY = this.player.myContainer.y
+            this.player.myContainer.body.enable = false;
         }
-
     }  
     
+    /*
     pickUpWeapon(player_container, weapon)
     {
         if(this.player.isEquipping)
@@ -275,15 +340,16 @@ class gameScene extends Phaser.Scene {
             this.cooldownEvent.delay = this.player.cooldown;
             this.meleeCooldownEvent.delay = this.player.meleeCooldown;
         }
-    }
+    }*/
     
     pickUpDrop(player_container, drop)
     {
+        
         var info = {x: drop.x, y: drop.y};
-        console.log("inside pickUpDrop");
         if (drop instanceof Weapon) {
             if(this.player.isEquipping)
             {
+                this.sound.play('knife_pickup_audio');
                 this.player.pickUpWeapon(drop, this);	
                 this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
                 drop.destroy();
@@ -291,15 +357,20 @@ class gameScene extends Phaser.Scene {
                 this.cooldownEvent.delay = this.player.cooldown;
                 this.meleeCooldownEvent.delay = this.player.meleeCooldown;
                 this.client.socket.emit("updateDropsClient", info);
+                this.events.emit("addScore");
+               
             }
         }
         
         else 
         {
+            this.sound.play('food_pickup_audio');
             this.player.pickUpFood(drop, this);
             this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
             drop.destroy();
             this.client.socket.emit("updateDropsClient", info);
+            this.events.emit("addScore");
+            
         }
     }
     
@@ -378,6 +449,8 @@ class gameScene extends Phaser.Scene {
                 if(damageAmount >= this.player.health){
                     killer = this.otherPlayers[id].username;
                     method = this.otherPlayers[id].weapon;
+                    
+                    this.client.socket.emit("updateDeathScoreServer", id);
                 }
                 
                 this.player.takeDamage(damageAmount, killer, method);
@@ -432,6 +505,12 @@ class gameScene extends Phaser.Scene {
             else if (bullet.frosting){
                 method = "frosting"
             }
+            
+            if(!this.gameOver) {
+                this.client.socket.emit("updateDeathScoreServer", bullet.id);
+            }
+            
+            this.gameOver = true;
         }
         
         this.player.takeDamage(damageAmount, killer, method);
@@ -442,7 +521,6 @@ class gameScene extends Phaser.Scene {
     }
     
     bulletHitOther(bullet, player){
-        //this.player.takeDamage(this.colliderHandler.projectileHit(bullet, this.player, this.player));
         bullet.destroy();
     }
     
@@ -452,14 +530,22 @@ class gameScene extends Phaser.Scene {
            animation.key === 'knife_swipe' ||
            animation.key === 'whisk_twirl')
         {
+            this.player.meleeSprite.setVisible(true);
+            this.client.socket.emit("seeMeleeSpriteServer", true);  
             this.player.isMeleeing = false;
             this.player.hitCount = 0;
         }
     
         if (animation.key === 'mouse_dash')
         {
+            
             this.player.isDashing = false;
            
+        }
+        
+        if (animation.key === 'mouse_death')
+        {
+            this.addAfterDeathButtons();
         }
     }
 
@@ -483,9 +569,165 @@ class gameScene extends Phaser.Scene {
     {
         if (this.player.canMelee == false)
         {
-            console.log("Melee cooldown: " + this.player.meleeCooldown);
+           // console.log("Melee cooldown: " + this.player.meleeCooldown);
             this.player.canMelee = true;
         }
+    }
+    
+    reconnectToMultiplayer(){
+        
+        //if(this.phyiscs == null){
+        //    return;
+        //}
+          
+        //if(this.physics.add == null){
+        //    return
+        //}
+          
+        if(!(this.client.socket.connected)){
+            console.log("connect");
+            this.client.socket.connect();
+        }
+    }
+    
+    addAfterDeathButtons(){
+        if(!(this.respawn_button == null)){
+            return;
+        }
+        
+        if(!(this.restart_button == null)){
+            return;
+        }
+        
+        console.log("Adding death buttons");
+        
+        this.setupDeathButtons();
+    }
+    
+    setupDeathButtons(){
+        console.log('Setting up death buttons');
+        this.client.socket.emit("died");
+        
+        this.respawn_button = this.add.sprite(this.lastX , this.lastY + 50, 'respawn_button');
+        this.restart_button = this.add.sprite(this.lastX, this.lastY - 50, 'restart_button');
+        this.killed_message = this.add.text(this.lastX - 75, this.lastY - 125, this.player.killed_text, {font: "16px Arial", fill: "#ffffff"});
+        
+        this.respawn_button.depth = 2000;
+        this.restart_button.depth = 2000;
+        this.killed_message.depth = 2000;
+        this.respawn_button.setInteractive();
+        this.restart_button.setInteractive();
+        
+        // Does respawn button stuff
+        
+        this.respawn_button.on('pointerup', function(p)
+        {       
+            this.events.emit("reset");
+            
+            this.player.health = this.player.maxHealth;
+            this.player.myContainer.setVisible(true);
+            this.player.myContainer.body.enable = true;
+            this.player.updateHealth();
+            
+            this.restart_button.destroy();
+            this.respawn_button.destroy();
+            this.killed_message.destroy();
+            this.restart_button = null;
+            this.respawn_button = null;
+            this.killed_message = null;
+            
+            this.gameOver = false;
+            
+            var info = {id: this.client.socket.id, health: this.player.maxHealth};
+            this.client.socket.emit('respawnServer', info);
+        }, this);
+        
+        this.respawn_button.on('pointerover', function (p) 
+        {
+            this.respawn_button.setTint(0x808080);
+        }, this);
+        
+        this.respawn_button.on('pointerout', function (p)
+        {
+            this.respawn_button.setTint(0xffffff);
+        }, this)
+        
+        // Does restart button stuff
+        this.restart_button.on('pointerup', function(p)
+        {
+            window.location.reload();
+        }, this);
+        
+        this.restart_button.on('pointerover', function (p) 
+        {
+            this.restart_button.setTint(0x808080);
+        }, this);
+        
+        this.restart_button.on('pointerout', function (p)
+        {
+            this.restart_button.setTint(0xffffff);
+        }, this)   
+    }
+    
+    /*
+    clearProjColliders(){
+        for(var id in this.otherProjColliders){
+            if(this.otherProjColliders[id] == null){
+                return;
+            }
+            
+            this.otherProjColliders[id].destroy();
+        }
+    }
+    
+    addProjColliders(){
+        for(var id in this.otherProjectiles){
+            if(this.otherProjectiles[id]){
+                return;
+            }
+            
+            if(this.otherProjColliders[id] == null){
+                this.otherProjColliders[id] = this.physics.add.collider
+                    (this.otherProjectiles[id], this.playerGroup, this.bulletHitPlayer, null, this);
+            }
+            
+        }
+        
+    }
+    */
+    
+    clearScene(){
+        for(var id in this.otherPlayers){
+            this.otherPlayers[id].myContainer.destroy();
+            delete this.otherPlayers[id];
+        }
+        
+        for(var id in this.otherProjectiles){
+            /*
+            if(this.otherProjectiles.children == null){
+                continue;
+            }
+            
+            
+            this.otherProjectiles.children.iterate(function(child){
+                if(child == null){
+                    return;
+                }
+                child.destroy();
+            });
+            */
+            this.otherProjectiles[id].destroy();
+            delete this.otherProjectiles[id];
+        }
+        
+        this.otherPlayersGroup.children.iterate(function(child){
+            if(child == null){
+                return;
+            }
+            child.destroy();
+        });
+        
+        this.playerGroup.destroy();
     }
     
 }

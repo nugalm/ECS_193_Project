@@ -70,6 +70,7 @@ class ProjectileHandler
             var info = {x: projectile.body.x, y: projectile.body.y, rotation: projectile.rotation, element: this.context.player.element};
             socket.emit('addSaltProjectileServer', info);
         }
+        this.context.sound.play("salt_shaker_attack_audio");
         
     }
     
@@ -211,6 +212,10 @@ class ProjectileHandler
         for(var id in this.context.otherPlayers){
             if(!(id in this.context.otherProjectiles)){
                 continue;
+            }
+            
+            if(this.context.otherProjectiles[id].children == null){
+                return;
             }
             
             this.context.otherProjectiles[id].children.iterate(function(child) {
