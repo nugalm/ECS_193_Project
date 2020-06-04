@@ -33,14 +33,10 @@ class menuScene extends Phaser.Scene
     preload()
     {
         this.load.html('username', 'static/data/username.html');
-        //this.sound.play('game_audio');
     }
     
     create()
     {
-      //  this.sound.play('selection_audio');
-      // this.bg = this.add.image(this.game.config.width / 2, this.game.config.height / 2, 'menu_background');
-     //   this.bg.setDisplaySize(this.game.config.width, this.game.config.height);
         this.add.text(100, 100, 'Choose your taste!', { fontSize: '24px', fill: 'white' });
 
         this.initBackground();
@@ -110,7 +106,6 @@ class menuScene extends Phaser.Scene
         this.saltyButton.setInteractive();
         this.saltyButton.on('pointerover', function()
         {
-           // this.saltyButton.setTint(0x808080);
             this.saltyButton.setScale(0.9);
         }, this);
         
@@ -121,17 +116,15 @@ class menuScene extends Phaser.Scene
         }, this);
         this.saltyButton.on('pointerup', function(p) 
         {
-           // if (p.leftButtonDown()){           
-               // alert('everything tastes better with salt');
+         
                 this.scene.start('armoryScene', { player: new SaltyCharacter(), socket: this.socket});
-           // }
         }, this);
         
         //spicy
         this.spicyButton.setInteractive();
         this.spicyButton.on('pointerover', function()
         {
-            //this.spicyButton.setTint(0x808080);
+          
             this.spicyButton.setScale(0.9);
         }, this);
         
@@ -142,10 +135,8 @@ class menuScene extends Phaser.Scene
         }, this);
         this.spicyButton.on('pointerup', function(p) 
         {
-           // if (p.leftButtonDown()){  
-                //alert('is it hot in here..or is it just you?');
+          
                 this.scene.start('armoryScene', { player: new SpicyCharacter(), socket: this.socket});
-          //  }
         }, this);
         
         //sour
@@ -161,10 +152,7 @@ class menuScene extends Phaser.Scene
         }, this);
         this.sourButton.on('pointerup', function(p) 
         {
-           // if (p.leftButtonDown()){  
-               // alert('here, have a token of sour gratitude');
                 this.scene.start('armoryScene', { player: new SourCharacter(), socket: this.socket});
-          //  }
         }, this);
         
         //sweet
@@ -180,10 +168,9 @@ class menuScene extends Phaser.Scene
         }, this);
         this.sweetButton.on('pointerup', function(p) 
         {
-            //if (p.leftButtonDown()){  
-                //alert('mm.. the sweet smell of a winner');
+            
                 this.scene.start('armoryScene', { player: new SweetCharacter(), socket: this.socket});
-           // }
+           
         }, this);   
     }
 

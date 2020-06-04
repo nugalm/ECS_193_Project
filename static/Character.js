@@ -70,13 +70,7 @@ class Character {
                 + "stamina: " + this.stamina
 				);
     }
-    
-    setWeapon(_weapon, context)
-    {
-        //TODO: this.weapon = _weapon;
-            
-    }
-    
+
     initSprite(context) 
     {
         
@@ -118,12 +112,7 @@ class Character {
     }
     initContainer(context)
     {
-        /*
-        var x = Phaser.Math.Between(0, 2560);
-        var y = Phaser.Math.Between(0, 2560);
-        
-        this.myContainer = context.add.container(x,y, [this.username, this.sprite, this.healthBar.healthBar]);
-        */
+
         this.myContainer = context.add.container(this.startPositionX, this.startPositionY, [this.username, this.sprite, this.healthBar.healthBar, this.meleeSprite]);
         
         this.myContainer.setSize(this.HITBOX, this.HITBOX);
@@ -449,7 +438,7 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.playMeleeLayerIdle();
-                  //  this.sprite.anims.play('left', true);
+                  
                     this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
@@ -464,7 +453,6 @@ class Character {
                 if (!this.isSpecialAnimating())  
                 {
                     this.playMeleeLayerIdle();
-                   // this.sprite.anims.play('left', true);
                     this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
                     var info = {anims: 'left', melee: false, hitCount: 0};
@@ -480,7 +468,7 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.playMeleeLayerIdle();
-                  //  this.sprite.anims.play('left', true);
+                 
                     this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
@@ -495,7 +483,7 @@ class Character {
                 if (!this.isSpecialAnimating()) 
                 {
                     this.playMeleeLayerIdle();
-                    //this.sprite.anims.play('left', true);
+                 
                     this.playWalk();
                     var info = {anims: 'left', melee: false, hitCount: 0};
             
@@ -515,7 +503,6 @@ class Character {
                     {
                         this.playMeleeLayerIdle();
                         this.playIdle();
-                       // this.sprite.anims.play('mouse_frosting_bag_idle');
                         
                         var info = {anims: 'turn', melee: false, hitCount: 0};
 
@@ -525,29 +512,6 @@ class Character {
             }
             
     } //end else
-        
-        // Multiplayer
-        // Send player movement to server when state changes
-        /*
-        if ((context.cursors.up.isDown != this.up)
-            || (context.cursors.down.isDown != this.down)
-            || (context.cursors.left.isDown != this.left)
-            || (context.cursors.right.isDown != this.right)
-            || (this.sprite.rotation != this.oldRotation)
-            ) 
-        {
-            this.left = context.cursors.left.isDown;
-            this.right = context.cursors.right.isDown;
-            this.down = context.cursors.down.isDown;
-            this.up = context.cursors.up.isDown;
-            this.oldRotation = this.sprite.rotation;
-                        
-            var myPosition = {x: this.myContainer.x , y: this.myContainer.y};
-            var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
-            var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
-            socket.emit('movement', info);
-        }
-        */
         
         var myPosition = {x: this.myContainer.x , y: this.myContainer.y};
         var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
@@ -608,10 +572,8 @@ class Character {
     
     takeDamage(damageAmount, killer, method) 
     {
-        
-      //  alert("health before hit: " + this.health);
         this.health = this.health - damageAmount;
-       // alert("health after hit: " + this.health);
+      
         if (this.health <= 0) 
         {
             this.health = 0;
@@ -622,9 +584,6 @@ class Character {
             
             var info = {anims: 'mouse_death', melee: false, hitCount: 0};
             
-            // apparently this will make the wrong player itself actually do
-            // death animation 
-            // this.client.socket.emit('doAnim', info);
         }
         
     }
@@ -698,7 +657,7 @@ class Character {
         var statChange = {health: 0, speed: 0, power: -100};
         this.power = this.power - 100;	
         this.client.socket.emit("statChangeServer", statChange);
-      //  alert("power after pepper subtraction: "+ this.power)	
+      
     }
     
     

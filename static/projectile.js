@@ -38,7 +38,5 @@ class Projectile extends Phaser.Physics.Arcade.Sprite
     callbackFunction()
     {
         
-      //  this.body.destroy();
-       // this.deletionTime.remove();
     }
 }

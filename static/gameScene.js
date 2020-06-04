@@ -117,33 +117,21 @@ class gameScene extends Phaser.Scene {
         
         this.drawer.drawCharacter();
         
-       // dummies for testing
-       // this.dummies = new Dummies(this);
-       // this.dummies.initAllDummies();
-       // this.dummies.initGroup();
-        
         
         // Player melee animation callback
         this.player.sprite.on('animationcomplete', this.animationComplete, this);
-        
-       // this.physics.add.overlap(this.dummiesGroup, this.player.myContainer, this.playerMeleeHitDummy, null, this);
-        
-        
         
         this.keyboardHandler.initEvents(this);
 
         this.colliderHandler.initPlayerColliders();
         this.physics.world.enable(this.projectiles);
         
-
-        //this.physics.add.collider(this.projectiles, this.dummiesGroup, this.bulletHitDummy, null, this);
-        
         //camera
         this.cameras.main.startFollow(this.player.myContainer, true, 0.05, 0.05);
         this.cameras.main.zoom = 1.5;
         
     
-        //Respawn
+        // Item Respawn
         this.timedEvent = this.time.addEvent
         ({
             delay: 5000,
@@ -152,14 +140,6 @@ class gameScene extends Phaser.Scene {
             loop: true
         });
     
-        // Weapon Respawn
-        /*this.weaponRespawnEvent = this.time.addEvent
-        ({
-            delay: 3000,
-            callback: this.weaponCallbackFunction,
-            callbackScope: this,
-            loop: true
-        });*/
         
         // Handles player's gun cooldown
         this.cooldownEvent = this.time.addEvent 
@@ -185,17 +165,6 @@ class gameScene extends Phaser.Scene {
          this.physics.add.overlap(this.randomDropsHandler.group, this.player.myContainer, this.pickUpDrop, null, this);
         
         this.scene.launch('UIScene', {name: this.username});
-        
-        
-     /*  this.player.myContainer.on("overlap", function() 
-                                         {
-                            alert("overlapping start");
-        }, this);
-        this.player.myContainer.off("overlap", function() 
-                                         {
-                            alert("overlapping end");
-        }, this);*/
-        
      
         //Multiplayer
         
@@ -270,7 +239,7 @@ class gameScene extends Phaser.Scene {
         });
         
         this.client.socket.on("seeMeleeSpriteClient", function(info){
-            console.log("setting melee sprite visibility");
+         
              if(self.otherPlayers[info.id] == null){
                 return;
             } 
@@ -298,26 +267,14 @@ class gameScene extends Phaser.Scene {
             if(!(self.otherPlayers[myId] == null)){
                 self.otherPlayers[myId].myContainer.destroy();
                 delete self.otherPlayers[myId];
-                /*
-                if(!(self.otherProjectiles[myId] == null)){
-                    self.otherProjectiles[myId].destroy();
-                    delete self.otherProjectiles[myId];
-                }
-                */
             }
         });
         
-        //this.reconnectToMultiplayer();        
-        //this.setupDeathButtons();
     } 
     
     update()
       {
-        var self = this;
-       // console.log("time event loop value: ",this.timedEvent.loop);
-          
-        //this.dummies.updateHealth();
-        
+        var self = this;      
         this.player.update(this);
         this.projectileHandler.moveProjectiles();  
           
@@ -327,20 +284,6 @@ class gameScene extends Phaser.Scene {
             this.player.myContainer.body.enable = false;
         }
     }  
-    
-    /*
-    pickUpWeapon(player_container, weapon)
-    {
-        if(this.player.isEquipping)
-        {
-            this.player.pickUpWeapon(weapon, this);	
-            this.randomDropsHandler.updateAvailablePositions(weapon.x, weapon.y);
-            weapon.destroy();
-            this.player.initCooldown();
-            this.cooldownEvent.delay = this.player.cooldown;
-            this.meleeCooldownEvent.delay = this.player.meleeCooldown;
-        }
-    }*/
     
     pickUpDrop(player_container, drop)
     {
@@ -409,7 +352,6 @@ class gameScene extends Phaser.Scene {
         var player = this.otherPlayers[id];
         
         if(player == null){
-            console.log("Not found");
             return;
         }
         
@@ -464,7 +406,6 @@ class gameScene extends Phaser.Scene {
     
     bulletHitDummy(bullet, container)
     {
-        //alert("colliding with laher");
         if (container === this.salt.myContainer)
         {
             this.salt.takeDamage(this.colliderHandler.projectileHit(bullet, this.salt, this.player));
@@ -569,23 +510,12 @@ class gameScene extends Phaser.Scene {
     {
         if (this.player.canMelee == false)
         {
-           // console.log("Melee cooldown: " + this.player.meleeCooldown);
             this.player.canMelee = true;
         }
     }
     
     reconnectToMultiplayer(){
-        
-        //if(this.phyiscs == null){
-        //    return;
-        //}
-          
-        //if(this.physics.add == null){
-        //    return
-        //}
-          
         if(!(this.client.socket.connected)){
-            console.log("connect");
             this.client.socket.connect();
         }
     }
@@ -599,13 +529,11 @@ class gameScene extends Phaser.Scene {
             return;
         }
         
-        console.log("Adding death buttons");
-        
         this.setupDeathButtons();
     }
     
     setupDeathButtons(){
-        console.log('Setting up death buttons');
+        
         this.client.socket.emit("died");
         
         this.respawn_button = this.add.sprite(this.lastX , this.lastY + 50, 'respawn_button');
@@ -669,33 +597,6 @@ class gameScene extends Phaser.Scene {
         }, this)   
     }
     
-    /*
-    clearProjColliders(){
-        for(var id in this.otherProjColliders){
-            if(this.otherProjColliders[id] == null){
-                return;
-            }
-            
-            this.otherProjColliders[id].destroy();
-        }
-    }
-    
-    addProjColliders(){
-        for(var id in this.otherProjectiles){
-            if(this.otherProjectiles[id]){
-                return;
-            }
-            
-            if(this.otherProjColliders[id] == null){
-                this.otherProjColliders[id] = this.physics.add.collider
-                    (this.otherProjectiles[id], this.playerGroup, this.bulletHitPlayer, null, this);
-            }
-            
-        }
-        
-    }
-    */
-    
     clearScene(){
         for(var id in this.otherPlayers){
             this.otherPlayers[id].myContainer.destroy();
@@ -703,19 +604,6 @@ class gameScene extends Phaser.Scene {
         }
         
         for(var id in this.otherProjectiles){
-            /*
-            if(this.otherProjectiles.children == null){
-                continue;
-            }
-            
-            
-            this.otherProjectiles.children.iterate(function(child){
-                if(child == null){
-                    return;
-                }
-                child.destroy();
-            });
-            */
             this.otherProjectiles[id].destroy();
             delete this.otherProjectiles[id];
         }

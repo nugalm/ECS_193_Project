@@ -56,7 +56,6 @@ class Drawer
     {
        
         // check surrounding tiles to take into account character display size
-       // var tile = this.context.collidableLayer.getTileAtWorldXY(x, y, true);
         //original tile
         var tile_1 = this.context.collidableLayer.getTileAtWorldXY(x, y, true);  
         // tile to the bottom right of original tile
