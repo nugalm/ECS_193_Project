@@ -639,9 +639,9 @@ class loadScene extends Phaser.Scene
     loadMenuSelect()
     {
         //menu scene chars
-        this.load.image('loadingSpicy', 'static/images/spicyMouse.png');
+        this.load.image('loadingSpicy', 'static/images/mouseSpicy.png');
         this.load.image('loadingSweet', 'static/images/sweetMouse.png');
-        this.load.image('loadingSalty', 'static/images/saltyMouse.png');
+        this.load.image('loadingSalty', 'static/images/mouseSalty.png');
         this.load.image('loadingSour', 'static/images/sourMouse.png');
         this.load.image('menu_bg', 'static/images/mousecave.png');
     }

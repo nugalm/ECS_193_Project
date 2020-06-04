@@ -12,6 +12,7 @@ class menuScene extends Phaser.Scene
         this.buttonPositionY = config.height / 2;
         this.buttonPositionOffset = config.width / 4;
         this.IMAGE_SCALE = 0.07;
+        this.scale = 0.8;
         this.buttonTextOffsetY = 140;
         this.bg;
         
@@ -79,17 +80,19 @@ class menuScene extends Phaser.Scene
     
     scaleCharImages()
     {
-        this.scaleCharImage(this.saltyButton);
-        this.scaleCharImage(this.spicyButton);
+    //    this.scaleCharImage(this.saltyButton);
+       // this.scaleCharImage(this.spicyButton);
+        this.saltyButton.setScale(0.7);
+        this.spicyButton.setScale(0.7);
         this.scaleCharImage(this.sourButton);
         this.scaleCharImage(this.sweetButton);
     }
 
     addButtonTexts()
     {
-        this.add.text(this.saltyButton.x - 50, this.saltyButton.y - this.buttonTextOffsetY, 'Salty');
+       // this.add.text(this.saltyButton.x - 50, this.saltyButton.y - this.buttonTextOffsetY, 'Salty');
         
-        this.add.text(this.spicyButton.x - 50, this.spicyButton.y - this.buttonTextOffsetY, 'Spicy');
+        //this.add.text(this.spicyButton.x - 50, this.spicyButton.y - this.buttonTextOffsetY, 'Spicy');
         
         this.add.text(this.sourButton.x - 50, this.sourButton.y - this.buttonTextOffsetY, 'Sour');
         
