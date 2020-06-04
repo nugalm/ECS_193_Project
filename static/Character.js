@@ -132,7 +132,7 @@ class Character {
         }
         else if (this.gun == "salt_shaker") 
         {
-            this.cooldown = 1500;
+            this.cooldown = 1000;
         }
         else if (this.gun == "frosting_bag")
         {
