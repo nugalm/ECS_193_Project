@@ -251,8 +251,8 @@ class Character {
     
     updateWhileDashing(context)
     {
-        var newX = this.myContainer.x + (Math.cos(this.sprite.rotation - Math.PI/2) * this.dashMultiplier);
-        var newY = this.myContainer.y + (Math.sin(this.sprite.rotation - Math.PI/2) * this.dashMultiplier);
+        var newX = this.myContainer.x + (Math.cos(this.sprite.rotation - Math.PI/2) * (this.dashMultiplier + (0.007 * this.speed)));
+        var newY = this.myContainer.y + (Math.sin(this.sprite.rotation - Math.PI/2) * (this.dashMultiplier + (0.007 * this.speed)));
         
         if (!context.drawer.isViableSpawnPoint(newX, newY)) 
         {
@@ -514,8 +514,7 @@ class Character {
             }
             
     } //end else
-        console.log("velocity: ", this.velocity);
-        
+       
         var myPosition = {x: this.myContainer.x , y: this.myContainer.y};
         var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
         var info = {position: myPosition, velocity: myVelocity, r: this.sprite.rotation};
