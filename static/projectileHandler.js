@@ -9,7 +9,7 @@ class ProjectileHandler
         this.saltBulletSize = 75;
         
         // time it takes for projectile to disappear (in milliseconds)
-        this.saltTime = 250;
+        this.saltTime = 350;
         this.bottleTime = 1000;
         this.frostingTime = 2000;
         
@@ -243,8 +243,8 @@ class ProjectileHandler
     {
         if (projectile.salt == true) 
         {
-            projectile.x += Math.cos(projectile.rotation) * 20;
-            projectile.y += Math.sin(projectile.rotation) * 20;
+            projectile.x += Math.cos(projectile.rotation) * 15;
+            projectile.y += Math.sin(projectile.rotation) * 15;
         }
         else 
         {
