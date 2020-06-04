@@ -513,9 +513,9 @@ class Character {
                         this.playIdle();
                        // this.sprite.anims.play('mouse_frosting_bag_idle');
                         
-                        var info = {anims: 'turn', melee: false, hitCount: 0};
+                        //var info = {anims: 'turn', melee: false, hitCount: 0};
 
-                        this.client.socket.emit('doAnim', info);
+                        //this.client.socket.emit('doAnim', info);
                     }
                 }
             }

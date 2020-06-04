@@ -270,7 +270,6 @@ class gameScene extends Phaser.Scene {
         });
         
         this.client.socket.on("seeMeleeSpriteClient", function(info){
-            console.log("setting melee sprite visibility");
              if(self.otherPlayers[info.id] == null){
                 return;
             } 
@@ -306,17 +305,12 @@ class gameScene extends Phaser.Scene {
     update()
       {
         var self = this;
-       // console.log("time event loop value: ",this.timedEvent.loop);
           
-        //this.dummies.updateHealth();
         
         this.player.update(this);
         this.projectileHandler.moveProjectiles();  
           
         if(this.player.health <= 0){
-            //this.client.socket.disconnect();
-            //this.clearScene();
-            //this.scene.start("menuScene", {socket: this.client.socket});
             this.lastX = this.player.myContainer.x
             this.lastY = this.player.myContainer.y
             this.player.myContainer.setVisible(false);
@@ -404,7 +398,6 @@ class gameScene extends Phaser.Scene {
         var player = this.otherPlayers[id];
         
         if(player == null){
-            console.log("Not found");
             return;
         }
         
@@ -559,7 +552,6 @@ class gameScene extends Phaser.Scene {
     {
         if (this.player.canMelee == false)
         {
-            console.log("Melee cooldown: " + this.player.meleeCooldown);
             this.player.canMelee = true;
         }
     }
@@ -575,7 +567,6 @@ class gameScene extends Phaser.Scene {
         //}
           
         if(!(this.client.socket.connected)){
-            console.log("connect");
             this.client.socket.connect();
         }
     }
@@ -588,11 +579,9 @@ class gameScene extends Phaser.Scene {
         if(!(this.restart_button == null)){
             return;
         }
-
-        
-        console.log("Adding death buttons");
         
         this.events.emit("reset");
+        
         this.setupDeathButtons();
     }
     
