@@ -194,10 +194,10 @@ class ColliderHandler
         
         var damage = 0.25 * player.power * multiplier;
         
-        if (attacker.salt == true) 
-        {
-            damage = damage * 0.33;
-        }
+        //if (attacker.salt == true) 
+        //{
+        //    damage = damage * 0.33;
+       // }
     
         return damage; 
         
