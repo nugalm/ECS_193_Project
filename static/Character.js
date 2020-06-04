@@ -203,7 +203,7 @@ class Character {
         }
         else if (this.weapon == "fork") {
             this.sprite.anims.play('fork_stab');
-            //context.sound.play('fork_attack_audio');
+            context.sound.play('fork_attack_audio');
             
             var info = {anims: 'fork_stab', melee: true, hitCount: 1};
             

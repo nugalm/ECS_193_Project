@@ -349,7 +349,7 @@ class gameScene extends Phaser.Scene {
         if (drop instanceof Weapon) {
             if(this.player.isEquipping)
             {
-                //this.sound.play('knife_pickup_audio');
+                this.sound.play('knife_pickup_audio');
                 this.player.pickUpWeapon(drop, this);	
                 this.randomDropsHandler.updateAvailablePositions(drop.x, drop.y);
                 drop.destroy();
