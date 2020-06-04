@@ -793,6 +793,8 @@ class loadScene extends Phaser.Scene
         this.sound.add('knife_attack_audio');
         this.sound.add('fork_attack_audio');
         this.sound.add('knife_pickup_audio');
+        this.sound.add('squirter_attack_audio');
+        this.sound.add('frosting_bag_attack_audio');
     }
     
     loadAudio()
@@ -805,6 +807,8 @@ class loadScene extends Phaser.Scene
         this.load.audio('knife_attack_audio', 'static/Sound/gameScene/knife_swing_audio.mp3');
         this.load.audio('knife_pickup_audio', 'static/Sound/gameScene/knife_pickup_audio.mp3');
         this.load.audio('fork_attack_audio', 'static/Sound/gameScene/fork_attack_audio.mp3');
+        this.load.audio('squirter_attack_audio','static/Sound/gameScene/squirter_attack_audio.mp3');
+        this.load.audio('frosting_bag_attack_audio','static/Sound/gameScene/frosting_bag_attack_audio.mp3');
     }
     
     preloaders()

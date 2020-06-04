@@ -229,6 +229,7 @@ class Character {
 
         if (this.gun == "bottle") {
             this.sprite.anims.play('bottle_squeeze');
+            this.context.sound.play('squirter_attack_audio');
             this.playMeleeLayerIdle();
             
             var info = {anims: 'bottle_squeeze', melee: false, hitCount: 0};
@@ -239,6 +240,7 @@ class Character {
         else if (this.gun == "frosting_bag") {
             
             this.sprite.anims.play('frosting_bag_squeeze');
+            this.context.sound.play('frosting_bag_attack_audio');
             this.playMeleeLayerFrostingBag();
             
             var info = {anims: 'frosting_bag_squeeze', melee: false, hitCount: 0};
@@ -246,7 +248,7 @@ class Character {
             this.client.socket.emit('doAnim', info);
         }
         else if (this.gun == "salt_shaker") {
-            
+            this.context.sound.play("salt_shaker_attack_audio");
             this.sprite.anims.play('salt_shaker_shake');
             this.playMeleeLayerSaltShaker();
             
