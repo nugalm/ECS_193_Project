@@ -49,13 +49,7 @@ class loadScene extends Phaser.Scene
         this.loadIdleAnims();
         this.loadHealthBar();
         this.load.image('menu_background', 'static/images/menu_background.png');
-        
-        
-        //audio
-        this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
-        this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3');
-        this.load.audio('m', 'static/images/armoryScene/m.mp3');
-        this.load.audio('salt_shaker_attack_audio', 'static/Sound/gameScene/salt_shaker_attack_audio.mp3');
+        this.loadAudio();
  
     }
     
@@ -63,14 +57,9 @@ class loadScene extends Phaser.Scene
     // prompt user to click to enter gameScene
     create()
     {
-        this.sound.add('game_audio');
-        this.sound.add('selection_audio');
-        this.sound.add('salt_shaker_attack_audio', {volume: 1});
+        
        
-        
-        
-        
-        
+        this.addSounds();
         this.initPopUps();
         this.initButtons();
         this.initAttackAnimations();
@@ -792,6 +781,30 @@ class loadScene extends Phaser.Scene
 		this.load.image('statsbar', 'static/images/armoryScene/statsbar.png');
 		this.load.image('background', 'static/images/armoryScene/background.jpg');
 		
+    }
+    
+    
+    addSounds()
+    {
+        this.sound.add('game_audio');
+        this.sound.add('selection_audio');
+        this.sound.add('salt_shaker_attack_audio', {volume: 1});
+        this.sound.add('food_pickup_audio');
+        this.sound.add('knife_attack_audio');
+        this.sound.add('fork_attack_audio');
+        this.sound.add('knife_pickup_audio');
+    }
+    
+    loadAudio()
+    {
+        this.load.audio('game_audio', 'static/Sound/kitchenSceneBGMV2.0.mp3');
+        this.load.audio('selection_audio', 'static/Sound/armorySceneBGMV2.0.mp3');
+        this.load.audio('m', 'static/images/armoryScene/m.mp3');
+        this.load.audio('salt_shaker_attack_audio', 'static/Sound/gameScene/salt_shaker_attack_audio.mp3');
+        this.load.audio('food_pickup_audio', 'static/Sound/gameScene/food_pickup_audio.mp3');
+        this.load.audio('knife_attack_audio', 'static/Sound/gameScene/knife_swing_audio.mp3');
+        this.load.audio('knife_pickup_audio', 'static/Sound/gameScene/knife_pickup_audio.mp3');
+        this.load.audio('fork_attack_audio', 'static/Sound/gameScene/fork_attack_audio.mp3');
     }
     
     preloaders()

@@ -50,7 +50,7 @@ class KeyboardHandler
             
             else if (p.rightButtonDown() && context.player.canMelee == true)
             {
-                context.player.updateMelee();
+                context.player.updateMelee(context);
                 context.player.canMelee = false;
             }
             

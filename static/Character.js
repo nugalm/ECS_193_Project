@@ -203,6 +203,7 @@ class Character {
         }
         else if (this.weapon == "fork") {
             this.sprite.anims.play('fork_stab');
+            //context.sound.play('fork_attack_audio');
             
             var info = {anims: 'fork_stab', melee: true, hitCount: 1};
             
@@ -210,6 +211,7 @@ class Character {
         }
         else if (this.weapon == "knife") {
             this.sprite.anims.play('knife_swipe');
+            context.sound.play('knife_attack_audio');
             
             var info = {anims: 'knife_swipe', melee: true, hitCount: 1};
             
@@ -415,7 +417,7 @@ class Character {
     updateRotation(context)
     {
     
-        if (this.isSpecialAnimating()) 	
+        if (this.isMeleeOrDashAnimating()) 	
         {	
             return;	
         }
@@ -590,6 +592,18 @@ class Character {
         
         return animating;
     }
+    
+    isMeleeOrDashAnimating()
+    {
+        var animating = ((this.sprite.anims.isPlaying) &&
+                        ((this.sprite.anims.currentAnim.key === 'fork_stab') ||
+                        (this.sprite.anims.currentAnim.key === 'whisk_twirl') ||
+                        (this.sprite.anims.currentAnim.key === 'knife_swipe') ||
+                        (this.sprite.anims.currentAnim.key === 'mouse_dash')) )
+        
+        return animating;
+    }
+    
     takeDamage(damageAmount, killer, method) 
     {
         
