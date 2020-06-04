@@ -110,7 +110,7 @@ class armoryScene extends Phaser.Scene {
 		});
 
 		// skip button
-		this.skipScene = 
+		/*this.skipScene = 
 		this.add.image(200, 200, 'layer2_btn2').setScale(ratio).setInteractive();
 		this.skipScene.on('pointerdown', (pointer) => {
 			//temporary scene start
@@ -121,7 +121,7 @@ class armoryScene extends Phaser.Scene {
 								socket: this.socket, 
 								username: this.username
 							});
-		}, this);
+		}, this);*/
 
 		// layer
 		this.layer1Container = this.add.container();
