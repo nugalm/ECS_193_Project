@@ -19,6 +19,7 @@ class Character {
         this.element = "none"; 
         this.weapon;
         this.gun = "bottle";
+        this.velocity = 160;
         
         this.sprite;
         this.meleeSprite;
@@ -82,6 +83,7 @@ class Character {
         this.initMeleeSprite(context);
         this.initContainer(context);
         this.initCooldown();
+        this.initVelocity();
         this.playIdle();
         this.context = context;
     }
@@ -433,7 +435,7 @@ class Character {
         else {
             if (context.cursors.left.isDown)
             {
-                this.myContainer.body.setVelocityX(-160);
+                this.myContainer.body.setVelocityX(-1*this.velocity);
 
                 if (!this.isSpecialAnimating()) 
                 {
@@ -449,7 +451,7 @@ class Character {
             //right  
             else if (context.cursors.right.isDown)
             {
-                this.myContainer.body.setVelocityX(160);
+                this.myContainer.body.setVelocityX(this.velocity);
                 if (!this.isSpecialAnimating())  
                 {
                     this.playMeleeLayerIdle();
@@ -464,7 +466,7 @@ class Character {
             // down  
             if (context.cursors.down.isDown)
             {
-                this.myContainer.body.setVelocityY(160);
+                this.myContainer.body.setVelocityY(this.velocity);
                 if (!this.isSpecialAnimating()) 
                 {
                     this.playMeleeLayerIdle();
@@ -479,7 +481,7 @@ class Character {
             // up  
             else if (context.cursors.up.isDown)
             {
-                this.myContainer.body.setVelocityY(-160);
+                this.myContainer.body.setVelocityY(-1*this.velocity);
                 if (!this.isSpecialAnimating()) 
                 {
                     this.playMeleeLayerIdle();
@@ -512,6 +514,7 @@ class Character {
             }
             
     } //end else
+        console.log("velocity: ", this.velocity);
         
         var myPosition = {x: this.myContainer.x , y: this.myContainer.y};
         var myVelocity = {x: this.myContainer.body.velocity.x , y: this.myContainer.body.velocity.y };
@@ -627,7 +630,8 @@ class Character {
         }
         else if (drop.type == "blueberry_drop_image") 
         {
-            this.speed += 50;
+            this.speed += 100;
+            this.initVelocity();
             statChange.speed = 50;
         }
         else if (drop.type == "pepper_drop_image") 
@@ -658,6 +662,11 @@ class Character {
         this.power = this.power - 100;	
         this.client.socket.emit("statChangeServer", statChange);
       
+    }
+    
+    initVelocity()
+    {
+        this.velocity = 160 + (0.1 * this.speed); 
     }
     
     
