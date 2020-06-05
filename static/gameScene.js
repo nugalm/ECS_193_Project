@@ -281,8 +281,6 @@ class gameScene extends Phaser.Scene {
         this.projectileHandler.moveProjectiles();  
           
         if(this.player.health <= 0){
-            this.lastX = this.player.myContainer.x
-            this.lastY = this.player.myContainer.y
             this.player.myContainer.body.enable = false;
         }
     }  
@@ -537,6 +535,8 @@ class gameScene extends Phaser.Scene {
     setupDeathButtons(){
         
         this.client.socket.emit("died");
+        this.lastX = this.player.myContainer.x;
+        this.lastY = this.player.myContainer.y;
         
         this.respawn_button = this.add.sprite(this.lastX , this.lastY + 50, 'respawn_button');
         this.restart_button = this.add.sprite(this.lastX, this.lastY - 50, 'restart_button');
