@@ -350,6 +350,8 @@ io.on('connection', function(socket) {
     
     socket.on('respawnServer', function(info){
         socket.broadcast.emit('respawnClient', info); 
+        var info = {name: serverPlayers[socket.id].name, score: 0, id: socket.id};
+        socket.broadcast.emit("scoreBoardUpdateClient", info);
     });
     
     socket.on('disconnect', function() {
@@ -358,6 +360,7 @@ io.on('connection', function(socket) {
         delete serverPlayers[socket.id];
         // emit a message to all players to remove this player
         socket.broadcast.emit('deleteTime', socket.id);
+        socket.broadcast.emit('deleteScore', socket.id);
         //console.log('removed player ' + socket.id);
     });
 });
