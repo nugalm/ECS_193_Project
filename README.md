@@ -10,4 +10,5 @@ Jed Mandy Nugal - jmnugal@ucdavis.edu
 
 Junyang Shi - jyshi@ucdavis.edu
 
-[User Guide](https://docs.google.com/document/d/1CMreVQ3VCu-rIhICe1iwfcoPJGofpVOAXTz8djX8rj8/edit?usp=sharingm)
+## User Guide
+[Link](https://docs.google.com/document/d/1CMreVQ3VCu-rIhICe1iwfcoPJGofpVOAXTz8djX8rj8/edit?usp=sharingm)
