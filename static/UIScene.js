@@ -90,6 +90,12 @@ class UIScene extends Phaser.Scene
             self.sortPlaces();
             self.setPlaces();
         });
+        
+        this.client.socket.on("deleteScore", function(id){
+            if(id in self.players){
+                delete self.players[id];
+            }
+        });
     }
     
     update()
@@ -102,6 +108,7 @@ class UIScene extends Phaser.Scene
     putIntoPlaces()
     {
         var i = 0;
+        this.places = [];
         this.places.length = Object.keys(this.players).length
         for(var id in this.players){
             if(this.players[id] == null){
